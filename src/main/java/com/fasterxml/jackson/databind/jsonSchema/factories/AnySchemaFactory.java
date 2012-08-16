@@ -1,34 +1,35 @@
 package com.fasterxml.jackson.databind.jsonSchema.factories;
 
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
 import com.fasterxml.jackson.databind.jsonSchema.types.AnySchema;
-import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 
-public class AnySchemaFactory extends SchemaFactory implements
-		JsonAnyFormatVisitor {
+public class AnySchemaFactory implements JsonAnyFormatVisitor {
 
 	protected SchemaFactory parent;
 	protected AnySchema anySchema;
 	
-	public AnySchemaFactory(SchemaFactory parent) {
+	public AnySchemaFactory(SchemaFactory parent, AnySchema schema) {
 		this.parent = parent;
-		setProvider(parent.getProvider());
-		anySchema = new AnySchema();
+		this.anySchema = schema; 
 	}
 
-	/**
-	 * @param provider
-	 */
-	public AnySchemaFactory(SerializerProvider provider) {
-		parent = null;
-		setProvider(provider);
-		anySchema = new AnySchema();
+	public SchemaFactory getParent() {
+		return parent;
 	}
 
-	public JsonSchema getSchema() {
+	public void setParent(SchemaFactory parent) {
+		this.parent = parent;
+	}
+
+	public AnySchema getAnySchema() {
 		return anySchema;
 	}
+
+	public void setAnySchema(AnySchema anySchema) {
+		this.anySchema = anySchema;
+	}
+
+
 	
 
 }

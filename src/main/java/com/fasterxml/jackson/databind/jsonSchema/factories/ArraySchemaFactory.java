@@ -11,21 +11,19 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 
-public class ArraySchemaFactory extends SchemaFactory 
-	implements JsonArrayFormatVisitor {
+public class ArraySchemaFactory implements JsonArrayFormatVisitor {
 
 	protected SchemaFactory parent; 
-	protected ArraySchema arraySchema;
+	protected ArraySchema schema;
 	protected BeanProperty _property;
 	
-	public ArraySchemaFactory(SchemaFactory parent, BeanProperty property) {
+	public ArraySchemaFactory(SchemaFactory parent, BeanProperty property, ArraySchema schema) {
 		this.parent = parent;
-		setProvider(parent.getProvider());
-		arraySchema = new ArraySchema();
+		this.schema = schema;
 	}
 
-	public ArraySchemaFactory(SchemaFactory schemaFactory) {
-		this(schemaFactory, null);
+	public ArraySchemaFactory(SchemaFactory schemaFactory, ArraySchema schema) {
+		this(schemaFactory, null, schema);
 	}
 
 	/**
@@ -34,7 +32,7 @@ public class ArraySchemaFactory extends SchemaFactory
 	public ArraySchemaFactory(SerializerProvider provider) {
 		parent = null;
 		setProvider(provider);
-		arraySchema = new ArraySchema();
+		schema = new ArraySchema();
 	}
 
 	public void itemsFormat(JavaType contentType) {
@@ -46,9 +44,9 @@ public class ArraySchemaFactory extends SchemaFactory
 				ser = getProvider().findValueSerializer(contentType, _property);
 				if (ser instanceof JsonFormatVisitable) {
 	            	SchemaFactoryProvider visitor = new SchemaFactoryProvider();
-	            	visitor.setProvider(provider);
+	            	visitor.setProvider(parent.getProvider());
 	                ((JsonFormatVisitable) ser).acceptJsonFormatVisitor(visitor, contentType);
-	                arraySchema.setItemsSchema(visitor.finalSchema());
+	                schema.setItemsSchema(visitor.finalSchema());
 	            }
 			} catch (JsonMappingException e) {
 				//TODO: log error
@@ -57,11 +55,19 @@ public class ArraySchemaFactory extends SchemaFactory
 	}
 	
 	public void itemsFormat(JsonFormatTypes format) {
-		arraySchema.setItemsSchema(JsonSchema.minimalForFormat(format));
+		schema.setItemsSchema(JsonSchema.minimalForFormat(format));
 	}
 
 	public JsonSchema getSchema() {
-		return arraySchema;
+		return schema;
+	}
+
+	public SerializerProvider getProvider() {
+		return parent.getProvider();
+	}
+
+	public void setProvider(SerializerProvider provider) {
+		parent.setProvider(provider);
 	}
 	
 

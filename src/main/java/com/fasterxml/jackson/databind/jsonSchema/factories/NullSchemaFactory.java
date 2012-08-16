@@ -1,33 +1,33 @@
 package com.fasterxml.jackson.databind.jsonSchema.factories;
 
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonNullFormatVisitor;
-import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 import com.fasterxml.jackson.databind.jsonSchema.types.NullSchema;
 
-public class NullSchemaFactory extends SchemaFactory implements
-		JsonNullFormatVisitor {
+public class NullSchemaFactory implements JsonNullFormatVisitor {
 
 	protected SchemaFactory parent;
-	protected NullSchema nullSchema;
+	protected NullSchema schema;
 	
-	public NullSchemaFactory(SchemaFactory parent) {
+	public NullSchemaFactory(SchemaFactory parent, NullSchema schema) {
 		this.parent = parent;
-		setProvider(parent.getProvider());
-		nullSchema = new NullSchema();
+		this.schema = schema;
 	}
 
-	/**
-	 * @param provider
-	 */
-	public NullSchemaFactory(SerializerProvider provider) {
-		parent = null;
-		setProvider(provider);
-		nullSchema = new NullSchema();
+	public SchemaFactory getParent() {
+		return parent;
 	}
 
-	public JsonSchema getSchema() {
-		return nullSchema;
+	public void setParent(SchemaFactory parent) {
+		this.parent = parent;
 	}
+
+	public NullSchema getSchema() {
+		return schema;
+	}
+
+	public void setSchema(NullSchema schema) {
+		this.schema = schema;
+	}
+
 
 }

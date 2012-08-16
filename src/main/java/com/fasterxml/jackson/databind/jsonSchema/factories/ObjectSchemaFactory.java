@@ -13,30 +13,36 @@ import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 import com.fasterxml.jackson.databind.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 
-public class ObjectSchemaFactory extends SchemaFactory 
-	implements JsonObjectFormatVisitor {
+public class ObjectSchemaFactory implements JsonObjectFormatVisitor {
 
 	protected SchemaFactory parent;
-	protected ObjectSchema objectSchema;
+	protected ObjectSchema schema;
 	
-	public ObjectSchemaFactory(SchemaFactory parent) {
+	public ObjectSchemaFactory(SchemaFactory parent, ObjectSchema schema) {
 		this.parent = parent;
-		setProvider(parent.getProvider());
-		objectSchema = new ObjectSchema();
+		this.schema = schema;
 	}
 	
-	/**
-	 * @param provider
-	 */
-	public ObjectSchemaFactory(SerializerProvider provider) {
-		parent = null;
-		setProvider(provider);
-		objectSchema = new ObjectSchema();
+
+	public SchemaFactory getParent() {
+		return parent;
 	}
 
-	public JsonSchema getSchema() {
-		return objectSchema;
+
+	public void setParent(SchemaFactory parent) {
+		this.parent = parent;
 	}
+
+
+	public ObjectSchema getSchema() {
+		return schema;
+	}
+
+
+	public void setSchema(ObjectSchema schema) {
+		this.schema = schema;
+	}
+
 
 	private JsonSerializer<Object> getSer(BeanProperty writer) {
 		JsonSerializer<Object> ser = null;
@@ -56,7 +62,7 @@ public class ObjectSchemaFactory extends SchemaFactory
 	
 	protected JsonSchema propertySchema(BeanProperty writer) {
 		SchemaFactoryProvider visitor = new SchemaFactoryProvider();
-		visitor.setProvider(provider);
+		visitor.setProvider(parent.getProvider());
 		JsonSerializer<Object> ser = getSer(writer);
 		if (ser != null && ser instanceof JsonFormatVisitable) {
 			((JsonFormatVisitable)ser).acceptJsonFormatVisitor(visitor, writer.getType());
@@ -68,33 +74,43 @@ public class ObjectSchemaFactory extends SchemaFactory
 	
 	protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint) {
 		SchemaFactoryProvider visitor = new SchemaFactoryProvider();
-		visitor.setProvider(provider);
+		visitor.setProvider(parent.getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
 	}
 	
 	public void property(BeanProperty writer) {
-		objectSchema.putProperty(writer.getName(), propertySchema(writer));
+		schema.putProperty(writer.getName(), propertySchema(writer));
 	}
 
 	public void optionalProperty(BeanProperty writer) {
-		objectSchema.putOptionalProperty(writer.getName(), propertySchema(writer));
+		schema.putOptionalProperty(writer.getName(), propertySchema(writer));
 	}
 	
 	public void property(String name, JsonFormatVisitable handler, JavaType propertyTypeHint) {
-		objectSchema.putProperty(name, propertySchema(handler, propertyTypeHint));
+		schema.putProperty(name, propertySchema(handler, propertyTypeHint));
 	}
 	
 	public void optionalProperty(String name, JsonFormatVisitable handler, JavaType propertyTypeHint) {
-		objectSchema.putOptionalProperty(name, propertySchema(handler, propertyTypeHint));
+		schema.putOptionalProperty(name, propertySchema(handler, propertyTypeHint));
 	}
 	
 	public void property(String name) {
-		objectSchema.putProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
+		schema.putProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
 	}
 	
 	public void optionalProperty(String name) {
-		objectSchema.putOptionalProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
+		schema.putOptionalProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
+	}
+
+
+	public SerializerProvider getProvider() {
+		return parent.getProvider();
+	}
+
+
+	public void setProvider(SerializerProvider provider) {
+		parent.setProvider(provider);
 	}
 
 }

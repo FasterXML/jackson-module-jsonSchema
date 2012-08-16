@@ -2,42 +2,43 @@ package com.fasterxml.jackson.databind.jsonSchema.factories;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormatVisitor;
-import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 import com.fasterxml.jackson.databind.jsonSchema.types.ValueTypeSchema;
 
-public abstract class ValueTypeSchemaFactory extends SchemaFactory implements
-	JsonValueFormatVisitor {
+public class ValueTypeSchemaFactory implements JsonValueFormatVisitor {
 
 	protected SchemaFactory parent; 
+	protected ValueTypeSchema schema;
 	
-	protected ValueTypeSchemaFactory(SchemaFactory parent) {
+	protected ValueTypeSchemaFactory(SchemaFactory parent, ValueTypeSchema schema) {
 		this.parent = parent;
-		setProvider(parent.getProvider());
+		this.schema = schema;
 	}
 
-	/**
-	 * @param provider
-	 */
-	public ValueTypeSchemaFactory(SerializerProvider provider) {
-		parent = null;
-		setProvider(provider);
+	public SchemaFactory getParent() {
+		return parent;
 	}
 
-	public JsonSchema getSchema() {
-		return getValueSchema();
+	public void setParent(SchemaFactory parent) {
+		this.parent = parent;
 	}
-	protected abstract ValueTypeSchema getValueSchema();
-	
+
+	public ValueTypeSchema getSchema() {
+		return schema;
+	}
+
+	public void setSchema(ValueTypeSchema schema) {
+		this.schema = schema;
+	}
+
 	public void format(JsonValueFormat format) {
-		getValueSchema().setFormat(format);
+		getSchema().setFormat(format);
 
 	}
 
 	public void enumTypes(Set<String> enums) {
-		getValueSchema().setEnums(enums);
+		getSchema().setEnums(enums);
 
 	}
 

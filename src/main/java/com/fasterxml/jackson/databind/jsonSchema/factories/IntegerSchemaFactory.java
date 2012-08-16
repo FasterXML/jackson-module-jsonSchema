@@ -1,30 +1,45 @@
 package com.fasterxml.jackson.databind.jsonSchema.factories;
 
-import com.fasterxml.jackson.databind.SerializerProvider;
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonIntegerFormatVisitor;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.databind.jsonSchema.types.IntegerSchema;
-import com.fasterxml.jackson.databind.jsonSchema.types.ValueTypeSchema;
 
-public class IntegerSchemaFactory extends ValueTypeSchemaFactory implements
-		JsonIntegerFormatVisitor {
+public class IntegerSchemaFactory implements JsonIntegerFormatVisitor {
 
-	protected IntegerSchema integerSchema;
+	protected ValueTypeSchemaFactory parent;
+	protected IntegerSchema schema;
 	
-	public IntegerSchemaFactory(SchemaFactory parent) {
-		super(parent);
-		integerSchema = new IntegerSchema();
+	public IntegerSchemaFactory(ValueTypeSchemaFactory parent, IntegerSchema schema) {
+		this.parent = parent;
+		this.schema = schema;
 	}
 
-	/**
-	 * @param provider
-	 */
-	public IntegerSchemaFactory(SerializerProvider provider) {
-		super(provider);
-		integerSchema = new IntegerSchema();
+	public ValueTypeSchemaFactory getParent() {
+		return parent;
 	}
 
-	public ValueTypeSchema getValueSchema() {
-		return integerSchema;
+	public void setParent(ValueTypeSchemaFactory parent) {
+		this.parent = parent;
 	}
+
+	public IntegerSchema getIntegerSchema() {
+		return schema;
+	}
+
+	public void setIntegerSchema(IntegerSchema integerSchema) {
+		this.schema = integerSchema;
+	}
+
+	public void format(JsonValueFormat format) {
+		parent.format(format);
+	}
+
+	public void enumTypes(Set<String> enums) {
+		parent.enumTypes(enums);
+	}
+
+
 
 }
