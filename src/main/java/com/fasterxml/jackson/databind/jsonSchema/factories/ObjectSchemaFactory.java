@@ -1,6 +1,7 @@
 package com.fasterxml.jackson.databind.jsonSchema.factories;
 
 
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -37,10 +38,13 @@ public class ObjectSchemaFactory extends SchemaFactory
 		return objectSchema;
 	}
 
-	private JsonSerializer<Object> getSer(BeanPropertyWriter writer) {
-		JsonSerializer<Object> ser = writer.getSerializer();
+	private JsonSerializer<Object> getSer(BeanProperty writer) {
+		JsonSerializer<Object> ser = null;
+		if (writer instanceof BeanPropertyWriter) {
+			ser = ((BeanPropertyWriter)writer).getSerializer();
+		}
 		if (ser == null) {
-			Class<?>	serType = writer.getPropertyType();
+			Class<?>	serType = writer.getType().getRawClass();
 			try {
 				return getProvider().findValueSerializer(serType, writer);
 			} catch (JsonMappingException e) {
@@ -50,7 +54,7 @@ public class ObjectSchemaFactory extends SchemaFactory
 		return ser;
 	}	
 	
-	protected JsonSchema propertySchema(BeanPropertyWriter writer) {
+	protected JsonSchema propertySchema(BeanProperty writer) {
 		SchemaFactoryProvider visitor = new SchemaFactoryProvider();
 		visitor.setProvider(provider);
 		JsonSerializer<Object> ser = getSer(writer);
@@ -69,11 +73,11 @@ public class ObjectSchemaFactory extends SchemaFactory
 		return visitor.finalSchema();
 	}
 	
-	public void property(BeanPropertyWriter writer) {
+	public void property(BeanProperty writer) {
 		objectSchema.putProperty(writer.getName(), propertySchema(writer));
 	}
 
-	public void optionalProperty(BeanPropertyWriter writer) {
+	public void optionalProperty(BeanProperty writer) {
 		objectSchema.putOptionalProperty(writer.getName(), propertySchema(writer));
 	}
 	
