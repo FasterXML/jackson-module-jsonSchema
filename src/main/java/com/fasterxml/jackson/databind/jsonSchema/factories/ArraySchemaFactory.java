@@ -43,7 +43,7 @@ public class ArraySchemaFactory implements JsonArrayFormatVisitor {
 			try {
 				ser = getProvider().findValueSerializer(contentType, _property);
 				if (ser instanceof JsonFormatVisitable) {
-	            	SchemaFactoryProvider visitor = new SchemaFactoryProvider();
+	            	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
 	            	visitor.setProvider(parent.getProvider());
 	                ((JsonFormatVisitable) ser).acceptJsonFormatVisitor(visitor, contentType);
 	                schema.setItemsSchema(visitor.finalSchema());

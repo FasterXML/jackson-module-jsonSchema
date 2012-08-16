@@ -61,7 +61,7 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor {
 	}	
 	
 	protected JsonSchema propertySchema(BeanProperty writer) {
-		SchemaFactoryProvider visitor = new SchemaFactoryProvider();
+		SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
 		visitor.setProvider(parent.getProvider());
 		JsonSerializer<Object> ser = getSer(writer);
 		if (ser != null && ser instanceof JsonFormatVisitable) {
@@ -73,7 +73,7 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor {
 	}
 	
 	protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint) {
-		SchemaFactoryProvider visitor = new SchemaFactoryProvider();
+		SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
 		visitor.setProvider(parent.getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();

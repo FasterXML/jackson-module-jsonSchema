@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.jsonSchema.types.*;
  * @author jphelan
  *
  */
-public class SchemaFactoryProvider implements JsonFormatVisitorWrapper{
+public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper{
 
 	protected SerializerProvider provider;
 	protected SchemaProvider schemaProvider;
@@ -19,7 +19,7 @@ public class SchemaFactoryProvider implements JsonFormatVisitorWrapper{
 	/**
 	 * 
 	 */
-	public SchemaFactoryProvider() {
+	public SchemaFactoryWrapper() {
 		schemaProvider = new SchemaProvider();
 		factoryProvider = new FactoryProvider();
 	}

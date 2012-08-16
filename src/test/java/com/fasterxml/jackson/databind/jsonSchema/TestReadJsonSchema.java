@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsonSchema.factories.SchemaFactoryProvider;
+import com.fasterxml.jackson.databind.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 
 /**
@@ -57,7 +57,7 @@ public class TestReadJsonSchema
     public void testDeserializeSimple() throws Exception
     {
         ObjectMapper mapper = new ObjectMapper();
-        SchemaFactoryProvider visitor = new SchemaFactoryProvider();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
         mapper.acceptJsonFormatVisitor(Schemable.class, visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
