@@ -3,7 +3,7 @@ package com.fasterxml.jackson.databind.jsonSchema.factories;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 
-public class SchemaFactory {
+public class SchemaFactory implements SchemaProducer{
 
 	
 	protected SerializerProvider provider;
@@ -19,20 +19,20 @@ public class SchemaFactory {
 		this.provider = provider;
 		this.schema = schema;
 	}
+	public SerializerProvider getProvider() {
+		return provider;
+	}
+	
+	public JsonSchema getSchema() {
+		return schema;
+	}
+
 	/**
 	 * {@link SchemaFactory#provider}
 	 * @param provider the provider to set
 	 */
 	public void setProvider(SerializerProvider provider) {
 		this.provider = provider;
-	}
-	
-	public SerializerProvider getProvider() {
-		return provider;
-	}
-
-	public JsonSchema getSchema() {
-		return schema;
 	}
 
 	public void setSchema(JsonSchema schema) {

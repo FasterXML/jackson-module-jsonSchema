@@ -3,7 +3,7 @@ package com.fasterxml.jackson.databind.jsonSchema.factories;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonNullFormatVisitor;
 import com.fasterxml.jackson.databind.jsonSchema.types.NullSchema;
 
-public class NullSchemaFactory implements JsonNullFormatVisitor {
+public class NullSchemaFactory implements JsonNullFormatVisitor, SchemaProducer {
 
 	protected SchemaFactory parent;
 	protected NullSchema schema;
@@ -17,12 +17,12 @@ public class NullSchemaFactory implements JsonNullFormatVisitor {
 		return parent;
 	}
 
-	public void setParent(SchemaFactory parent) {
-		this.parent = parent;
-	}
-
 	public NullSchema getSchema() {
 		return schema;
+	}
+
+	public void setParent(SchemaFactory parent) {
+		this.parent = parent;
 	}
 
 	public void setSchema(NullSchema schema) {

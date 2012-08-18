@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonBooleanFormatVisito
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.databind.jsonSchema.types.BooleanSchema;
 
-public class BooleanSchemaFactory implements JsonBooleanFormatVisitor {
+public class BooleanSchemaFactory implements JsonBooleanFormatVisitor, SchemaProducer {
 
 	protected ValueTypeSchemaFactory parent;
 	protected BooleanSchema schema;
@@ -16,28 +16,28 @@ public class BooleanSchemaFactory implements JsonBooleanFormatVisitor {
 		this.schema = schema;
 	}
 
-	public ValueTypeSchemaFactory getParent() {
-		return parent;
-	}
-
-	public void setParent(ValueTypeSchemaFactory parent) {
-		this.parent = parent;
-	}
-
-	public BooleanSchema getSchema() {
-		return schema;
-	}
-
-	public void setSchema(BooleanSchema schema) {
-		this.schema = schema;
+	public void enumTypes(Set<String> enums) {
+		parent.enumTypes(enums);
 	}
 
 	public void format(JsonValueFormat format) {
 		parent.format(format);
 	}
 
-	public void enumTypes(Set<String> enums) {
-		parent.enumTypes(enums);
+	public ValueTypeSchemaFactory getParent() {
+		return parent;
+	}
+
+	public BooleanSchema getSchema() {
+		return schema;
+	}
+
+	public void setParent(ValueTypeSchemaFactory parent) {
+		this.parent = parent;
+	}
+
+	public void setSchema(BooleanSchema schema) {
+		this.schema = schema;
 	}
 	
 

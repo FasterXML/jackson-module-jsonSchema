@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormatVisitor;
 import com.fasterxml.jackson.databind.jsonSchema.types.ValueTypeSchema;
 
-public class ValueTypeSchemaFactory implements JsonValueFormatVisitor {
+public class ValueTypeSchemaFactory implements JsonValueFormatVisitor, SchemaProducer {
 
 	protected SchemaFactory parent; 
 	protected ValueTypeSchema schema;
@@ -16,20 +16,9 @@ public class ValueTypeSchemaFactory implements JsonValueFormatVisitor {
 		this.schema = schema;
 	}
 
-	public SchemaFactory getParent() {
-		return parent;
-	}
+	public void enumTypes(Set<String> enums) {
+		getSchema().setEnums(enums);
 
-	public void setParent(SchemaFactory parent) {
-		this.parent = parent;
-	}
-
-	public ValueTypeSchema getSchema() {
-		return schema;
-	}
-
-	public void setSchema(ValueTypeSchema schema) {
-		this.schema = schema;
 	}
 
 	public void format(JsonValueFormat format) {
@@ -37,9 +26,20 @@ public class ValueTypeSchemaFactory implements JsonValueFormatVisitor {
 
 	}
 
-	public void enumTypes(Set<String> enums) {
-		getSchema().setEnums(enums);
+	public SchemaFactory getParent() {
+		return parent;
+	}
 
+	public ValueTypeSchema getSchema() {
+		return schema;
+	}
+
+	public void setParent(SchemaFactory parent) {
+		this.parent = parent;
+	}
+
+	public void setSchema(ValueTypeSchema schema) {
+		this.schema = schema;
 	}
 
 }
