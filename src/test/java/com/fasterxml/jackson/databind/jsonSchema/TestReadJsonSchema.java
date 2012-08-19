@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
@@ -58,7 +59,7 @@ public class TestReadJsonSchema
     {
         ObjectMapper mapper = new ObjectMapper();
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        mapper.acceptJsonFormatVisitor(Schemable.class, visitor);
+        mapper.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(Schemable.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
 

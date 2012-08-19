@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * @author Ryan Heaton
@@ -112,7 +113,7 @@ public class TestGenerateJsonSchema
     {
         ObjectMapper m = new ObjectMapper();
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        m.acceptJsonFormatVisitor(SimpleBean.class, visitor);
+        m.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(SimpleBean.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         
         assertNotNull(jsonSchema);
@@ -186,7 +187,7 @@ public class TestGenerateJsonSchema
     	ObjectMapper mapper = new ObjectMapper();
     	mapper.setFilters(secretFilterProvider);
     	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        mapper.acceptJsonFormatVisitor(FilteredBean.class, visitor);
+        mapper.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(FilteredBean.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
     	assertNotNull(jsonSchema);
     	assertTrue(jsonSchema.isObjectSchema());
@@ -208,7 +209,7 @@ public class TestGenerateJsonSchema
             throws Exception
     {
     	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        MAPPER.acceptJsonFormatVisitor(SimpleBean.class, visitor);
+        MAPPER.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(SimpleBean.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         Map<String,Object> result = writeAndMap(MAPPER, jsonSchema);
         assertNotNull(result);
@@ -226,7 +227,8 @@ public class TestGenerateJsonSchema
         try {
         	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
             MAPPER.acceptJsonFormatVisitor(null, visitor);
-            JsonSchema jsonSchema = visitor.finalSchema();
+            @SuppressWarnings("unused")
+			JsonSchema jsonSchema = visitor.finalSchema();
             fail("Should have failed");
         } catch (IllegalArgumentException iae) {
             verifyException(iae, "class must be provided");
@@ -239,7 +241,7 @@ public class TestGenerateJsonSchema
     public void testThatObjectsHaveNoItems() throws Exception
     {
     	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        MAPPER.acceptJsonFormatVisitor(TrivialBean.class, visitor);
+        MAPPER.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(TrivialBean.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         Map<String,Object> result = writeAndMap(MAPPER, jsonSchema);
         // can we count on ordering being stable? I think this is true with current ObjectNode impl
@@ -252,7 +254,7 @@ public class TestGenerateJsonSchema
 	public void testSchemaId() throws Exception
     {
     	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        MAPPER.acceptJsonFormatVisitor(BeanWithId.class, visitor);
+        MAPPER.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(BeanWithId.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         Map<String,Object> result = writeAndMap(MAPPER, jsonSchema);
         
