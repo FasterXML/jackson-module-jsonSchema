@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
@@ -225,13 +226,13 @@ public class TestGenerateJsonSchema
     {
         // not ok to pass null
         try {
-        	SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-            MAPPER.acceptJsonFormatVisitor(null, visitor);
+            SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+            MAPPER.acceptJsonFormatVisitor((JavaType) null, visitor);
             @SuppressWarnings("unused")
 			JsonSchema jsonSchema = visitor.finalSchema();
             fail("Should have failed");
         } catch (IllegalArgumentException iae) {
-            verifyException(iae, "class must be provided");
+            verifyException(iae, "type must be provided");
         }
     }
 
