@@ -36,18 +36,15 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, SchemaProdu
         return schema;
     }
 
-    private JsonSerializer<Object> getSer(BeanProperty writer) {
+    private JsonSerializer<Object> getSer(BeanProperty writer)
+        throws JsonMappingException
+    {
 		JsonSerializer<Object> ser = null;
 		if (writer instanceof BeanPropertyWriter) {
 			ser = ((BeanPropertyWriter)writer).getSerializer();
 		}
 		if (ser == null) {
-			Class<?>	serType = writer.getType().getRawClass();
-			try {
-				return getProvider().findValueSerializer(serType, writer);
-			} catch (JsonMappingException e) {
-				// TODO: log error
-			}
+			ser = getProvider().findValueSerializer(writer.getType(), writer);
 		}
 		return ser;
 	}
