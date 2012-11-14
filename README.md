@@ -4,29 +4,20 @@ currently in jackson databind (pre 2.1), in order to allow for the generation of
 
 
 ##status
-The proper release of this module is pending [jackson 2.1](http://jira.codehaus.org/browse/JACKSON#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel). Currently the module has a dependency on 2.1.0-SNAPSHOT which is not available in the central maven repo.
+The proper release of this module is [Jackson 2.1](http://jira.codehaus.org/browse/JACKSON#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel).
 This module is very new, and thus will probably be volatile.
 
 ##example usage (from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/databind/jsonSchema/TestGenerateJsonSchema.java#L114))
 
-to install, you should must have a local installation of jackson-core, jackson-annotations, jackson-databind from `2.1.0-snapsshot`
-
-cloning those three from github, and running 
-```bash
-maven install
-```
-first on core, then annotations, databind, and finally jsonschema
-should work to install jsonschema in your local maven repo.
-
 simply add a dependency (this is from my gradle config)
-`"com.fasterxml.jackson.datatype:jackson-datatype-jsonSchema:2.1.0-SNAPSHOT"`
+`"com.fasterxml.jackson.datatype:jackson-datatype-jsonSchema:2.1.0"`
 and for gradle, at least, you can simply add `mavenLocal()` to your repositories. 
 Maven should resolve the dependency from its local repo transparently.
 
 ```java
 ObjectMapper m = new ObjectMapper();
 SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-m.acceptJsonFormatVisitor(TypeFactory.defaultInstance().constructType(SimpleBean.class), visitor);
+m.acceptJsonFormatVisitor(m.constructType(SimpleBean.class), visitor);
 JsonSchema jsonSchema = visitor.finalSchema();
 ```
 
