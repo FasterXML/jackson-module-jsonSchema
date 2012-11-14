@@ -13,11 +13,11 @@
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
 json schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
   </description>
-  <url>https://github.com/jackphel/jackson-module-jsonSchema</url>
+  <url>https://github.com/FasterXML/jackson-module-jsonSchema</url>
   <scm>
-    <connection>scm:git:git@github.com:jackphel/jackson-module-jsonSchema.git</connection>
-    <developerConnection>scm:git:git@github.com:jackphel/jackson-module-jsonSchema.git</developerConnection>
-    <url>http://github.com/jackphel/jackson-module-jsonSchema</url>    
+    <connection>scm:git:git@github.com:FasterXML/jackson-module-jsonSchema.git</connection>
+    <developerConnection>scm:git:git@github.com:FasterXML/jackson-module-jsonSchema.git</developerConnection>
+    <url>http://github.com/FasterXML/jackson-module-jsonSchema</url>    
   </scm>
   <developers>
         <developer>
