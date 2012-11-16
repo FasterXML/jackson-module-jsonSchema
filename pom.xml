@@ -103,8 +103,8 @@ json schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
       </plugin>
       <plugin>

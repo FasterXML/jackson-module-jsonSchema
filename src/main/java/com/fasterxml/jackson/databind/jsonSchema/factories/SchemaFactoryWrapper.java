@@ -9,74 +9,83 @@ import com.fasterxml.jackson.databind.jsonSchema.types.*;
  * @author jphelan
  *
  */
-public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper{
+public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper {
 
 	private SchemaFactory delegate;
 	protected FactoryProvider factoryProvider;
 	protected SerializerProvider provider;
 	protected SchemaProvider schemaProvider;
 	
-	/**
-	 * 
-	 */
 	public SchemaFactoryWrapper() {
 		schemaProvider = new SchemaProvider();
 		factoryProvider = new FactoryProvider();
 	}
+
+	/*
+	/*********************************************************************
+	/* JsonFormatVisitorWrapper implementation
+     /*********************************************************************
+	 */
 	
 	public JsonAnyFormatVisitor expectAnyFormat(JavaType convertedType) {
-		AnySchema anySchema = schemaProvider.AnySchema();
-		delegate = factoryProvider.SchemaFactory(anySchema);
-		return factoryProvider.AnySchemaFactory(delegate, anySchema);
+		AnySchema anySchema = schemaProvider.anySchema();
+		delegate = factoryProvider.schemaFactory(anySchema);
+		return factoryProvider.anySchemaFactory(delegate, anySchema);
 	}
 	
 	public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
-		ArraySchema arraySchema = schemaProvider.ArraySchema();
-		delegate = factoryProvider.SchemaFactory(arraySchema);
-		return (JsonArrayFormatVisitor) factoryProvider.ArraySchemaFactory(delegate, arraySchema);
+		ArraySchema arraySchema = schemaProvider.arraySchema();
+		delegate = factoryProvider.schemaFactory(arraySchema);
+		return (JsonArrayFormatVisitor) factoryProvider.arraySchemaFactory(delegate, arraySchema);
 	}
 	
 	
 	public JsonBooleanFormatVisitor expectBooleanFormat(JavaType convertedType) {
-		BooleanSchema booleanSchema = schemaProvider.BooleanSchema();
-		delegate = factoryProvider.SchemaFactory(booleanSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.ValueTypeSchemaFactory(delegate, booleanSchema);
-		return (JsonBooleanFormatVisitor) factoryProvider.BooleanSchemaFactory(valueTypeSchemaFactory, booleanSchema);
+		BooleanSchema booleanSchema = schemaProvider.booleanSchema();
+		delegate = factoryProvider.schemaFactory(booleanSchema);
+		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.valueTypeSchemaFactory(delegate, booleanSchema);
+		return (JsonBooleanFormatVisitor) factoryProvider.booleanSchemaFactory(valueTypeSchemaFactory, booleanSchema);
 	}
 
 	public JsonIntegerFormatVisitor expectIntegerFormat(JavaType convertedType) {
-		IntegerSchema integerSchema = schemaProvider.IntegerSchema();
-		delegate = factoryProvider.SchemaFactory(integerSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.ValueTypeSchemaFactory(delegate, integerSchema);
-		return (JsonIntegerFormatVisitor) factoryProvider.IntegerSchemaFactory(valueTypeSchemaFactory, integerSchema);
+		IntegerSchema integerSchema = schemaProvider.integerSchema();
+		delegate = factoryProvider.schemaFactory(integerSchema);
+		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.valueTypeSchemaFactory(delegate, integerSchema);
+		return (JsonIntegerFormatVisitor) factoryProvider.integerSchemaFactory(valueTypeSchemaFactory, integerSchema);
 	}
 
 	public JsonNullFormatVisitor expectNullFormat(JavaType convertedType) {
-		NullSchema nullSchema = schemaProvider.NullSchema();
-		delegate = factoryProvider.SchemaFactory(nullSchema);
-		return (JsonNullFormatVisitor) factoryProvider.NullSchemaFactory(delegate, nullSchema);
+		NullSchema nullSchema = schemaProvider.nullSchema();
+		delegate = factoryProvider.schemaFactory(nullSchema);
+		return (JsonNullFormatVisitor) factoryProvider.nullSchemaFactory(delegate, nullSchema);
 	}
 
 	public JsonNumberFormatVisitor expectNumberFormat(JavaType convertedType) {
-		NumberSchema numberSchema = schemaProvider.NumberSchema();
-		delegate = factoryProvider.SchemaFactory(numberSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.ValueTypeSchemaFactory(delegate, numberSchema);
-		return (JsonNumberFormatVisitor) factoryProvider.NumberSchemaFactory(valueTypeSchemaFactory, numberSchema);
+		NumberSchema numberSchema = schemaProvider.numberSchema();
+		delegate = factoryProvider.schemaFactory(numberSchema);
+		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.valueTypeSchemaFactory(delegate, numberSchema);
+		return (JsonNumberFormatVisitor) factoryProvider.numberSchemaFactory(valueTypeSchemaFactory, numberSchema);
 	}
 	
 	public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
-		ObjectSchema objectSchema = schemaProvider.ObjectSchema();
-		delegate = factoryProvider.SchemaFactory(objectSchema);
-		return (JsonObjectFormatVisitor) factoryProvider.ObjectSchemaFactory(delegate, objectSchema);
+		ObjectSchema objectSchema = schemaProvider.objectSchema();
+		delegate = factoryProvider.schemaFactory(objectSchema);
+		return (JsonObjectFormatVisitor) factoryProvider.objectSchemaFactory(delegate, objectSchema);
 	}
 
 	public JsonStringFormatVisitor expectStringFormat(JavaType convertedType) {
 		StringSchema stringSchema = schemaProvider.StringSchema();
-		delegate = factoryProvider.SchemaFactory(stringSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.ValueTypeSchemaFactory(delegate, stringSchema);
-		return (JsonStringFormatVisitor) factoryProvider.StringSchemaFactory(valueTypeSchemaFactory, stringSchema);
+		delegate = factoryProvider.schemaFactory(stringSchema);
+		ValueTypeSchemaFactory valueTypeSchemaFactory = factoryProvider.valueTypeSchemaFactory(delegate, stringSchema);
+		return (JsonStringFormatVisitor) factoryProvider.stringSchemaFactory(valueTypeSchemaFactory, stringSchema);
 	}
 
+     /*
+     /*********************************************************************
+     /* API
+     /*********************************************************************
+      */
+	
 	public JsonSchema finalSchema() {
 		assert delegate != null : "SchemaFactory must envoke a delegate method before it can return a JsonSchema.";
 		if (delegate == null) {
@@ -99,94 +108,62 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper{
 		this.provider = provider;
 	}
 
-	protected class FactoryProvider {
-
+    /*
+    /*********************************************************************
+    /* Helper classes
+    /*********************************************************************
+    */
+	
+    protected class FactoryProvider
+    {		
+        protected SchemaFactoryWrapperProvider factoryWrapperProvider;
 		
-		SchemaFactoryWrapperProvider factoryWrapperProvider;
+        public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
+            return factoryWrapperProvider;
+        }
 		
-		public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
-			return factoryWrapperProvider;
-		}
-		
-		public void setFactoryWrapperProvider(
-				SchemaFactoryWrapperProvider factoryWrapperProvider) {
+		public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
 			this.factoryWrapperProvider = factoryWrapperProvider;
 		}
-		/**
-		 * 
-		 */
+
 		public FactoryProvider() {
 			factoryWrapperProvider = new SchemaFactoryWrapperProvider();
 		}
-		/**
-		 * @param delegate
-		 * @param schema
-		 * @return
-		 */
-		public JsonAnyFormatVisitor AnySchemaFactory(SchemaFactory delegate,
+
+		public JsonAnyFormatVisitor anySchemaFactory(SchemaFactory delegate,
 				AnySchema anySchema) {
 			return null;
 		}
 
-		/**
-		 * @param parent
-		 * @param arraySchema
-		 * @return
-		 */
-		public JsonArrayFormatVisitor ArraySchemaFactory(
+		public JsonArrayFormatVisitor arraySchemaFactory(
 				SchemaFactory parent, ArraySchema arraySchema) {
 			ArraySchemaFactory arraySchemaFactory = new ArraySchemaFactory(parent, arraySchema);
 			arraySchemaFactory.setFactoryWrapperProvider(factoryWrapperProvider);
 			return arraySchemaFactory;
 		}
 
-		/**
-		 * @param delegate
-		 * @param booleanSchema
-		 * @return
-		 */
-		public JsonBooleanFormatVisitor BooleanSchemaFactory(ValueTypeSchemaFactory parent, BooleanSchema booleanSchema) {
+		public JsonBooleanFormatVisitor booleanSchemaFactory(ValueTypeSchemaFactory parent, BooleanSchema booleanSchema) {
 			return new BooleanSchemaFactory(parent, booleanSchema);
 		}
 
-		/**
-		 * @param parent
-		 * @param integerSchema
-		 * @return
-		 */
-		public JsonIntegerFormatVisitor IntegerSchemaFactory(
+		public JsonIntegerFormatVisitor integerSchemaFactory(
 				ValueTypeSchemaFactory parent,
 				IntegerSchema integerSchema) {
 			return new IntegerSchemaFactory(parent, integerSchema);
 		}
 
-		/**
-		 * @param parent
-		 * @param nullSchema
-		 * @return
-		 */
-		public JsonNullFormatVisitor NullSchemaFactory(SchemaFactory parent,
+		public JsonNullFormatVisitor nullSchemaFactory(SchemaFactory parent,
 				NullSchema nullSchema) {
 			return new NullSchemaFactory(parent, nullSchema);
 		}
 
-		/**
-		 * @param parent
-		 * @param numberSchema
-		 * @return
-		 */
-		public JsonNumberFormatVisitor NumberSchemaFactory(
+		public JsonNumberFormatVisitor numberSchemaFactory(
 				ValueTypeSchemaFactory parent,
 				NumberSchema numberSchema) {
 			return new NumberSchemaFactory(parent, numberSchema);
 		}
 
-		/**
-		 * @param delegate
-		 * @param objectSchema
-		 * @return
-		 */
-		public JsonObjectFormatVisitor ObjectSchemaFactory(
+		public JsonObjectFormatVisitor objectSchemaFactory(
 				SchemaFactory parent, ObjectSchema objectSchema) {
 			
 			ObjectSchemaFactory objectSchemaFactory = new ObjectSchemaFactory(parent, objectSchema);
@@ -194,34 +171,21 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper{
 			return objectSchemaFactory;
 		}
 
-		/**
-		 * @param schema 
-		 * @return
-		 */
-		public SchemaFactory SchemaFactory(JsonSchema schema) {
+		public SchemaFactory schemaFactory(JsonSchema schema) {
 			return new SchemaFactory(provider, schema);
 		}
 
-		/**
-		 * @param valueTypeSchemaFactory
-		 * @param stringSchema
-		 * @return
-		 */
-		public JsonStringFormatVisitor StringSchemaFactory(
+		public JsonStringFormatVisitor stringSchemaFactory(
 				ValueTypeSchemaFactory parent,
 				StringSchema stringSchema) {
 			return new StringSchemaFactory(parent, stringSchema);
 		}
 
-		/**
-		 * @param parent
-		 * @param valueTypeSchema
-		 * @return
-		 */
-		public ValueTypeSchemaFactory ValueTypeSchemaFactory(
+		public ValueTypeSchemaFactory valueTypeSchemaFactory(
 				SchemaFactory parent, ValueTypeSchema valueTypeSchema) {
 			return new ValueTypeSchemaFactory(parent, valueTypeSchema);
-		}}
+		}
+	}
 	
 	public class SchemaFactoryWrapperProvider {
 		public SchemaFactoryWrapper SchemaFactoryWrapper() { 
@@ -230,63 +194,39 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper{
 			return wrapper;
 		}
 	}
-	
-	protected class SchemaProvider {
 
-		/**
-		 * @return
-		 */
-		public AnySchema AnySchema() {
-			return new AnySchema();
-		}
+    protected class SchemaProvider
+    {
+        public AnySchema anySchema() {
+            return new AnySchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public ArraySchema ArraySchema() {
-			return new ArraySchema();
-		}
+        public ArraySchema arraySchema() {
+            return new ArraySchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public BooleanSchema BooleanSchema() {
-			return new BooleanSchema();
-		}
+        public BooleanSchema booleanSchema() {
+            return new BooleanSchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public IntegerSchema IntegerSchema() {
-			return new IntegerSchema();
-		}
+        public IntegerSchema integerSchema() {
+            return new IntegerSchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public NullSchema NullSchema() {
-			return new NullSchema();
-		}
+        public NullSchema nullSchema() {
+            return new NullSchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public NumberSchema NumberSchema() {
-			return new NumberSchema();
-		}
+        public NumberSchema numberSchema() {
+            return new NumberSchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public ObjectSchema ObjectSchema() {
-			return new ObjectSchema();
-		}
+        public ObjectSchema objectSchema() {
+            return new ObjectSchema();
+        }
 
-		/**
-		 * @return
-		 */
-		public StringSchema StringSchema() {
-			return new StringSchema();
-		}}
-	
+        public StringSchema StringSchema() {
+            return new StringSchema();
+        }
+    }
 }
