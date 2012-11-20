@@ -1,20 +1,16 @@
 package com.fasterxml.jackson.databind.jsonSchema.factories;
 
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonSchema.factories.SchemaFactoryWrapper.SchemaFactoryWrapperProvider;
 import com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 
-public class ArraySchemaFactory implements JsonArrayFormatVisitor, SchemaProducer {
-
-	protected BeanProperty _property; 
+public class ArraySchemaFactory
+    implements JsonArrayFormatVisitor, SchemaProducer
+{
+	protected BeanProperty property; 
 	protected SchemaFactoryWrapperProvider factoryWrapperProvider;
 	protected SchemaFactory parent;
 	protected ArraySchema schema;
@@ -28,8 +24,8 @@ public class ArraySchemaFactory implements JsonArrayFormatVisitor, SchemaProduce
 		this.schema = schema;
 	}
 
-	public BeanProperty get_property() {
-		return _property;
+	public BeanProperty getProperty() {
+		return property;
 	}
 	
 	public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
@@ -52,14 +48,11 @@ public class ArraySchemaFactory implements JsonArrayFormatVisitor, SchemaProduce
 	{
 		// An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            JsonSerializer<Object> ser;
-            ser = getProvider().findValueSerializer(contentType, _property);
-            if (ser instanceof JsonFormatVisitable) {
-                SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper();
-                visitor.setProvider(parent.getProvider());
-                ((JsonFormatVisitable) ser).acceptJsonFormatVisitor(visitor, contentType);
-                schema.setItemsSchema(visitor.finalSchema());
-            }
+            JsonSerializer<Object> ser = getProvider().findValueSerializer(contentType, property);
+            SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper();
+            visitor.setProvider(parent.getProvider());
+            ser.acceptJsonFormatVisitor(visitor, contentType);
+            schema.setItemsSchema(visitor.finalSchema());
         }
 	}
 
@@ -68,8 +61,8 @@ public class ArraySchemaFactory implements JsonArrayFormatVisitor, SchemaProduce
 		schema.setItemsSchema(JsonSchema.minimalForFormat(format));
 	}
 
-	public void set_property(BeanProperty _property) {
-		this._property = _property;
+	public void setProperty(BeanProperty p) {
+	    property = p;
 	}
 
 	public void setFactoryWrapperProvider(
