@@ -3,6 +3,7 @@ package com.fasterxml.jackson.databind.jsonSchema.factories;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonSchema.factories.SchemaFactoryWrapper.SchemaFactoryWrapperProvider;
 import com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
@@ -10,48 +11,49 @@ import com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema;
 public class ArraySchemaFactory
     implements JsonArrayFormatVisitor, SchemaProducer
 {
-	protected BeanProperty property; 
-	protected SchemaFactoryWrapperProvider factoryWrapperProvider;
-	protected SchemaFactory parent;
-	protected ArraySchema schema;
+    protected BeanProperty property; 
+    protected SchemaFactoryWrapperProvider factoryWrapperProvider;
+    protected SchemaFactory parent;
+    protected ArraySchema schema;
 	
-	public ArraySchemaFactory(SchemaFactory schemaFactory, ArraySchema schema) {
-		this(schemaFactory, null, schema);
-	}
+    public ArraySchemaFactory(SchemaFactory schemaFactory, ArraySchema schema) {
+        this(schemaFactory, null, schema);
+    }
 
-	public ArraySchemaFactory(SchemaFactory parent, BeanProperty property, ArraySchema schema) {
-		this.parent = parent;
-		this.schema = schema;
-	}
+    public ArraySchemaFactory(SchemaFactory parent, BeanProperty property, ArraySchema schema) {
+        this.parent = parent;
+        this.schema = schema;
+    }
 
-	public BeanProperty getProperty() {
-		return property;
-	}
+    public BeanProperty getProperty() {
+        return property;
+    }
 	
-	public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
-		return factoryWrapperProvider;
-	}
+    public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
+        return factoryWrapperProvider;
+    }
 
-	public SchemaFactory getParent() {
-		return parent;
-	}
+    public SchemaFactory getParent() {
+        return parent;
+    }
 
-	public SerializerProvider getProvider() {
-		return parent.getProvider();
-	}
+    public SerializerProvider getProvider() {
+        return parent.getProvider();
+    }
 
-	public JsonSchema getSchema() {
-		return schema;
-	}
+    public JsonSchema getSchema() {
+        return schema;
+    }
 
-	public void itemsFormat(JavaType contentType) throws JsonMappingException
-	{
-		// An array of object matches any values, thus we leave the schema empty.
+    @Override
+    public void itemsFormat(JsonFormatVisitable handler, JavaType contentType)
+        throws JsonMappingException
+    {
+        // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            JsonSerializer<Object> ser = getProvider().findValueSerializer(contentType, property);
             SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper();
             visitor.setProvider(parent.getProvider());
-            ser.acceptJsonFormatVisitor(visitor, contentType);
+            handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }
 	}
@@ -81,6 +83,5 @@ public class ArraySchemaFactory
 	public void setSchema(ArraySchema schema) {
 		this.schema = schema;
 	}
-	
 
 }
