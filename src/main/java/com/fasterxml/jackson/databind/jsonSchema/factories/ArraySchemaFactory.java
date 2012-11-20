@@ -48,26 +48,23 @@ public class ArraySchemaFactory implements JsonArrayFormatVisitor, SchemaProduce
 		return schema;
 	}
 
-	public void itemsFormat(JavaType contentType) {
+	public void itemsFormat(JavaType contentType) throws JsonMappingException
+	{
 		// An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-        	
             JsonSerializer<Object> ser;
-			try {
-				ser = getProvider().findValueSerializer(contentType, _property);
-				if (ser instanceof JsonFormatVisitable) {
-	            	SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper();
-	            	visitor.setProvider(parent.getProvider());
-	                ((JsonFormatVisitable) ser).acceptJsonFormatVisitor(visitor, contentType);
-	                schema.setItemsSchema(visitor.finalSchema());
-	            }
-			} catch (JsonMappingException e) {
-				//TODO: log error
-			}   
+            ser = getProvider().findValueSerializer(contentType, _property);
+            if (ser instanceof JsonFormatVisitable) {
+                SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper();
+                visitor.setProvider(parent.getProvider());
+                ((JsonFormatVisitable) ser).acceptJsonFormatVisitor(visitor, contentType);
+                schema.setItemsSchema(visitor.finalSchema());
+            }
         }
 	}
 
-	public void itemsFormat(JsonFormatTypes format) {
+	public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
+	{
 		schema.setItemsSchema(JsonSchema.minimalForFormat(format));
 	}
 

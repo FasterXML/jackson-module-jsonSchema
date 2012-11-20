@@ -1,17 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion> 
   <parent>
-    <groupId>org.sonatype.oss</groupId>
+    <groupId>com.fasterxml</groupId>
     <artifactId>oss-parent</artifactId>
-    <version>7</version>
+    <version>4</version>
   </parent>
   <groupId>com.fasterxml.jackson.module</groupId>
   <artifactId>jackson-module-jsonSchema</artifactId>
   <name>jackson-module-jsonSchema</name>
   <version>2.1.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
-json schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
+JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
   </description>
   <url>https://github.com/FasterXML/jackson-module-jsonSchema</url>
   <scm>
@@ -31,42 +30,34 @@ json schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
             <email>jphelan@andrew.cmu.edu</email>
         </developer>
   </developers>
-
-  <prerequisites>
-    <maven>2.2.1</maven>
-  </prerequisites>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     <!--  this module is 1.6 only -->
+    <javac.src.version>1.6</javac.src.version>
+    <javac.target.version>1.6</javac.target.version>
+    
+    <jackson.core.version>2.2.0-SNAPSHOT</jackson.core.version>
+    <!--
+     | Configuration properties for the OSGi maven-bundle-plugin
+    -->
+    <osgi.export>com.fasterxml.jackson.module.jsonSchema.*; version=${project.version}
+</osgi.export>
   </properties>
-
-  <!-- Licensing -->
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <organization>
-    <name>fasterxml.com</name>
-    <url>http://fasterxml.com</url>
-  </organization>
 
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.1.0</version>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.core.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.1.0</version>
+      <version>${jackson.core.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>2.1.0</version>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.core.version}</version>
     </dependency>
 	
      <!-- and for testing, JUnit is needed -->
@@ -88,7 +79,6 @@ json schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
 	  <version>1.2.16</version>
 	  <scope>test</scope>
 	</dependency>
-
   </dependencies>
 
   <build>
@@ -98,109 +88,5 @@ json schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         <filtering>true</filtering>
       </resource>  
     </resources>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <configuration>
-                <mavenExecutorId>forked-path</mavenExecutorId>
-            </configuration>
-      </plugin>
-        <plugin><!-- plug-in to attach source bundle in repo -->
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>2.1.2</version>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <encoding>UTF-8</encoding>
-                    <maxmemory>512m</maxmemory>
-                    <links>
-                      <link>http://docs.oracle.com/javase/6/docs/api/</link>
-                    </links>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-        </plugin>
-
-        <!-- Plus, let's make jars OSGi bundles as well  -->
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>2.3.7</version>
-          <extensions>true</extensions>
-          <configuration>
-            <instructions>
-              <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-              <Bundle-Vendor>fasterml.com</Bundle-Vendor>
-              <Import-Package>
-</Import-Package>
-              <Private-Package>
-</Private-Package>
-              <Export-Package>
-com.fasterxml.jackson.module.jsonSchema
-</Export-Package>
-            </instructions>
-          </configuration>
-        </plugin>
-    </plugins>
   </build>
-  <profiles>
-        <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-  </profiles>
-  <!-- NOTE: repositories from parent POM -->
 </project>
