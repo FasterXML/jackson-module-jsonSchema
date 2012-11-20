@@ -17,10 +17,10 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper {
 	protected SchemaProvider schemaProvider;
 	
 	public SchemaFactoryWrapper() {
-		schemaProvider = new SchemaProvider();
-		factoryProvider = new FactoryProvider();
-	}
-
+         schemaProvider = new SchemaProvider();
+         factoryProvider = new FactoryProvider();
+     }
+     
 	/*
 	/*********************************************************************
 	/* JsonFormatVisitorWrapper implementation
@@ -188,11 +188,15 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper {
 	}
 	
 	public class SchemaFactoryWrapperProvider {
-		public SchemaFactoryWrapper SchemaFactoryWrapper() { 
-			SchemaFactoryWrapper wrapper = new SchemaFactoryWrapper();
-			wrapper.setProvider(getProvider());
-			return wrapper;
+		public SchemaFactoryWrapper schemaFactoryWrapper() {
+		    return schemaFactoryWrapper(getProvider());
 		}
+
+          public SchemaFactoryWrapper schemaFactoryWrapper(SerializerProvider provider) { 
+              SchemaFactoryWrapper wrapper = new SchemaFactoryWrapper();
+              wrapper.setProvider(provider);
+              return wrapper;
+          }
 	}
 
     protected class SchemaProvider

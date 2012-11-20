@@ -98,8 +98,7 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, SchemaProdu
         if (writer == null) {
             throw new IllegalArgumentException("Null writer");
         }
-        SchemaFactoryWrapper visitor = factoryWrapperProvider.SchemaFactoryWrapper();
-        visitor.setProvider(parent.getProvider());
+        SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(parent.getProvider());
         JsonSerializer<Object> ser = getSer(writer);
         if (ser != null) {
             JavaType type = writer.getType();
@@ -114,29 +113,24 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, SchemaProdu
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-		SchemaFactoryWrapper visitor = factoryWrapperProvider.SchemaFactoryWrapper();
-		visitor.setProvider(parent.getProvider());
+		SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(parent.getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
     }
 	
-	public void setFactoryWrapperProvider(
-			SchemaFactoryWrapperProvider factoryWrapperProvider) {
-		this.factoryWrapperProvider = factoryWrapperProvider;
-	}
+    public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
+        this.factoryWrapperProvider = factoryWrapperProvider;
+    }
 	
-	public void setParent(SchemaFactory parent) {
-		this.parent = parent;
-	}
+    public void setParent(SchemaFactory parent) {
+        this.parent = parent;
+    }
 
+    public void setProvider(SerializerProvider provider) {
+        parent.setProvider(provider);
+    }
 
-	public void setProvider(SerializerProvider provider) {
-		parent.setProvider(provider);
-	}
-
-
-	public void setSchema(ObjectSchema schema) {
-		this.schema = schema;
-	}
-
+    public void setSchema(ObjectSchema schema) {
+        this.schema = schema;
+    }
 }
