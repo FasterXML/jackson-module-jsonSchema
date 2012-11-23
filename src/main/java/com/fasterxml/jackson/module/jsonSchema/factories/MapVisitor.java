@@ -12,18 +12,17 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
  * names), Jackson has, so the distinction is exposed. We will need
  * to handle it here, produce JSON Schema Object type.
  */
-public class MapVisitor implements JsonMapFormatVisitor, JsonSchemaProducer
+public class MapVisitor extends StructuredTypeVisitor
+    implements JsonMapFormatVisitor, JsonSchemaProducer
 {
     protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
     protected final JsonSchemaReference parent;
     protected final ObjectSchema schema;
-
-    protected SerializerProvider provider;
     
     public MapVisitor(SerializerProvider provider,
             JsonSchemaReference parent, ObjectSchema schema, SchemaFactoryWrapperProvider wp)
     {
-        this.provider = provider;
+        super(provider);
         this.parent = parent;
         this.schema = schema;
         factoryWrapperProvider = wp;
@@ -44,16 +43,6 @@ public class MapVisitor implements JsonMapFormatVisitor, JsonSchemaProducer
     /* JsonMapFormatVisitor
     /*********************************************************************
      */
-
-    @Override
-    public SerializerProvider getProvider() {
-        return provider;
-    }
-    
-    @Override
-    public void setProvider(SerializerProvider p) {
-        provider = p;
-    }
     
     @Override
     public void keyFormat(JsonFormatVisitable handler, JavaType keyType)

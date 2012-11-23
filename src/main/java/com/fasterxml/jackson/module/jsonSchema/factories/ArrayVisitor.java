@@ -7,17 +7,15 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 
-public class ArrayVisitor
+public class ArrayVisitor extends StructuredTypeVisitor
     implements JsonArrayFormatVisitor, JsonSchemaProducer
 {
-    protected SerializerProvider provider;
-
     protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
     protected final ArraySchema schema;
 
     public ArrayVisitor(SerializerProvider provider,
             ArraySchema schema, SchemaFactoryWrapperProvider wp) {
-        this.provider = provider;
+        super(provider);
         this.schema = schema;
         factoryWrapperProvider = wp;
     }
@@ -39,11 +37,6 @@ public class ArrayVisitor
      */
 
     @Override
-    public SerializerProvider getProvider() {
-        return provider;
-    }
-
-    @Override
     public void itemsFormat(JsonFormatVisitable handler, JavaType contentType)
         throws JsonMappingException
     {
@@ -60,10 +53,5 @@ public class ArrayVisitor
     public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
     {
         schema.setItemsSchema(JsonSchema.minimalForFormat(format));
-    }
-
-    @Override
-    public void setProvider(SerializerProvider p) {
-        provider = p;
     }
 }
