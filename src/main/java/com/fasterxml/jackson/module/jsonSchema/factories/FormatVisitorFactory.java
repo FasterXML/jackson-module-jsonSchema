@@ -77,9 +77,8 @@ public class FormatVisitorFactory
  		return new IntegerVisitor(parent, integerSchema);
  	}
 
- 	public JsonNullFormatVisitor nullFormatVisitor(SchemaFactory parent,
- 			NullSchema nullSchema) {
- 		return new NullSchemaFactory(parent, nullSchema);
+ 	public JsonNullFormatVisitor nullFormatVisitor(NullSchema nullSchema) {
+ 		return new NullVisitor(nullSchema);
  	}
 
      public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,

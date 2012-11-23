@@ -39,8 +39,4 @@ public class IntegerVisitor implements JsonIntegerFormatVisitor, JsonSchemaProdu
 	public void format(JsonValueFormat format) {
 		parent.format(format);
 	}
-
-	public ValueTypeSchemaFactory getParent() {
-		return parent;
-	}
 }

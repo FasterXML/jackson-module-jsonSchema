@@ -14,21 +14,12 @@ public class ArrayVisitor
     protected SerializerProvider provider;
 
     protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
-    protected final BeanProperty property; 
     protected final ArraySchema schema;
 
     public ArrayVisitor(SerializerProvider provider,
-            ArraySchema schema,
-            SchemaFactoryWrapperProvider wp) {
-        this(provider, null, schema, wp);
-    }
-
-    public ArrayVisitor(SerializerProvider provider,
-            BeanProperty property, ArraySchema schema,
-            SchemaFactoryWrapperProvider wp) {
+            ArraySchema schema, SchemaFactoryWrapperProvider wp) {
         this.provider = provider;
         this.schema = schema;
-        this.property = property;
         factoryWrapperProvider = wp;
     }
     
@@ -64,15 +55,16 @@ public class ArrayVisitor
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }
-	}
+    }
 
-	public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
-	{
-		schema.setItemsSchema(JsonSchema.minimalForFormat(format));
-	}
+    @Override
+    public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
+    {
+        schema.setItemsSchema(JsonSchema.minimalForFormat(format));
+    }
 
-	@Override
-	public void setProvider(SerializerProvider p) {
-	    provider = p;
-	}
+    @Override
+    public void setProvider(SerializerProvider p) {
+        provider = p;
+    }
 }

@@ -56,9 +56,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     }
 
     public JsonNullFormatVisitor expectNullFormat(JavaType convertedType) {
-		NullSchema nullSchema = schemaProvider.nullSchema();
-		delegate = visitorFactory.schemaFactory(provider, nullSchema);
-		return visitorFactory.nullFormatVisitor(delegate, nullSchema);
+		return visitorFactory.nullFormatVisitor(schemaProvider.nullSchema());
     }
 
     public JsonNumberFormatVisitor expectNumberFormat(JavaType convertedType) {

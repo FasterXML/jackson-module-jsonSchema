@@ -48,21 +48,24 @@ public class MapVisitor implements JsonMapFormatVisitor, JsonSchemaProducer
 
     @Override
     public SerializerProvider getProvider() {
-        return parent.getProvider();
+        return provider;
     }
     
     @Override
-    public void setProvider(SerializerProvider provider) {
-        parent.setProvider(provider);
+    public void setProvider(SerializerProvider p) {
+        provider = p;
     }
     
     @Override
     public void keyFormat(JsonFormatVisitable handler, JavaType keyType)
             throws JsonMappingException {
+        // JSON Schema only allows String types so let's not bother too much
     }
 
     @Override
     public void valueFormat(JsonFormatVisitable handler, JavaType valueType)
             throws JsonMappingException {
+        /* Also... not sure what to do with value type either.
+         */
     }
 }
