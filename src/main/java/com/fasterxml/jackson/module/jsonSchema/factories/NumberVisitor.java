@@ -8,36 +8,35 @@ import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 
 public class NumberVisitor implements JsonNumberFormatVisitor, JsonSchemaProducer
 {
-	protected ValueTypeSchemaFactory parent;
-	protected NumberSchema schema;
+    protected final ValueTypeSchemaFactory parent;
+    protected final NumberSchema schema;
 	
-	public NumberVisitor(ValueTypeSchemaFactory parent, NumberSchema schema) {
-		this.parent = parent;
-		this.schema = schema;
-	}
+    public NumberVisitor(ValueTypeSchemaFactory parent, NumberSchema schema) {
+        this.parent = parent;
+        this.schema = schema;
+    }
 
-	public void enumTypes(Set<String> enums) {
-		parent.enumTypes(enums);
-	}
+    /*
+    /*********************************************************************
+    /* JsonSchemaProducer
+    /*********************************************************************
+     */
 
-	public void format(JsonValueFormat format) {
-		parent.format(format);
-	}
+    public NumberSchema getSchema() {
+        return schema;
+    }
+    
+    /*
+    /*********************************************************************
+    /* JsonSchemaProducer
+    /*********************************************************************
+     */
+	
+    public void enumTypes(Set<String> enums) {
+        parent.enumTypes(enums);
+    }
 
-	public ValueTypeSchemaFactory getParent() {
-		return parent;
-	}
-
-	public NumberSchema getSchema() {
-		return schema;
-	}
-
-	public void setParent(ValueTypeSchemaFactory parent) {
-		this.parent = parent;
-	}
-
-	public void setSchema(NumberSchema schema) {
-		this.schema = schema;
-	}	
-
+    public void format(JsonValueFormat format) {
+        parent.format(format);
+    }
 }

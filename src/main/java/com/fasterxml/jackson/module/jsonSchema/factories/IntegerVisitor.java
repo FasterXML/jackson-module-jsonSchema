@@ -31,12 +31,12 @@ public class IntegerVisitor implements JsonIntegerFormatVisitor, JsonSchemaProdu
     /* JsonIntegerFormatVisitor
     /*********************************************************************
      */
-    
-	public void enumTypes(Set<String> enums) {
-		parent.enumTypes(enums);
-	}
 
-	public void format(JsonValueFormat format) {
-		parent.format(format);
-	}
+    public void enumTypes(Set<String> enums) {
+        parent.enumTypes(enums);
+    }
+
+    public void format(JsonValueFormat format) {
+        parent.format(format);
+    }
 }
