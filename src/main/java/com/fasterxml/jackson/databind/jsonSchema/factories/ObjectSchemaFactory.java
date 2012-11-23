@@ -36,61 +36,59 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, SchemaProdu
         return schema;
     }
 
-    private JsonSerializer<Object> getSer(BeanProperty writer)
-        throws JsonMappingException
-    {
-		JsonSerializer<Object> ser = null;
-		if (writer instanceof BeanPropertyWriter) {
-			ser = ((BeanPropertyWriter)writer).getSerializer();
-		}
-		if (ser == null) {
-			ser = getProvider().findValueSerializer(writer.getType(), writer);
-		}
-		return ser;
-	}
-
-
-    public void optionalProperty(BeanProperty writer) {
-        // TODO: fix for 2.2
-        try { 
-            schema.putOptionalProperty(writer.getName(), propertySchema(writer));
-        } catch (JsonMappingException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+    public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
+        this.factoryWrapperProvider = factoryWrapperProvider;
+    }
+     
+    public void setParent(SchemaFactory parent) {
+        this.parent = parent;
     }
 
-    public void optionalProperty(String name) {
-        // TODO: fix for 2.2
+    public void setProvider(SerializerProvider provider) {
+        parent.setProvider(provider);
+    }
+
+    public void setSchema(ObjectSchema schema) {
+        this.schema = schema;
+    }
+
+    /*
+    /*********************************************************************
+    /* Visitor methods
+    /*********************************************************************
+     */
+    
+    @Override
+    public void optionalProperty(BeanProperty writer) throws JsonMappingException {
+        schema.putOptionalProperty(writer.getName(), propertySchema(writer));
+    }
+
+    @Override
+    public void optionalProperty(String name) throws JsonMappingException {
         schema.putOptionalProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
     }	
 	
-    public void optionalProperty(String name, JsonFormatVisitable handler, JavaType propertyTypeHint) {
-        try { 
-            schema.putOptionalProperty(name, propertySchema(handler, propertyTypeHint));
-        } catch (JsonMappingException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+    @Override
+    public void optionalProperty(String name, JsonFormatVisitable handler, JavaType propertyTypeHint)
+            throws JsonMappingException {
+        schema.putOptionalProperty(name, propertySchema(handler, propertyTypeHint));
     }
 
-    public void property(BeanProperty writer) {
-        try { 
-            schema.putProperty(writer.getName(), propertySchema(writer));
-        } catch (JsonMappingException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+    @Override
+    public void property(BeanProperty writer) throws JsonMappingException {
+        schema.putProperty(writer.getName(), propertySchema(writer));
     }
 	
-	public void property(String name) {
+    @Override
+    public void property(String name) throws JsonMappingException {
 		schema.putProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
-	}
+    }
 
-	public void property(String name, JsonFormatVisitable handler, JavaType propertyTypeHint) {
-	    try { 
-	        schema.putProperty(name, propertySchema(handler, propertyTypeHint));
-	    } catch (JsonMappingException e) {
-	        throw new IllegalStateException(e.getMessage(), e);
-	    }
-	}
+    @Override
+    public void property(String name, JsonFormatVisitable handler, JavaType propertyTypeHint)
+            throws JsonMappingException {
+        schema.putProperty(name, propertySchema(handler, propertyTypeHint));
+    }
 
     protected JsonSchema propertySchema(BeanProperty writer)
         throws JsonMappingException
@@ -117,20 +115,17 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, SchemaProdu
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
     }
-	
-    public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
-        this.factoryWrapperProvider = factoryWrapperProvider;
-    }
-	
-    public void setParent(SchemaFactory parent) {
-        this.parent = parent;
-    }
 
-    public void setProvider(SerializerProvider provider) {
-        parent.setProvider(provider);
-    }
-
-    public void setSchema(ObjectSchema schema) {
-        this.schema = schema;
+    private JsonSerializer<Object> getSer(BeanProperty writer)
+        throws JsonMappingException
+    {
+        JsonSerializer<Object> ser = null;
+        if (writer instanceof BeanPropertyWriter) {
+            ser = ((BeanPropertyWriter)writer).getSerializer();
+        }
+        if (ser == null) {
+            ser = getProvider().findValueSerializer(writer.getType(), writer);
+        }
+        return ser;
     }
 }

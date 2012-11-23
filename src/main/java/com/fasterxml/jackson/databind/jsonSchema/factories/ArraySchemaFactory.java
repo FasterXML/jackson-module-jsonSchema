@@ -51,7 +51,8 @@ public class ArraySchemaFactory
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper();
+            SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(
+                    parent.getProvider());
             visitor.setProvider(parent.getProvider());
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
