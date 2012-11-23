@@ -8,11 +8,9 @@ import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
 
 public class BooleanVisitor implements JsonBooleanFormatVisitor, JsonSchemaProducer
 {
-    protected final ValueTypeSchemaFactory parent;
     protected final BooleanSchema schema;
 	
-    public BooleanVisitor(ValueTypeSchemaFactory parent, BooleanSchema schema) {
-        this.parent = parent;
+    public BooleanVisitor(BooleanSchema schema) {
         this.schema = schema;
     }
 
@@ -33,11 +31,13 @@ public class BooleanVisitor implements JsonBooleanFormatVisitor, JsonSchemaProdu
     /*********************************************************************
      */
 	
+    @Override
     public void enumTypes(Set<String> enums) {
-        parent.enumTypes(enums);
+        schema.setEnums(enums);
     }
 
+    @Override
     public void format(JsonValueFormat format) {
-        parent.format(format);
+        schema.setFormat(format);
     }
 }

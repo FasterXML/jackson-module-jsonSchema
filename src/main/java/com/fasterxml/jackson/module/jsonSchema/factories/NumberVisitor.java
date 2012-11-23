@@ -8,11 +8,9 @@ import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 
 public class NumberVisitor implements JsonNumberFormatVisitor, JsonSchemaProducer
 {
-    protected final ValueTypeSchemaFactory parent;
     protected final NumberSchema schema;
 	
-    public NumberVisitor(ValueTypeSchemaFactory parent, NumberSchema schema) {
-        this.parent = parent;
+    public NumberVisitor(NumberSchema schema) {
         this.schema = schema;
     }
 
@@ -33,10 +31,10 @@ public class NumberVisitor implements JsonNumberFormatVisitor, JsonSchemaProduce
      */
 	
     public void enumTypes(Set<String> enums) {
-        parent.enumTypes(enums);
+        schema.setEnums(enums);
     }
 
     public void format(JsonValueFormat format) {
-        parent.format(format);
+        schema.setFormat(format);
     }
 }

@@ -63,31 +63,28 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonBooleanFormatVisitor expectBooleanFormat(JavaType convertedType) {
         BooleanSchema booleanSchema = schemaProvider.booleanSchema();
         schema = booleanSchema;
-        ValueTypeSchemaFactory valueTypeSchemaFactory = new ValueTypeSchemaFactory(booleanSchema);
-        return visitorFactory.booleanFormatVisitor(valueTypeSchemaFactory, booleanSchema);
+        return visitorFactory.booleanFormatVisitor(booleanSchema);
     }
 
     @Override
     public JsonIntegerFormatVisitor expectIntegerFormat(JavaType convertedType) {
         IntegerSchema integerSchema = schemaProvider.integerSchema();
         schema = integerSchema;
-        ValueTypeSchemaFactory valueTypeSchemaFactory = new ValueTypeSchemaFactory(integerSchema);
-        return visitorFactory.integerFormatVisitor(valueTypeSchemaFactory, integerSchema);
+        return visitorFactory.integerFormatVisitor(integerSchema);
     }
 
     @Override
     public JsonNullFormatVisitor expectNullFormat(JavaType convertedType) {
-        NullSchema ns = schemaProvider.nullSchema();
-        schema = ns;
-        return visitorFactory.nullFormatVisitor(ns);
+        NullSchema s = schemaProvider.nullSchema();
+        schema = s;
+        return visitorFactory.nullFormatVisitor(s);
     }
 
     @Override
     public JsonNumberFormatVisitor expectNumberFormat(JavaType convertedType) {
-        NumberSchema numberSchema = schemaProvider.numberSchema();
-        schema = numberSchema;
-        return visitorFactory.numberFormatVisitor(new ValueTypeSchemaFactory(numberSchema),
-                numberSchema);
+        NumberSchema s = schemaProvider.numberSchema();
+        schema = s;
+        return visitorFactory.numberFormatVisitor(s);
     }
 	
     @Override
@@ -101,8 +98,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonStringFormatVisitor expectStringFormat(JavaType convertedType) {
         StringSchema stringSchema = schemaProvider.stringSchema();
         schema = stringSchema;
-        return visitorFactory.stringFormatVisitor(new ValueTypeSchemaFactory(stringSchema),
-                stringSchema);
+        return visitorFactory.stringFormatVisitor(stringSchema);
     }
 
     @Override

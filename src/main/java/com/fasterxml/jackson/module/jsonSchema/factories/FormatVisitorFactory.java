@@ -44,27 +44,24 @@ public class FormatVisitorFactory
     /**********************************************************
      */
 
-    public JsonBooleanFormatVisitor booleanFormatVisitor(ValueTypeSchemaFactory parent,
-            BooleanSchema booleanSchema) {
-        return new BooleanVisitor(parent, booleanSchema);
+    public JsonBooleanFormatVisitor booleanFormatVisitor(BooleanSchema booleanSchema) {
+        return new BooleanVisitor(booleanSchema);
     }
 
-    public JsonIntegerFormatVisitor integerFormatVisitor(ValueTypeSchemaFactory parent,
-            IntegerSchema integerSchema) {
-        return new IntegerVisitor(parent, integerSchema);
+    public JsonIntegerFormatVisitor integerFormatVisitor(IntegerSchema integerSchema) {
+        return new IntegerVisitor(integerSchema);
     }
 
+    // no ValueTypeSchemaFactory, since null type has no formatting
     public JsonNullFormatVisitor nullFormatVisitor(NullSchema nullSchema) {
         return new NullVisitor(nullSchema);
     }
 
- 	public JsonNumberFormatVisitor numberFormatVisitor(ValueTypeSchemaFactory parent,
- 			NumberSchema numberSchema) {
- 	    return new NumberVisitor(parent, numberSchema);
- 	}
+    public JsonNumberFormatVisitor numberFormatVisitor(NumberSchema numberSchema) {
+        return new NumberVisitor(numberSchema);
+    }
 
- 	public JsonStringFormatVisitor stringFormatVisitor(ValueTypeSchemaFactory parent,
- 			StringSchema stringSchema) {
- 		return new StringVisitor(parent, stringSchema);
- 	}
+    public JsonStringFormatVisitor stringFormatVisitor(StringSchema stringSchema) {
+        return new StringVisitor(stringSchema);
+    }
 }

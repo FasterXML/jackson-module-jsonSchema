@@ -1,8 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -92,7 +90,7 @@ public class TestGenerateJsonSchema
     }
 
     //@JsonSerializableSchema(id="myType")
-    public class BeanWithId {
+    public static class BeanWithId {
         public String value;
     }
 
@@ -114,6 +112,17 @@ public class TestGenerateJsonSchema
     
     public static FilterProvider secretFilterProvider = new SimpleFilterProvider()
         .addFilter("filteredBean", SimpleBeanPropertyFilter.filterOutAllExcept(new String[]{"obvious"}));
+
+    public enum Enumerated {
+        A, B, C;
+    }
+    
+    public static class LetterBean {
+        public Enumerated letter;
+    }
+
+    @SuppressWarnings("serial")
+    static class StringMap extends HashMap<String,String> { }
     
     /*
     /**********************************************************
@@ -202,8 +211,7 @@ public class TestGenerateJsonSchema
      * Additional unit test for verifying that schema object itself
      * can be properly serialized
      */
-    public void testSchemaSerialization()
-            throws Exception
+    public void testSchemaSerialization() throws Exception
     {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
@@ -230,22 +238,57 @@ public class TestGenerateJsonSchema
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes", "serial" })
-	public void testSchemaId() throws Exception
+    public void testSchemaId() throws Exception
     {
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        MAPPER.acceptJsonFormatVisitor(BeanWithId.class, visitor);
-        JsonSchema jsonSchema = visitor.finalSchema();
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchema jsonSchema = generator.generateSchema(BeanWithId.class);
         Map<String,Object> result = writeAndMap(MAPPER, jsonSchema);
         
         assertEquals(new HashMap() {{ 
         	put("type", "object");
         	put("properties", 
-        			new HashMap(){{ put("value", 
-        					new HashMap() {{ put("type", "string");}}
-        			);}}
-        	);}}, result);
+        	        new HashMap(){{ put("value", 
+        	                new HashMap() {{ put("type", "string"); }}
+        	                );
+        	        }}
+        	        );
+        	}}, result);
     }
 
+    @SuppressWarnings("serial")
+    public void testWithEnum() throws Exception
+    {
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchema jsonSchema = generator.generateSchema(LetterBean.class);
+        Map<String,Object> result = writeAndMap(MAPPER, jsonSchema);
+        assertNotNull(result);
+        
+        assertEquals(new HashMap<String,Object>() {{ 
+            put("type", "object");
+            put("properties", 
+                    new HashMap<String,Object>(){{ put("letter", 
+                            new HashMap<String,Object>() {{
+                                put("type", "string");
+                                put("enums", new ArrayList<String>() {{
+                                    add("A"); add("B"); add("C");
+                                }} );
+                            }} );
+                    }}
+                    );
+            }}, result);
+    }
+
+    public void testSimpleMap() throws Exception
+    {
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchema jsonSchema = generator.generateSchema(StringMap.class);
+        Map<String,Object> result = writeAndMap(MAPPER, jsonSchema);
+        assertNotNull(result);
+
+        // Maps are treated like ... "empty" Object. Not good, should be improved if possible
+        assertEquals("{\"type\":\"object\"}", MAPPER.writeValueAsString(jsonSchema));
+    }
+    
     /*
     /**********************************************************
     /* Tests cases, error detection/handling

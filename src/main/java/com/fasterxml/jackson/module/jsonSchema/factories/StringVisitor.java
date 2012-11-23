@@ -8,11 +8,9 @@ import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 public class StringVisitor implements JsonStringFormatVisitor, JsonSchemaProducer
 {
-    protected final ValueTypeSchemaFactory parent;
     protected final StringSchema schema;
 	
-    public StringVisitor(ValueTypeSchemaFactory parent, StringSchema schema) {
-        this.parent = parent;
+    public StringVisitor(StringSchema schema) {
         this.schema = schema;
     }
 
@@ -24,12 +22,12 @@ public class StringVisitor implements JsonStringFormatVisitor, JsonSchemaProduce
 	
     @Override
     public void enumTypes(Set<String> enums) {
-        parent.enumTypes(enums);
+        schema.setEnums(enums);
     }
 
     @Override
     public void format(JsonValueFormat format) {
-        parent.format(format);
+        schema.setFormat(format);
     }
 
     @Override
