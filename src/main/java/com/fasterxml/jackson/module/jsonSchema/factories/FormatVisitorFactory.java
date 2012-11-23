@@ -34,8 +34,8 @@ public class FormatVisitorFactory
         return new ValueTypeSchemaFactory(parent, valueTypeSchema);
     }
 
-    public JsonSchemaReference schemaFactory(SerializerProvider provider, JsonSchema schema) {
-        return new JsonSchemaReference(provider, schema);
+    public JsonSchemaReference schemaReference(JsonSchema schema) {
+        return new JsonSchemaReference(schema);
     }
 
     /*
