@@ -18,12 +18,12 @@ public class ValueTypeSchemaFactory implements JsonValueFormatVisitor, JsonSchem
 
     @Override
     public void enumTypes(Set<String> enums) {
-        getSchema().setEnums(enums);
+        schema.setEnums(enums);
     }
 
     @Override
     public void format(JsonValueFormat format) {
-        getSchema().setFormat(format);
+        schema.setFormat(format);
     }
 
     @Override

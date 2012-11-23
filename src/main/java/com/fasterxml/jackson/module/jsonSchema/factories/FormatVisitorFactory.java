@@ -15,7 +15,7 @@ public class FormatVisitorFactory
 
     /*
     /**********************************************************
-    /* Factory methods for visitors
+    /* Factory methods for visitors, structured types
     /**********************************************************
      */
 
@@ -28,38 +28,42 @@ public class FormatVisitorFactory
             JsonSchemaReference parent, ArraySchema arraySchema) {
         return new ArrayVisitor(provider, arraySchema);
     }
+    public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
+            JsonSchemaReference parent, ObjectSchema objectSchema) {
+        return new MapVisitor(provider, parent, objectSchema);
+    }
 
- 	public JsonBooleanFormatVisitor booleanFormatVisitor(ValueTypeSchemaFactory parent, BooleanSchema booleanSchema) {
- 		return new BooleanVisitor(parent, booleanSchema);
- 	}
+    public JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
+              JsonSchemaReference parent, ObjectSchema objectSchema) {
+        return new ObjectVisitor(provider, parent, objectSchema);
+    }
+    
+    /*
+    /**********************************************************
+    /* Factory methods for visitors, value types
+    /**********************************************************
+     */
 
- 	public JsonIntegerFormatVisitor integerFormatVisitor(ValueTypeSchemaFactory parent,
- 			IntegerSchema integerSchema) {
- 		return new IntegerVisitor(parent, integerSchema);
- 	}
+    public JsonBooleanFormatVisitor booleanFormatVisitor(ValueTypeSchemaFactory parent,
+            BooleanSchema booleanSchema) {
+        return new BooleanVisitor(parent, booleanSchema);
+    }
 
- 	public JsonNullFormatVisitor nullFormatVisitor(NullSchema nullSchema) {
- 		return new NullVisitor(nullSchema);
- 	}
+    public JsonIntegerFormatVisitor integerFormatVisitor(ValueTypeSchemaFactory parent,
+            IntegerSchema integerSchema) {
+        return new IntegerVisitor(parent, integerSchema);
+    }
 
-     public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
-             JsonSchemaReference parent, ObjectSchema objectSchema) {
-         return new MapVisitor(provider, parent, objectSchema);
-     }
+    public JsonNullFormatVisitor nullFormatVisitor(NullSchema nullSchema) {
+        return new NullVisitor(nullSchema);
+    }
 
- 	public JsonNumberFormatVisitor numberFormatVisitor(
- 			ValueTypeSchemaFactory parent,
+ 	public JsonNumberFormatVisitor numberFormatVisitor(ValueTypeSchemaFactory parent,
  			NumberSchema numberSchema) {
- 		return new NumberVisitor(parent, numberSchema);
+ 	    return new NumberVisitor(parent, numberSchema);
  	}
 
- 	public JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
- 			JsonSchemaReference parent, ObjectSchema objectSchema) {
- 		return new ObjectVisitor(provider, parent, objectSchema);
- 	}
-
- 	public JsonStringFormatVisitor stringFormatVisitor(
- 			ValueTypeSchemaFactory parent,
+ 	public JsonStringFormatVisitor stringFormatVisitor(ValueTypeSchemaFactory parent,
  			StringSchema stringSchema) {
  		return new StringVisitor(parent, stringSchema);
  	}
