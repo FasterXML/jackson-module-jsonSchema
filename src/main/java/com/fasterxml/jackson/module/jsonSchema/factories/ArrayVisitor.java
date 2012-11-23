@@ -39,8 +39,7 @@ public class ArrayVisitor extends StructuredTypeVisitor
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = schemaFactoryWrapper(getProvider());
-            visitor.setProvider(getProvider());
+            SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(getProvider());
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }

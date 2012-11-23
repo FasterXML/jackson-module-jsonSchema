@@ -23,7 +23,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	   (Section 5.15).
 	 */
 	@JsonProperty
-	private Set<String> enums;
+	private Set<String> enums = new HashSet<String>();
 	
 	/**
 	 * This property defines the type of data, content type, or microformat to
@@ -39,11 +39,6 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	 */
 	@JsonProperty
 	private JsonValueFormat format;
-	
-	//instance initializer block
-	{
-		enums = new HashSet<String>();
-	}
 	
 	/* (non-Javadoc)
 	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asValueSchemaSchema()

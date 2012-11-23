@@ -10,10 +10,6 @@ public abstract class StructuredTypeVisitor implements JsonSchemaProducer
     {
         this.provider = provider;
     }
-
-    protected SchemaFactoryWrapper schemaFactoryWrapper(SerializerProvider provider) { 
-        return new SchemaFactoryWrapper(provider);
-    }
     
     // // // Partial implementation for visitors; handling of SerializerProvider
     

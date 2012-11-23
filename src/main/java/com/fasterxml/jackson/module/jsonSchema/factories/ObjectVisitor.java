@@ -72,7 +72,7 @@ public class ObjectVisitor extends StructuredTypeVisitor
         if (writer == null) {
             throw new IllegalArgumentException("Null writer");
         }
-        SchemaFactoryWrapper visitor = schemaFactoryWrapper(getProvider());
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(getProvider());
         JsonSerializer<Object> ser = getSer(writer);
         if (ser != null) {
             JavaType type = writer.getType();
@@ -87,7 +87,7 @@ public class ObjectVisitor extends StructuredTypeVisitor
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-		SchemaFactoryWrapper visitor = schemaFactoryWrapper(getProvider());
+		SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
     }
