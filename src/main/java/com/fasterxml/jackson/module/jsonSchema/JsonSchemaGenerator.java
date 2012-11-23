@@ -19,14 +19,14 @@ public class JsonSchemaGenerator
 
     public JsonSchema generateSchema(Class<?> type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(null);
         _mapper.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
 
     public JsonSchema generateSchema(JavaType type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(null);
         _mapper.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }

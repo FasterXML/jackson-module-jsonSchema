@@ -10,14 +10,11 @@ import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 public class ArrayVisitor extends StructuredTypeVisitor
     implements JsonArrayFormatVisitor, JsonSchemaProducer
 {
-    protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
     protected final ArraySchema schema;
 
-    public ArrayVisitor(SerializerProvider provider,
-            ArraySchema schema, SchemaFactoryWrapperProvider wp) {
+    public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
         super(provider);
         this.schema = schema;
-        factoryWrapperProvider = wp;
     }
     
     /*
@@ -42,7 +39,7 @@ public class ArrayVisitor extends StructuredTypeVisitor
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(getProvider());
+            SchemaFactoryWrapper visitor = schemaFactoryWrapper(getProvider());
             visitor.setProvider(getProvider());
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());

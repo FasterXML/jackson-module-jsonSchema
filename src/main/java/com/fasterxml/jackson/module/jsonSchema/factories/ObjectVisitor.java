@@ -12,14 +12,11 @@ public class ObjectVisitor extends StructuredTypeVisitor
     implements JsonObjectFormatVisitor, JsonSchemaProducer
 {
     protected final ObjectSchema schema;
-    protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
     
     public ObjectVisitor(SerializerProvider provider,
-            JsonSchemaReference parent, ObjectSchema schema,
-            SchemaFactoryWrapperProvider factoryWrapperProvider) {
+            JsonSchemaReference parent, ObjectSchema schema) {
         super(provider);
         this.schema = schema;
-        this.factoryWrapperProvider = factoryWrapperProvider;
     }
 
     /*
@@ -76,7 +73,7 @@ public class ObjectVisitor extends StructuredTypeVisitor
         if (writer == null) {
             throw new IllegalArgumentException("Null writer");
         }
-        SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(getProvider());
+        SchemaFactoryWrapper visitor = schemaFactoryWrapper(getProvider());
         JsonSerializer<Object> ser = getSer(writer);
         if (ser != null) {
             JavaType type = writer.getType();
@@ -91,7 +88,7 @@ public class ObjectVisitor extends StructuredTypeVisitor
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-		SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(getProvider());
+		SchemaFactoryWrapper visitor = schemaFactoryWrapper(getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
     }

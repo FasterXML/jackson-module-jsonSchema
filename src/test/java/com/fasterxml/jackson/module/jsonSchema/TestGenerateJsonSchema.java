@@ -258,8 +258,6 @@ public class TestGenerateJsonSchema
         try {
             SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
             MAPPER.acceptJsonFormatVisitor((JavaType) null, visitor);
-            @SuppressWarnings("unused")
-               JsonSchema jsonSchema = visitor.finalSchema();
             fail("Should have failed");
         } catch (IllegalArgumentException iae) {
             verifyException(iae, "type must be provided");

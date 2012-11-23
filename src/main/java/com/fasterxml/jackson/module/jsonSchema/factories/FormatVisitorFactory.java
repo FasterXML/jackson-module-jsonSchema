@@ -27,44 +27,32 @@ import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
  */
 public class FormatVisitorFactory
 {		
-    protected SchemaFactoryWrapperProvider factoryWrapperProvider;
- 	
-    public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
-        return factoryWrapperProvider;
+    public FormatVisitorFactory() { }
+
+    public ValueTypeSchemaFactory valueTypeSchemaFactory(
+            JsonSchemaReference parent, ValueTypeSchema valueTypeSchema) {
+        return new ValueTypeSchemaFactory(parent, valueTypeSchema);
     }
- 	
- 	public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
- 		this.factoryWrapperProvider = factoryWrapperProvider;
- 	}
 
- 	public FormatVisitorFactory() {
- 		factoryWrapperProvider = new SchemaFactoryWrapperProvider();
- 	}
+    public JsonSchemaReference schemaFactory(SerializerProvider provider, JsonSchema schema) {
+        return new JsonSchemaReference(provider, schema);
+    }
 
-     public ValueTypeSchemaFactory valueTypeSchemaFactory(
-             JsonSchemaReference parent, ValueTypeSchema valueTypeSchema) {
-         return new ValueTypeSchemaFactory(parent, valueTypeSchema);
-     }
+    /*
+    /**********************************************************
+    /* Factory methods for visitors
+    /**********************************************************
+     */
 
-     public JsonSchemaReference schemaFactory(SerializerProvider provider, JsonSchema schema) {
-         return new JsonSchemaReference(provider, schema);
-     }
+    public JsonAnyFormatVisitor anyFormatVisitor(JsonSchemaReference delegate,
+            AnySchema anySchema) {
+        return null;
+    }
 
-     /*
-     /**********************************************************
-     /* Factory methods for visitors
-     /**********************************************************
-      */
-     
- 	public JsonAnyFormatVisitor anyFormatVisitor(JsonSchemaReference delegate,
- 			AnySchema anySchema) {
- 		return null;
- 	}
-
- 	public JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
- 			JsonSchemaReference parent, ArraySchema arraySchema) {
- 	    return new ArrayVisitor(provider, arraySchema, factoryWrapperProvider);
- 	}
+    public JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
+            JsonSchemaReference parent, ArraySchema arraySchema) {
+        return new ArrayVisitor(provider, arraySchema);
+    }
 
  	public JsonBooleanFormatVisitor booleanFormatVisitor(ValueTypeSchemaFactory parent, BooleanSchema booleanSchema) {
  		return new BooleanVisitor(parent, booleanSchema);
@@ -82,7 +70,7 @@ public class FormatVisitorFactory
 
      public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
              JsonSchemaReference parent, ObjectSchema objectSchema) {
-         return new MapVisitor(provider, parent, objectSchema, factoryWrapperProvider);
+         return new MapVisitor(provider, parent, objectSchema);
      }
 
  	public JsonNumberFormatVisitor numberFormatVisitor(
@@ -93,7 +81,7 @@ public class FormatVisitorFactory
 
  	public JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
  			JsonSchemaReference parent, ObjectSchema objectSchema) {
- 		return new ObjectVisitor(provider, parent, objectSchema, factoryWrapperProvider);
+ 		return new ObjectVisitor(provider, parent, objectSchema);
  	}
 
  	public JsonStringFormatVisitor stringFormatVisitor(

@@ -18,8 +18,13 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
 
     protected SerializerProvider provider;
     private JsonSchemaReference delegate;
-    
+
     public SchemaFactoryWrapper() {
+        this(null);
+    }
+    
+    public SchemaFactoryWrapper(SerializerProvider p) {
+        provider = p;
         schemaProvider = new JsonSchemaFactory();
         visitorFactory = new FormatVisitorFactory();
     }
