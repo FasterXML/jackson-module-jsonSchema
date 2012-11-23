@@ -70,13 +70,13 @@ public class FormatVisitorFactory
  	}
 
  	public JsonBooleanFormatVisitor booleanFormatVisitor(ValueTypeSchemaFactory parent, BooleanSchema booleanSchema) {
- 		return new BooleanSchemaFactory(parent, booleanSchema);
+ 		return new BooleanVisitor(parent, booleanSchema);
  	}
 
  	public JsonIntegerFormatVisitor integerFormatVisitor(
  			ValueTypeSchemaFactory parent,
  			IntegerSchema integerSchema) {
- 		return new IntegerSchemaFactory(parent, integerSchema);
+ 		return new IntegerVisitor(parent, integerSchema);
  	}
 
  	public JsonNullFormatVisitor nullFormatVisitor(SchemaFactory parent,

@@ -93,7 +93,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
         delegate = visitorFactory.schemaFactory(provider, objectSchema);
         return visitorFactory.mapFormatVisitor(delegate, objectSchema);
     }
-	
+
     /*
     /*********************************************************************
     /* API

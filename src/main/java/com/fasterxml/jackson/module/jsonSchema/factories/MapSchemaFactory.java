@@ -13,7 +13,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
  * names), Jackson has, so the distinction is exposed. We will need
  * to handle it here, produce JSON Schema Object type.
  */
-public class MapSchemaFactory implements JsonMapFormatVisitor, SchemaProducer
+public class MapSchemaFactory implements JsonMapFormatVisitor, JsonSchemaProducer
 {
     protected SchemaFactoryWrapperProvider factoryWrapperProvider;
     protected SchemaFactory parent;

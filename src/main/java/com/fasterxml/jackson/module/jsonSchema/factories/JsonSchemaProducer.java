@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 /**
  * @author jphelan
  */
-public interface SchemaProducer {
+public interface JsonSchemaProducer {
 
 	public JsonSchema getSchema();
 }

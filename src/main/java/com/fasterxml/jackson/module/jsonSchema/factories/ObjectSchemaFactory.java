@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper.SchemaFactoryWrapperProvider;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
-public class ObjectSchemaFactory implements JsonObjectFormatVisitor, SchemaProducer
+public class ObjectSchemaFactory implements JsonObjectFormatVisitor, JsonSchemaProducer
 {
     protected SchemaFactoryWrapperProvider factoryWrapperProvider;
     protected SchemaFactory parent;

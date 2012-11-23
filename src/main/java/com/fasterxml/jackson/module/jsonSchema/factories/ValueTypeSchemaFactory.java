@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
 
-public class ValueTypeSchemaFactory implements JsonValueFormatVisitor, SchemaProducer {
+public class ValueTypeSchemaFactory implements JsonValueFormatVisitor, JsonSchemaProducer {
 
 	protected SchemaFactory parent; 
 	protected ValueTypeSchema schema;

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper.Sc
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 
 public class ArraySchemaFactory
-    implements JsonArrayFormatVisitor, SchemaProducer
+    implements JsonArrayFormatVisitor, JsonSchemaProducer
 {
     protected BeanProperty property; 
     protected SchemaFactoryWrapperProvider factoryWrapperProvider;
