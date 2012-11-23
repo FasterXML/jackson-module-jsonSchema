@@ -13,59 +13,56 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
  * names), Jackson has, so the distinction is exposed. We will need
  * to handle it here, produce JSON Schema Object type.
  */
-public class MapSchemaFactory implements JsonMapFormatVisitor, JsonSchemaProducer
+public class MapVisitor implements JsonMapFormatVisitor, JsonSchemaProducer
 {
-    protected SchemaFactoryWrapperProvider factoryWrapperProvider;
-    protected SchemaFactory parent;
-    protected ObjectSchema schema;
-     
-    public MapSchemaFactory(SchemaFactory parent, ObjectSchema schema) {
+    protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
+    protected final SchemaFactory parent;
+    protected final ObjectSchema schema;
+
+    protected SerializerProvider provider;
+    
+    public MapVisitor(SerializerProvider provider,
+            SchemaFactory parent, ObjectSchema schema, SchemaFactoryWrapperProvider wp)
+    {
+        this.provider = provider;
         this.parent = parent;
         this.schema = schema;
-    }
-
-    public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
-        this.factoryWrapperProvider = factoryWrapperProvider;
-    }
-
-    public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
-        return factoryWrapperProvider;
-    }
-
-    public SchemaFactory getParent() {
-        return parent;
-    }
-
-    public SerializerProvider getProvider() {
-        return parent.getProvider();
-    } 
-    
-    public ObjectSchema getSchema() {
-        return schema;
-    }
-
-    @Override
-    public void setProvider(SerializerProvider provider) {
-        parent.setProvider(provider);
+        factoryWrapperProvider = wp;
     }
 
     /*
     /*********************************************************************
-    /* Visitor methods
+    /* JsonSchemaProducer
     /*********************************************************************
      */
-    
 
+    public ObjectSchema getSchema() {
+        return schema;
+    }
+    
+    /*
+    /*********************************************************************
+    /* JsonMapFormatVisitor
+    /*********************************************************************
+     */
+
+    @Override
+    public SerializerProvider getProvider() {
+        return parent.getProvider();
+    }
+    
+    @Override
+    public void setProvider(SerializerProvider provider) {
+        parent.setProvider(provider);
+    }
+    
     @Override
     public void keyFormat(JsonFormatVisitable handler, JavaType keyType)
             throws JsonMappingException {
-        // no info here
     }
 
     @Override
     public void valueFormat(JsonFormatVisitable handler, JavaType valueType)
             throws JsonMappingException {
-        // TODO Auto-generated method stub
-        
     }
 }

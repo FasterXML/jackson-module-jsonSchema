@@ -9,54 +9,46 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper.SchemaFactoryWrapperProvider;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
-public class ObjectSchemaFactory implements JsonObjectFormatVisitor, JsonSchemaProducer
+public class ObjectVisitor implements JsonObjectFormatVisitor, JsonSchemaProducer
 {
-    protected SchemaFactoryWrapperProvider factoryWrapperProvider;
-    protected SchemaFactory parent;
-    protected ObjectSchema schema;
-	
-    public ObjectSchemaFactory(SchemaFactory parent, ObjectSchema schema) {
-        this.parent = parent;
+    protected final ObjectSchema schema;
+    protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
+
+    protected SerializerProvider provider;
+    
+    public ObjectVisitor(SerializerProvider provider,
+            SchemaFactory parent, ObjectSchema schema,
+            SchemaFactoryWrapperProvider factoryWrapperProvider) {
+        this.provider = provider;
         this.schema = schema;
-    }
-
-    public SchemaFactoryWrapperProvider getFactoryWrapperProvider() {
-        return factoryWrapperProvider;
-    }
-
-    public SchemaFactory getParent() {
-        return parent;
-    }
-
-    public SerializerProvider getProvider() {
-        return parent.getProvider();
-    }
-
-    public ObjectSchema getSchema() {
-        return schema;
-    }
-
-    public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
         this.factoryWrapperProvider = factoryWrapperProvider;
-    }
-     
-    public void setParent(SchemaFactory parent) {
-        this.parent = parent;
-    }
-
-    public void setProvider(SerializerProvider provider) {
-        parent.setProvider(provider);
-    }
-
-    public void setSchema(ObjectSchema schema) {
-        this.schema = schema;
     }
 
     /*
     /*********************************************************************
-    /* Visitor methods
+    /* JsonSchemaProducer
     /*********************************************************************
      */
+
+    public ObjectSchema getSchema() {
+        return schema;
+    }
+    
+    /*
+    /*********************************************************************
+    /* JsonObjectFormatVisitor impl
+    /*********************************************************************
+     */
+ 
+    @Override
+    public SerializerProvider getProvider() {
+        return provider;
+    }
+
+    @Override
+    public void setProvider(SerializerProvider p) {
+        provider = p;
+    }
     
     @Override
     public void optionalProperty(BeanProperty writer) throws JsonMappingException {
@@ -96,7 +88,7 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, JsonSchemaP
         if (writer == null) {
             throw new IllegalArgumentException("Null writer");
         }
-        SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(parent.getProvider());
+        SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(getProvider());
         JsonSerializer<Object> ser = getSer(writer);
         if (ser != null) {
             JavaType type = writer.getType();
@@ -111,7 +103,7 @@ public class ObjectSchemaFactory implements JsonObjectFormatVisitor, JsonSchemaP
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-		SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(parent.getProvider());
+		SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
     }

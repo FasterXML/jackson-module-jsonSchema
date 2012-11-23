@@ -62,9 +62,9 @@ public class FormatVisitorFactory
  		return null;
  	}
 
- 	public JsonArrayFormatVisitor arrayFormatVisitor(
+ 	public JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
  			SchemaFactory parent, ArraySchema arraySchema) {
- 		ArraySchemaFactory arraySchemaFactory = new ArraySchemaFactory(parent, arraySchema);
+ 		ArrayVisitor arraySchemaFactory = new ArrayVisitor(provider, parent, arraySchema);
  		arraySchemaFactory.setFactoryWrapperProvider(factoryWrapperProvider);
  		return arraySchemaFactory;
  	}
@@ -84,30 +84,25 @@ public class FormatVisitorFactory
  		return new NullSchemaFactory(parent, nullSchema);
  	}
 
-     public JsonMapFormatVisitor mapFormatVisitor(SchemaFactory parent, ObjectSchema objectSchema) {
-        
-        MapSchemaFactory mapSchemaFactory = new MapSchemaFactory(parent, objectSchema);
-        mapSchemaFactory.setFactoryWrapperProvider(factoryWrapperProvider);
-        return mapSchemaFactory;
+     public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
+             SchemaFactory parent, ObjectSchema objectSchema) {
+         return new MapVisitor(provider, parent, objectSchema, factoryWrapperProvider);
      }
 
  	public JsonNumberFormatVisitor numberFormatVisitor(
  			ValueTypeSchemaFactory parent,
  			NumberSchema numberSchema) {
- 		return new NumberSchemaFactory(parent, numberSchema);
+ 		return new NumberVisitor(parent, numberSchema);
  	}
 
- 	public JsonObjectFormatVisitor objectFormatVisitor(
+ 	public JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
  			SchemaFactory parent, ObjectSchema objectSchema) {
- 		
- 		ObjectSchemaFactory objectSchemaFactory = new ObjectSchemaFactory(parent, objectSchema);
- 		objectSchemaFactory.setFactoryWrapperProvider(factoryWrapperProvider);
- 		return objectSchemaFactory;
+ 		return new ObjectVisitor(provider, parent, objectSchema, factoryWrapperProvider);
  	}
 
  	public JsonStringFormatVisitor stringFormatVisitor(
  			ValueTypeSchemaFactory parent,
  			StringSchema stringSchema) {
- 		return new StringSchemaFactory(parent, stringSchema);
+ 		return new StringVisitor(parent, stringSchema);
  	}
 }

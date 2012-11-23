@@ -38,7 +38,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
 		ArraySchema arraySchema = schemaProvider.arraySchema();
 		delegate = visitorFactory.schemaFactory(provider, arraySchema);
-		return visitorFactory.arrayFormatVisitor(delegate, arraySchema);
+		return visitorFactory.arrayFormatVisitor(provider, delegate, arraySchema);
     }
 
     public JsonBooleanFormatVisitor expectBooleanFormat(JavaType convertedType) {
@@ -71,7 +71,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
 		ObjectSchema objectSchema = schemaProvider.objectSchema();
 		delegate = visitorFactory.schemaFactory(provider, objectSchema);
-		return visitorFactory.objectFormatVisitor(delegate, objectSchema);
+		return visitorFactory.objectFormatVisitor(provider, delegate, objectSchema);
     }
 
     public JsonStringFormatVisitor expectStringFormat(JavaType convertedType) {
@@ -86,12 +86,12 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
         throws JsonMappingException
     {
         /* 22-Nov-2012, tatu: Looks as if JSON Schema did not have
-         *   concept of Map (distring from Record or Object); so best
+         *   concept of Map (distinct from Record or Object); so best
          *   we can do is to consider it a vague kind-a Object...
          */
         ObjectSchema objectSchema = schemaProvider.objectSchema();
         delegate = visitorFactory.schemaFactory(provider, objectSchema);
-        return visitorFactory.mapFormatVisitor(delegate, objectSchema);
+        return visitorFactory.mapFormatVisitor(provider, delegate, objectSchema);
     }
 
     /*
