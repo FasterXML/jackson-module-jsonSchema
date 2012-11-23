@@ -13,11 +13,6 @@ public class FormatVisitorFactory
 {		
     public FormatVisitorFactory() { }
 
-    public ValueTypeSchemaFactory valueTypeSchemaFactory(
-            JsonSchemaReference parent, ValueTypeSchema valueTypeSchema) {
-        return new ValueTypeSchemaFactory(parent, valueTypeSchema);
-    }
-
     /*
     /**********************************************************
     /* Factory methods for visitors

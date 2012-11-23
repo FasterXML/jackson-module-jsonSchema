@@ -63,7 +63,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonBooleanFormatVisitor expectBooleanFormat(JavaType convertedType) {
         BooleanSchema booleanSchema = schemaProvider.booleanSchema();
         delegate = new JsonSchemaReference(booleanSchema);
-        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, booleanSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = new ValueTypeSchemaFactory(delegate, booleanSchema);
         return visitorFactory.booleanFormatVisitor(valueTypeSchemaFactory, booleanSchema);
     }
 
@@ -71,7 +71,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonIntegerFormatVisitor expectIntegerFormat(JavaType convertedType) {
         IntegerSchema integerSchema = schemaProvider.integerSchema();
         delegate = new JsonSchemaReference(integerSchema);
-        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, integerSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = new ValueTypeSchemaFactory(delegate, integerSchema);
         return visitorFactory.integerFormatVisitor(valueTypeSchemaFactory, integerSchema);
     }
 
@@ -84,7 +84,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonNumberFormatVisitor expectNumberFormat(JavaType convertedType) {
         NumberSchema numberSchema = schemaProvider.numberSchema();
         delegate = new JsonSchemaReference(numberSchema);
-        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, numberSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = new ValueTypeSchemaFactory(delegate, numberSchema);
         return visitorFactory.numberFormatVisitor(valueTypeSchemaFactory, numberSchema);
     }
 	
@@ -99,7 +99,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonStringFormatVisitor expectStringFormat(JavaType convertedType) {
         StringSchema stringSchema = schemaProvider.stringSchema();
         delegate = new JsonSchemaReference(stringSchema);
-        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, stringSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = new ValueTypeSchemaFactory(delegate, stringSchema);
         return visitorFactory.stringFormatVisitor(valueTypeSchemaFactory, stringSchema);
     }
 
