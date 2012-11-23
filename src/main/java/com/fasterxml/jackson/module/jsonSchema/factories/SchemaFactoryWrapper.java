@@ -123,18 +123,4 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
         }
         return delegate.getSchema();
     }
-
-    /*
-    /*********************************************************************
-    /* Helper classes
-    /*********************************************************************
-     */
-
-    public static class SchemaFactoryWrapperProvider {
-          public SchemaFactoryWrapper schemaFactoryWrapper(SerializerProvider provider) { 
-              SchemaFactoryWrapper wrapper = new SchemaFactoryWrapper();
-              wrapper.setProvider(provider);
-              return wrapper;
-          }
-	}
 }
