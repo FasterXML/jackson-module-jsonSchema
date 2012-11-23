@@ -1,25 +1,9 @@
 package com.fasterxml.jackson.module.jsonSchema.factories;
 
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonBooleanFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonIntegerFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonNullFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonNumberFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonStringFormatVisitor;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.AnySchema;
-import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
-import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.*;
+
+import com.fasterxml.jackson.module.jsonSchema.types.*;
 
 /**
  * Factory class used for constructing visitors for building various
@@ -32,10 +16,6 @@ public class FormatVisitorFactory
     public ValueTypeSchemaFactory valueTypeSchemaFactory(
             JsonSchemaReference parent, ValueTypeSchema valueTypeSchema) {
         return new ValueTypeSchemaFactory(parent, valueTypeSchema);
-    }
-
-    public JsonSchemaReference schemaReference(JsonSchema schema) {
-        return new JsonSchemaReference(schema);
     }
 
     /*
@@ -58,8 +38,7 @@ public class FormatVisitorFactory
  		return new BooleanVisitor(parent, booleanSchema);
  	}
 
- 	public JsonIntegerFormatVisitor integerFormatVisitor(
- 			ValueTypeSchemaFactory parent,
+ 	public JsonIntegerFormatVisitor integerFormatVisitor(ValueTypeSchemaFactory parent,
  			IntegerSchema integerSchema) {
  		return new IntegerVisitor(parent, integerSchema);
  	}
