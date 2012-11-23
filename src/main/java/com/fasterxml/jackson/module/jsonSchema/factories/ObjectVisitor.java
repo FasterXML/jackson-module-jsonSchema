@@ -13,8 +13,7 @@ public class ObjectVisitor extends StructuredTypeVisitor
 {
     protected final ObjectSchema schema;
     
-    public ObjectVisitor(SerializerProvider provider,
-            JsonSchemaReference parent, ObjectSchema schema) {
+    public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
         super(provider);
         this.schema = schema;
     }

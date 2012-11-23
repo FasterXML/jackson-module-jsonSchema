@@ -19,23 +19,23 @@ public class FormatVisitorFactory
     /**********************************************************
      */
 
-    public JsonAnyFormatVisitor anyFormatVisitor(JsonSchemaReference delegate,
-            AnySchema anySchema) {
+    public JsonAnyFormatVisitor anyFormatVisitor(AnySchema anySchema) {
         return null;
     }
 
     public JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
-            JsonSchemaReference parent, ArraySchema arraySchema) {
+            ArraySchema arraySchema) {
         return new ArrayVisitor(provider, arraySchema);
     }
+
     public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
-            JsonSchemaReference parent, ObjectSchema objectSchema) {
-        return new MapVisitor(provider, parent, objectSchema);
+            ObjectSchema objectSchema) {
+        return new MapVisitor(provider, objectSchema);
     }
 
     public JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
-              JsonSchemaReference parent, ObjectSchema objectSchema) {
-        return new ObjectVisitor(provider, parent, objectSchema);
+            ObjectSchema objectSchema) {
+        return new ObjectVisitor(provider, objectSchema);
     }
     
     /*

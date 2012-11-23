@@ -8,11 +8,9 @@ import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
 
 public class ValueTypeSchemaFactory implements JsonValueFormatVisitor, JsonSchemaProducer
 {
-    protected final JsonSchemaReference parent; 
     protected final ValueTypeSchema schema;
 	
-    protected ValueTypeSchemaFactory(JsonSchemaReference parent, ValueTypeSchema schema) {
-        this.parent = parent;
+    protected ValueTypeSchemaFactory(ValueTypeSchema schema) {
         this.schema = schema;
     }
 
