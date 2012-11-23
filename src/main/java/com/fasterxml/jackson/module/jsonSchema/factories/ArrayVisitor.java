@@ -12,27 +12,24 @@ public class ArrayVisitor
     implements JsonArrayFormatVisitor, JsonSchemaProducer
 {
     protected SerializerProvider provider;
-    protected SchemaFactoryWrapperProvider factoryWrapperProvider;
 
+    protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
     protected final BeanProperty property; 
-    protected final SchemaFactory parent;
     protected final ArraySchema schema;
-	
+
     public ArrayVisitor(SerializerProvider provider,
-            SchemaFactory schemaFactory, ArraySchema schema) {
-        this(provider, schemaFactory, null, schema);
+            ArraySchema schema,
+            SchemaFactoryWrapperProvider wp) {
+        this(provider, null, schema, wp);
     }
 
     public ArrayVisitor(SerializerProvider provider,
-            SchemaFactory parent, BeanProperty property, ArraySchema schema) {
+            BeanProperty property, ArraySchema schema,
+            SchemaFactoryWrapperProvider wp) {
         this.provider = provider;
-        this.parent = parent;
         this.schema = schema;
         this.property = property;
-    }
-
-    public void setFactoryWrapperProvider(SchemaFactoryWrapperProvider factoryWrapperProvider) {
-        this.factoryWrapperProvider = factoryWrapperProvider;
+        factoryWrapperProvider = wp;
     }
     
     /*
@@ -53,7 +50,7 @@ public class ArrayVisitor
 
     @Override
     public SerializerProvider getProvider() {
-        return parent.getProvider();
+        return provider;
     }
 
     @Override
@@ -62,9 +59,8 @@ public class ArrayVisitor
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(
-                    parent.getProvider());
-            visitor.setProvider(parent.getProvider());
+            SchemaFactoryWrapper visitor = factoryWrapperProvider.schemaFactoryWrapper(getProvider());
+            visitor.setProvider(getProvider());
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }
@@ -76,7 +72,7 @@ public class ArrayVisitor
 	}
 
 	@Override
-	public void setProvider(SerializerProvider provider) {
-		parent.setProvider(provider);
+	public void setProvider(SerializerProvider p) {
+	    provider = p;
 	}
 }

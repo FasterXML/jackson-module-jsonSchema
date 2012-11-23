@@ -64,9 +64,7 @@ public class FormatVisitorFactory
 
  	public JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
  			SchemaFactory parent, ArraySchema arraySchema) {
- 		ArrayVisitor arraySchemaFactory = new ArrayVisitor(provider, parent, arraySchema);
- 		arraySchemaFactory.setFactoryWrapperProvider(factoryWrapperProvider);
- 		return arraySchemaFactory;
+ 	    return new ArrayVisitor(provider, arraySchema, factoryWrapperProvider);
  	}
 
  	public JsonBooleanFormatVisitor booleanFormatVisitor(ValueTypeSchemaFactory parent, BooleanSchema booleanSchema) {

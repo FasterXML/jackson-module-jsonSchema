@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
-public class JsonSchemaProvider
+public class JsonSchemaFactory
 {
     public AnySchema anySchema() {
         return new AnySchema();

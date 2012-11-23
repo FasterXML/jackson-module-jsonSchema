@@ -16,10 +16,10 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     private SchemaFactory delegate;
     protected FormatVisitorFactory visitorFactory;
     protected SerializerProvider provider;
-    protected JsonSchemaProvider schemaProvider;
+    protected JsonSchemaFactory schemaProvider;
 
     public SchemaFactoryWrapper() {
-        schemaProvider = new JsonSchemaProvider();
+        schemaProvider = new JsonSchemaFactory();
         visitorFactory = new FormatVisitorFactory();
     }
 
