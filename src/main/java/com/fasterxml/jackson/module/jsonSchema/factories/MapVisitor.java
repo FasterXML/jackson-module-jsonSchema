@@ -16,13 +16,13 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 public class MapVisitor implements JsonMapFormatVisitor, JsonSchemaProducer
 {
     protected final SchemaFactoryWrapperProvider factoryWrapperProvider;
-    protected final SchemaFactory parent;
+    protected final JsonSchemaReference parent;
     protected final ObjectSchema schema;
 
     protected SerializerProvider provider;
     
     public MapVisitor(SerializerProvider provider,
-            SchemaFactory parent, ObjectSchema schema, SchemaFactoryWrapperProvider wp)
+            JsonSchemaReference parent, ObjectSchema schema, SchemaFactoryWrapperProvider wp)
     {
         this.provider = provider;
         this.parent = parent;

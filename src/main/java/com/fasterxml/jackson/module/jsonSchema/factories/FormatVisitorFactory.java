@@ -43,12 +43,12 @@ public class FormatVisitorFactory
  	}
 
      public ValueTypeSchemaFactory valueTypeSchemaFactory(
-             SchemaFactory parent, ValueTypeSchema valueTypeSchema) {
+             JsonSchemaReference parent, ValueTypeSchema valueTypeSchema) {
          return new ValueTypeSchemaFactory(parent, valueTypeSchema);
      }
 
-     public SchemaFactory schemaFactory(SerializerProvider provider, JsonSchema schema) {
-         return new SchemaFactory(provider, schema);
+     public JsonSchemaReference schemaFactory(SerializerProvider provider, JsonSchema schema) {
+         return new JsonSchemaReference(provider, schema);
      }
 
      /*
@@ -57,13 +57,13 @@ public class FormatVisitorFactory
      /**********************************************************
       */
      
- 	public JsonAnyFormatVisitor anyFormatVisitor(SchemaFactory delegate,
+ 	public JsonAnyFormatVisitor anyFormatVisitor(JsonSchemaReference delegate,
  			AnySchema anySchema) {
  		return null;
  	}
 
  	public JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
- 			SchemaFactory parent, ArraySchema arraySchema) {
+ 			JsonSchemaReference parent, ArraySchema arraySchema) {
  	    return new ArrayVisitor(provider, arraySchema, factoryWrapperProvider);
  	}
 
@@ -82,7 +82,7 @@ public class FormatVisitorFactory
  	}
 
      public JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
-             SchemaFactory parent, ObjectSchema objectSchema) {
+             JsonSchemaReference parent, ObjectSchema objectSchema) {
          return new MapVisitor(provider, parent, objectSchema, factoryWrapperProvider);
      }
 
@@ -93,7 +93,7 @@ public class FormatVisitorFactory
  	}
 
  	public JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
- 			SchemaFactory parent, ObjectSchema objectSchema) {
+ 			JsonSchemaReference parent, ObjectSchema objectSchema) {
  		return new ObjectVisitor(provider, parent, objectSchema, factoryWrapperProvider);
  	}
 

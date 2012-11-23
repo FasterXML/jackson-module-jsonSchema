@@ -17,7 +17,7 @@ public class ObjectVisitor implements JsonObjectFormatVisitor, JsonSchemaProduce
     protected SerializerProvider provider;
     
     public ObjectVisitor(SerializerProvider provider,
-            SchemaFactory parent, ObjectSchema schema,
+            JsonSchemaReference parent, ObjectSchema schema,
             SchemaFactoryWrapperProvider factoryWrapperProvider) {
         this.provider = provider;
         this.schema = schema;

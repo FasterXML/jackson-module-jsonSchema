@@ -13,11 +13,12 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  */
 public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
 {
-    private SchemaFactory delegate;
-    protected FormatVisitorFactory visitorFactory;
-    protected SerializerProvider provider;
-    protected JsonSchemaFactory schemaProvider;
+    protected final FormatVisitorFactory visitorFactory;
+    protected final JsonSchemaFactory schemaProvider;
 
+    protected SerializerProvider provider;
+    private JsonSchemaReference delegate;
+    
     public SchemaFactoryWrapper() {
         schemaProvider = new JsonSchemaFactory();
         visitorFactory = new FormatVisitorFactory();
@@ -28,55 +29,73 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     /* JsonFormatVisitorWrapper implementation
     /*********************************************************************
      */
-	
+
+    @Override
+    public SerializerProvider getProvider() {
+        return provider;
+    }
+
+    @Override
+    public void setProvider(SerializerProvider p) {
+        provider = p;
+    }
+    
+    @Override
     public JsonAnyFormatVisitor expectAnyFormat(JavaType convertedType) {
-		AnySchema anySchema = schemaProvider.anySchema();
-		delegate = visitorFactory.schemaFactory(provider, anySchema);
-		return visitorFactory.anyFormatVisitor(delegate, anySchema);
+        AnySchema anySchema = schemaProvider.anySchema();
+        delegate = visitorFactory.schemaFactory(provider, anySchema);
+        return visitorFactory.anyFormatVisitor(delegate, anySchema);
     }
 	
+    @Override
     public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
-		ArraySchema arraySchema = schemaProvider.arraySchema();
-		delegate = visitorFactory.schemaFactory(provider, arraySchema);
-		return visitorFactory.arrayFormatVisitor(provider, delegate, arraySchema);
+        ArraySchema arraySchema = schemaProvider.arraySchema();
+        delegate = visitorFactory.schemaFactory(provider, arraySchema);
+        return visitorFactory.arrayFormatVisitor(provider, delegate, arraySchema);
     }
 
+    @Override
     public JsonBooleanFormatVisitor expectBooleanFormat(JavaType convertedType) {
-		BooleanSchema booleanSchema = schemaProvider.booleanSchema();
-		delegate = visitorFactory.schemaFactory(provider, booleanSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, booleanSchema);
-		return visitorFactory.booleanFormatVisitor(valueTypeSchemaFactory, booleanSchema);
+        BooleanSchema booleanSchema = schemaProvider.booleanSchema();
+        delegate = visitorFactory.schemaFactory(provider, booleanSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, booleanSchema);
+        return visitorFactory.booleanFormatVisitor(valueTypeSchemaFactory, booleanSchema);
     }
 
+    @Override
     public JsonIntegerFormatVisitor expectIntegerFormat(JavaType convertedType) {
-		IntegerSchema integerSchema = schemaProvider.integerSchema();
-		delegate = visitorFactory.schemaFactory(provider, integerSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, integerSchema);
-		return visitorFactory.integerFormatVisitor(valueTypeSchemaFactory, integerSchema);
+        IntegerSchema integerSchema = schemaProvider.integerSchema();
+        delegate = visitorFactory.schemaFactory(provider, integerSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, integerSchema);
+        return visitorFactory.integerFormatVisitor(valueTypeSchemaFactory, integerSchema);
     }
 
+    @Override
     public JsonNullFormatVisitor expectNullFormat(JavaType convertedType) {
-		return visitorFactory.nullFormatVisitor(schemaProvider.nullSchema());
+        return visitorFactory.nullFormatVisitor(schemaProvider.nullSchema());
     }
 
+    @Override
     public JsonNumberFormatVisitor expectNumberFormat(JavaType convertedType) {
-		NumberSchema numberSchema = schemaProvider.numberSchema();
-		delegate = visitorFactory.schemaFactory(provider, numberSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, numberSchema);
-		return visitorFactory.numberFormatVisitor(valueTypeSchemaFactory, numberSchema);
+        NumberSchema numberSchema = schemaProvider.numberSchema();
+        delegate = visitorFactory.schemaFactory(provider, numberSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, numberSchema);
+        return visitorFactory.numberFormatVisitor(valueTypeSchemaFactory, numberSchema);
     }
 	
+    @Override
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
-		ObjectSchema objectSchema = schemaProvider.objectSchema();
-		delegate = visitorFactory.schemaFactory(provider, objectSchema);
-		return visitorFactory.objectFormatVisitor(provider, delegate, objectSchema);
+        ObjectSchema objectSchema = schemaProvider.objectSchema();
+        delegate = visitorFactory.schemaFactory(provider, objectSchema);
+        return visitorFactory.objectFormatVisitor(provider, delegate, objectSchema);
     }
 
+    @Override
     public JsonStringFormatVisitor expectStringFormat(JavaType convertedType) {
-		StringSchema stringSchema = schemaProvider.stringSchema();
-		delegate = visitorFactory.schemaFactory(provider, stringSchema);
-		ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, stringSchema);
-		return visitorFactory.stringFormatVisitor(valueTypeSchemaFactory, stringSchema);
+        StringSchema stringSchema = schemaProvider.stringSchema();
+        delegate = visitorFactory.schemaFactory(provider, stringSchema);
+        ValueTypeSchemaFactory valueTypeSchemaFactory = visitorFactory.valueTypeSchemaFactory(delegate, stringSchema);
+        return visitorFactory.stringFormatVisitor(valueTypeSchemaFactory, stringSchema);
     }
 
     @Override
@@ -99,25 +118,17 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
      */
 	
     public JsonSchema finalSchema() {
-		if (delegate == null) {
-			return null;
-		}
-		return delegate.getSchema();
+        if (delegate == null) {
+            return null;
+        }
+        return delegate.getSchema();
     }
-
-	public SerializerProvider getProvider() {
-		return provider;
-	}
-
-	public void setProvider(SerializerProvider provider) {
-		this.provider = provider;
-	}
 
     /*
     /*********************************************************************
     /* Helper classes
     /*********************************************************************
-    */
+     */
 
     public static class SchemaFactoryWrapperProvider {
           public SchemaFactoryWrapper schemaFactoryWrapper(SerializerProvider provider) { 
