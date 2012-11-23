@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
  * This class encapsulates the functionality of container type {@link JsonSchema}

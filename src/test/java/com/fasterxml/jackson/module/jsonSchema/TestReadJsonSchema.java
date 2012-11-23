@@ -10,7 +10,6 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.types.JsonSchema;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized

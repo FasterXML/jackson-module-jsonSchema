@@ -1,4 +1,4 @@
-package com.fasterxml.jackson.module.jsonSchema.types;
+package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,6 +14,18 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.module.jsonSchema.types.AnySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ContainerTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.UnionTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
 
 /**
  * The type wraps the json schema specification at :
@@ -257,21 +269,21 @@ public abstract class JsonSchema {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof JsonSchema) {
-			JsonSchema that = ((JsonSchema)obj);
-			return that.getType() == getType() &&
-					getRequired() == null ? that.getRequired() == null : 
-						getRequired().equals(that.getRequired()) &&
-					get$ref() == null ? that.get$ref() == null : 
-						get$ref().equals(that.get$ref()) &&
-					get$schema() == null ? that.get$schema() == null : 
-						get$schema().equals(that.get$schema()) &&
-					getDisallow() == null ? that.getDisallow() == null : 
-						getDisallow().equals(that.getDisallow()) &&
-					getExtends() == null ? that.getExtends() == null : 
-						getExtends().equals(that.getExtends());
-		} 
-		return false;
+	    if (obj == this) return true;
+	    if (obj == null) return false;
+	    if (!(obj instanceof JsonSchema)) return false;
+	    JsonSchema that = ((JsonSchema)obj);
+	    return that.getType() == getType() &&
+	            getRequired() == null ? that.getRequired() == null : 
+	                getRequired().equals(that.getRequired()) &&
+	                get$ref() == null ? that.get$ref() == null : 
+    					    get$ref().equals(that.get$ref()) &&
+    					    get$schema() == null ? that.get$schema() == null : 
+    						get$schema().equals(that.get$schema()) &&
+    					getDisallow() == null ? that.getDisallow() == null : 
+    						getDisallow().equals(that.getDisallow()) &&
+    					getExtends() == null ? that.getExtends() == null : 
+    						getExtends().equals(that.getExtends());
 	}
 	
 	/**

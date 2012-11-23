@@ -3,7 +3,6 @@ package com.fasterxml.jackson.module.jsonSchema;
 import com.fasterxml.jackson.databind.*;
 
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.types.JsonSchema;
 
 /**
  * Convenience class that wraps JSON Schema generation functionality.

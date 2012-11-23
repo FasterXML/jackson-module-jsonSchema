@@ -1,7 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema.factories;
 
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.module.jsonSchema.types.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 public class SchemaFactory implements SchemaProducer
 {
