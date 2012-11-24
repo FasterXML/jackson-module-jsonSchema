@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonNumberFormatVisitor
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 
-public class NumberVisitor implements JsonNumberFormatVisitor, JsonSchemaProducer
+public class NumberVisitor extends JsonNumberFormatVisitor.Base
+    implements JsonSchemaProducer
 {
     protected final NumberSchema schema;
 	

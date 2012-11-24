@@ -8,13 +8,14 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
-public class ObjectVisitor extends StructuredTypeVisitor
-    implements JsonObjectFormatVisitor, JsonSchemaProducer
+public class ObjectVisitor extends JsonObjectFormatVisitor.Base
+    implements JsonSchemaProducer
 {
     protected final ObjectSchema schema;
-    
+    protected SerializerProvider provider;
+
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
-        super(provider);
+        this.provider = provider;
         this.schema = schema;
     }
 
@@ -33,6 +34,16 @@ public class ObjectVisitor extends StructuredTypeVisitor
     /* JsonObjectFormatVisitor impl
     /*********************************************************************
      */
+
+    @Override
+    public SerializerProvider getProvider() {
+        return provider;
+    }
+
+    @Override
+    public void setProvider(SerializerProvider p) {
+        provider = p;
+    }
     
     @Override
     public void optionalProperty(BeanProperty writer) throws JsonMappingException {

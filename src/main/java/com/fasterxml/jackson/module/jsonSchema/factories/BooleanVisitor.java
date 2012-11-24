@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonBooleanFormatVisito
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
 
-public class BooleanVisitor implements JsonBooleanFormatVisitor, JsonSchemaProducer
+public class BooleanVisitor extends JsonBooleanFormatVisitor.Base
+    implements JsonSchemaProducer
 {
     protected final BooleanSchema schema;
 	

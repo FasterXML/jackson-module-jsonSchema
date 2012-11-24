@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonIntegerFormatVisito
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
 
-public class IntegerVisitor implements JsonIntegerFormatVisitor, JsonSchemaProducer
+public class IntegerVisitor extends JsonIntegerFormatVisitor.Base
+    implements JsonSchemaProducer
 {
     protected final IntegerSchema schema;
 	
