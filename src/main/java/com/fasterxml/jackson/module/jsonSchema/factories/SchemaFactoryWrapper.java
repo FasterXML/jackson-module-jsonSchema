@@ -13,11 +13,11 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  */
 public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
 {
-    protected final FormatVisitorFactory visitorFactory;
-    protected final JsonSchemaFactory schemaProvider;
+    protected FormatVisitorFactory visitorFactory;
+    protected JsonSchemaFactory schemaProvider;
 
     protected SerializerProvider provider;
-    private JsonSchema schema;
+    protected JsonSchema schema;
 
     public SchemaFactoryWrapper() {
         this(null);
