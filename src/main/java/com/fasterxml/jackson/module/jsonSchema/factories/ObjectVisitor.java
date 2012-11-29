@@ -103,7 +103,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
 		return visitor.finalSchema();
     }
 
-    private JsonSerializer<Object> getSer(BeanProperty writer)
+    protected JsonSerializer<Object> getSer(BeanProperty writer)
         throws JsonMappingException
     {
         JsonSerializer<Object> ser = null;
