@@ -26,5 +26,4 @@ This will yield a java pojo representing a json schema, which can itself easily 
 
 ## More
 
-Check out [Project Wiki](/FasterXML/jackson-module-jsonSchema/wiki) for more information (javadocs, downloads).
-
+Check out [Project Wiki](http://github.com/FasterXML/jackson-module-jsonSchema/wiki) for more information (javadocs, downloads).
