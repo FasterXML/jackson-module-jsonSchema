@@ -5,8 +5,8 @@ currently in jackson databind (pre 2.1), in order to allow for the generation of
 
 ## Status
 
-The proper release of this module is [Jackson 2.1](http://jira.codehaus.org/browse/JACKSON#selectedTab=com.atlassian.jira.plugin.system.project%3Aroadmap-panel).
-This module is very new, and thus will probably be volatile.
+Version 2.1 of this module is the first functioning version; but significant changes are possible for 2.2.
+This module is very new, and 2.2 is expected to be the first fully stable release.
 
 ## Example Usage (from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/databind/jsonSchema/TestGenerateJsonSchema.java#L114))
 
@@ -26,4 +26,5 @@ This will yield a java pojo representing a json schema, which can itself easily 
 
 ## More
 
-Check out [Project Wiki](jackson-module-jsonSchema/wiki)
+Check out [Project Wiki](/FasterXML/jackson-module-jsonSchema/wiki) for more information (javadocs, downloads).
+
