@@ -26,4 +26,4 @@ This will yield a java pojo representing a json schema, which can itself easily 
 
 ## More
 
-Check out [Project Wiki](./wiki)
+Check out [Project Wiki](jackson-module-jsonSchema/wiki)
