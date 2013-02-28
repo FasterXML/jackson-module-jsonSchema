@@ -22,7 +22,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	   of enum values uses the same algorithm as defined in "uniqueItems"
 	   (Section 5.15).
 	 */
-	@JsonProperty
+	@JsonProperty(value = "enum")
 	private Set<String> enums = new HashSet<String>();
 	
 	/**

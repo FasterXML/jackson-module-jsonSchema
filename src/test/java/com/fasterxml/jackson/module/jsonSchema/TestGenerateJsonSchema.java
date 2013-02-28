@@ -269,7 +269,7 @@ public class TestGenerateJsonSchema
                     new HashMap<String,Object>(){{ put("letter", 
                             new HashMap<String,Object>() {{
                                 put("type", "string");
-                                put("enums", new ArrayList<String>() {{
+                                put("enum", new ArrayList<String>() {{
                                     add("A"); add("B"); add("C");
                                 }} );
                             }} );
