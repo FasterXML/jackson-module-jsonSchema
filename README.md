@@ -24,6 +24,10 @@ JsonSchema jsonSchema = visitor.finalSchema();
 
 This will yield a java pojo representing a json schema, which can itself easily be serialized with jackson, or configured with java. Customizing the generation should be simply a matter of locating the particular stage of generation you want to override, and replacing or extending that particular object in the dependency injection cycle in schemafactory wrapper.
 
+## Adding Property Processing
+
+See com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper for an example of writing custom schema properties.
+
 ## More
 
 Check out [Project Wiki](http://github.com/FasterXML/jackson-module-jsonSchema/wiki) for more information (javadocs, downloads).
