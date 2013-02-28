@@ -14,6 +14,8 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     protected final ObjectSchema schema;
     protected SerializerProvider provider;
 
+    private WrapperFactory wrapperFactory = new WrapperFactory();
+    
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
         this.provider = provider;
         this.schema = schema;
@@ -44,6 +46,14 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     public void setProvider(SerializerProvider p) {
         provider = p;
     }
+    
+	public WrapperFactory getWrapperFactory() {
+		return wrapperFactory;
+	}
+
+	public void setWrapperFactory(WrapperFactory wrapperFactory) {
+		this.wrapperFactory = wrapperFactory;
+	}
     
     @Override
     public void optionalProperty(BeanProperty writer) throws JsonMappingException {
@@ -83,7 +93,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         if (writer == null) {
             throw new IllegalArgumentException("Null writer");
         }
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(getProvider());
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
         JsonSerializer<Object> ser = getSer(writer);
         if (ser != null) {
             JavaType type = writer.getType();
@@ -98,7 +108,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-		SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(getProvider());
+		SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
 		return visitor.finalSchema();
     }
@@ -115,4 +125,5 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
         return ser;
     }
+
 }

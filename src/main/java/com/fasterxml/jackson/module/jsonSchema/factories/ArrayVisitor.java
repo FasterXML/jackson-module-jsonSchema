@@ -13,6 +13,8 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     protected final ArraySchema schema;
 
     protected SerializerProvider provider;
+    
+    private WrapperFactory wrapperFactory = new WrapperFactory();
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
         this.provider = provider;
@@ -45,13 +47,21 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
         provider = p;
     }
     
+	public WrapperFactory getWrapperFactory() {
+		return wrapperFactory;
+	}
+
+	public void setWrapperFactory(WrapperFactory wrapperFactory) {
+		this.wrapperFactory = wrapperFactory;
+	}
+    
     @Override
     public void itemsFormat(JsonFormatVisitable handler, JavaType contentType)
         throws JsonMappingException
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(getProvider());
+            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }

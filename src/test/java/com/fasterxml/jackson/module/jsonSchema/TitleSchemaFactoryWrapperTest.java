@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.factories.TitleSchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper;
 
 public class TitleSchemaFactoryWrapperTest extends TestCase{
 
