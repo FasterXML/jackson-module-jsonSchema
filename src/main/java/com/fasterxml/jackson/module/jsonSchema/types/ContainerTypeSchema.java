@@ -22,7 +22,7 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	   of enum values uses the same algorithm as defined in "uniqueItems"
 	   (Section 5.15).
 	 */
-	@JsonProperty(required = true)
+	@JsonProperty(value = "enum", required = true)
 	private Set<String> enums;
 	
 	//instance initializer block 
