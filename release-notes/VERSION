@@ -1,8 +1,12 @@
 Project: jackson-module-jsonSchema
-Version: 2.2.0 (22-Apr-2013)
+Version: 2.2.1 (03-May-2013)
 
-The first functionally complete version.
+No functional changes.
 
 ------------------------------------------------------------------------
 === History: ===
 ------------------------------------------------------------------------
+
+2.2.0 (22-Apr-2013)
+
+The first functionally complete version.
