@@ -28,6 +28,10 @@ This will yield a java pojo representing a json schema, which can itself easily 
 
 See com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper for an example of writing custom schema properties.
 
+## Required Fields
+
+JSON Schema has the ability to mark fields as required. This module supports this via the `@JsonProperty(required = true)` field annotation.
+
 ## More
 
 Check out [Project Wiki](http://github.com/FasterXML/jackson-module-jsonSchema/wiki) for more information (javadocs, downloads).
