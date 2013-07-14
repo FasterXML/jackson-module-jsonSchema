@@ -2,6 +2,8 @@ Project: jackson-module-jsonSchema
 Version: 2.2.3 (xx-xxx-2013)
 
 #13: IntegerSchema returns type "NUMBER", should return "INTEGER"
+- Fix for `@JsonValue` handling in jackson-databind, added unit test to
+ verify that things work for Schema
 
 ------------------------------------------------------------------------
 === History: ===

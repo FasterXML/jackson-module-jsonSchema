@@ -288,7 +288,7 @@ public class TestGenerateJsonSchema
         // Maps are treated like ... "empty" Object. Not good, should be improved if possible
         assertEquals("{\"type\":\"object\"}", MAPPER.writeValueAsString(jsonSchema));
     }
-    
+
     /*
     /**********************************************************
     /* Tests cases, error detection/handling

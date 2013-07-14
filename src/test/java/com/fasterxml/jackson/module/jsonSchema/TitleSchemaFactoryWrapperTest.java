@@ -2,7 +2,6 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import junit.framework.TestCase;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper;
 
@@ -18,27 +17,21 @@ public class TitleSchemaFactoryWrapperTest extends TestCase{
 		public Pet pet;
 	}
 	
-	public void testAddingTitle() {
+	public void testAddingTitle() throws Exception
+	{
 		TitleSchemaFactoryWrapper visitor = new TitleSchemaFactoryWrapper();
 		ObjectMapper mapper = new ObjectMapper();
-		try {
-			mapper.acceptJsonFormatVisitor(Person.class, visitor);
-			JsonSchema schema = visitor.finalSchema();
-			assertTrue("schema should be an objectSchema.", schema.isObjectSchema());
-			String title = schema.asObjectSchema().getTitle();
-			assertNotNull(title);
-			assertTrue("schema should have a title", title.indexOf("Person") != -1);
-			JsonSchema schema2 = schema.asObjectSchema().getProperties().get("pet");
-			assertTrue("schema should be an objectSchema.", schema2.isObjectSchema());
-			String title2 = schema2.asObjectSchema().getTitle();
-			assertNotNull(title);
-			assertTrue("schema should have a title", title2.indexOf("Pet") != -1);
-			
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+
+		mapper.acceptJsonFormatVisitor(Person.class, visitor);
+		JsonSchema schema = visitor.finalSchema();
+		assertTrue("schema should be an objectSchema.", schema.isObjectSchema());
+		String title = schema.asObjectSchema().getTitle();
+		assertNotNull(title);
+		assertTrue("schema should have a title", title.indexOf("Person") != -1);
+		JsonSchema schema2 = schema.asObjectSchema().getProperties().get("pet");
+		assertTrue("schema should be an objectSchema.", schema2.isObjectSchema());
+		String title2 = schema2.asObjectSchema().getTitle();
+		assertNotNull(title);
+		assertTrue("schema should have a title", title2.indexOf("Pet") != -1);
 	}
 }
