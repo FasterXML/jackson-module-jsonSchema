@@ -1,7 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.factories;
 
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -27,6 +26,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public ObjectSchema getSchema() {
         return schema;
     }
@@ -59,11 +59,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     public void optionalProperty(BeanProperty writer) throws JsonMappingException {
         schema.putOptionalProperty(writer.getName(), propertySchema(writer));
     }
-
-    @Override
-    public void optionalProperty(String name) throws JsonMappingException {
-        schema.putOptionalProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
-    }	
 	
     @Override
     public void optionalProperty(String name, JsonFormatVisitable handler, JavaType propertyTypeHint)
@@ -74,11 +69,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     @Override
     public void property(BeanProperty writer) throws JsonMappingException {
         schema.putProperty(writer.getName(), propertySchema(writer));
-    }
-	
-    @Override
-    public void property(String name) throws JsonMappingException {
-		schema.putProperty(name, JsonSchema.minimalForFormat(JsonFormatTypes.ANY));
     }
 
     @Override

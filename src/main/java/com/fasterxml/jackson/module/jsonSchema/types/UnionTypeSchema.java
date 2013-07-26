@@ -39,12 +39,7 @@ public class UnionTypeSchema extends JsonSchema {
 			return false;
 		}
 	}
-	
-	/**
-	 * {@link UnionTypeSchema#elements}
-	 * 
-	 * @return the elements
-	 */
+
 	public ValueTypeSchema[] getElements() {
 		return elements;
 	}
@@ -62,12 +57,6 @@ public class UnionTypeSchema extends JsonSchema {
 		return true;
 	}
 
-	/**
-	 * {@link UnionTypeSchema#elements}
-	 * 
-	 * @param elements
-	 *            the elements to set
-	 */
 	public void setElements(ValueTypeSchema[] elements) {
 		assert elements.length >= 2 : "Union Type Schemas must contain two or more Simple Type Schemas";
 		this.elements = elements;

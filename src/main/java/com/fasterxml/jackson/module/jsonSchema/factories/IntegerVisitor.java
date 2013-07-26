@@ -21,6 +21,7 @@ public class IntegerVisitor extends JsonIntegerFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public IntegerSchema getSchema() {
         return schema;
     }
@@ -31,10 +32,12 @@ public class IntegerVisitor extends JsonIntegerFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public void enumTypes(Set<String> enums) {
         schema.setEnums(enums);
     }
 
+    @Override
     public void format(JsonValueFormat format) {
         schema.setFormat(format);
     }

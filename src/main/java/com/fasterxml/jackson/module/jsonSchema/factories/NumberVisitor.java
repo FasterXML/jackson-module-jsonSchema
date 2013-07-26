@@ -21,20 +21,23 @@ public class NumberVisitor extends JsonNumberFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public NumberSchema getSchema() {
         return schema;
     }
     
     /*
     /*********************************************************************
-    /* JsonSchemaProducer
+    /* JsonNumberFormatVisitor
     /*********************************************************************
      */
-	
+
+    @Override
     public void enumTypes(Set<String> enums) {
         schema.setEnums(enums);
     }
 
+    @Override
     public void format(JsonValueFormat format) {
         schema.setFormat(format);
     }

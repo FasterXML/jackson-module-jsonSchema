@@ -50,26 +50,15 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 			return false;
 		}
 	} 
-	
-	/**
-	 * {@link ContainerTypeSchema#enums}
-	 * @return the enums
-	 */
+
 	public Set<String> getEnums() {
-		return enums;
+	    return enums;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isContainerTypeSchema()
-	 */
+
 	@Override
 	public boolean isContainerTypeSchema() { return true; }
-	
-	/**
-	 * {@link ContainerTypeSchema#enums}
-	 * @param enums the enums to set
-	 */
+
 	public void setEnums(Set<String> enums) {
-		this.enums = enums;
+	    this.enums = enums;
 	}
 }

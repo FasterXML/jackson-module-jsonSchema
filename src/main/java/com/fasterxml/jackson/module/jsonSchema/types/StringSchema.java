@@ -56,78 +56,38 @@ public class StringSchema extends ValueTypeSchema {
 			return false;
 		}
 	} 
-	
 
-	/**
-	 * {@link StringSchema#maxLength}
-	 * 
-	 * @return the maxLength
-	 */
 	public Integer getMaxLength() {
-		return maxLength;
+	    return maxLength;
 	}
 
-	/**
-	 * {@link StringSchema#minLength}
-	 * 
-	 * @return the minLength
-	 */
 	public Integer getMinLength() {
-		return minLength;
+	    return minLength;
 	}
 
-	/**
-	 * {@link StringSchema#pattern}
-	 * 
-	 * @return the pattern
-	 */
 	public String getPattern() {
-		return pattern;
+	    return pattern;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
-	 */
+
 	@Override
 	public JsonFormatTypes getType() {
-		return type;
+	    return type;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isStringSchema()
-	 */
 	@Override
 	public boolean isStringSchema() {
-		return true;
+	    return true;
 	}
 
-	/**
-	 * {@link StringSchema#maxLength}
-	 * 
-	 * @param maxLength
-	 *            the maxLength to set
-	 */
 	public void setMaxLength(Integer maxLength) {
-		this.maxLength = maxLength;
+	    this.maxLength = maxLength;
 	}
 
-	/**
-	 * {@link StringSchema#minLength}
-	 * 
-	 * @param minLength
-	 *            the minLength to set
-	 */
 	public void setMinLength(Integer minLength) {
-		this.minLength = minLength;
+	    this.minLength = minLength;
 	}
 
-	/**
-	 * {@link StringSchema#pattern}
-	 * 
-	 * @param pattern
-	 *            the pattern to set
-	 */
 	public void setPattern(String pattern) {
-		this.pattern = pattern;
+	    this.pattern = pattern;
 	}
 }

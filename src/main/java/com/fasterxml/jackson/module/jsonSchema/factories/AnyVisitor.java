@@ -18,13 +18,14 @@ public class AnyVisitor extends JsonAnyFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public AnySchema getSchema() {
         return schema;
     }
 
     /*
     /*********************************************************************
-    /* JsonAnyFormatVisitor: no methods...
+    /* AnyVisitor: no additional methods...
     /*********************************************************************
      */
 }

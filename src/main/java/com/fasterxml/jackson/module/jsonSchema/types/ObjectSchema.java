@@ -113,54 +113,28 @@ public class ObjectSchema extends ContainerTypeSchema {
 		}
 
 	}
-	
-	/**
-	 * {@link ObjectSchema#additionalProperties}
-	 * 
-	 * @return the additionalProperties
-	 */
+
 	public AdditionalProperties getAdditionalProperties() {
-		return additionalProperties;
+	    return additionalProperties;
 	}
 
-	/**
-	 * {@link ObjectSchema#dependencies}
-	 * 
-	 * @return the dependencies
-	 */
 	public List<Dependency> getDependencies() {
-		return dependencies;
+	    return dependencies;
 	}
 
-	/**
-	 * {@link ObjectSchema#patternProperties}
-	 * 
-	 * @return the patternProperties
-	 */
 	public Map<String, JsonSchema> getPatternProperties() {
-		return patternProperties;
+	    return patternProperties;
 	}
 
-	/**
-	 * {@link ObjectSchema#properties}
-	 * 
-	 * @return the properties
-	 */
 	public Map<String, JsonSchema> getProperties() {
-		return properties;
+	    return properties;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
-	 */
 	@Override
 	public JsonFormatTypes getType() {
 		return type;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isObjectSchema()
-	 */
+
 	@Override
 	public boolean isObjectSchema() {
 		return true;
@@ -183,49 +157,24 @@ public class ObjectSchema extends ContainerTypeSchema {
 		additionalProperties = NoAdditionalProperties.instance;
 	}
 
-	/**
-	 * {@link ObjectSchema#additionalProperties}
-	 * 
-	 * @param additionalProperties
-	 *            the additionalProperties to set
-	 */
 	public void setAdditionalProperties(
-			AdditionalProperties additionalProperties) {
-		this.additionalProperties = additionalProperties;
+	        AdditionalProperties additionalProperties) {
+	    this.additionalProperties = additionalProperties;
 	}
 
-	/**
-	 * {@link ObjectSchema#dependencies}
-	 * 
-	 * @param dependencies
-	 *            the dependencies to set
-	 */
 	public void setDependencies(List<Dependency> dependencies) {
-		this.dependencies = dependencies;
+	    this.dependencies = dependencies;
 	}
 
-	/**
-	 * {@link ObjectSchema#patternProperties}
-	 * 
-	 * @param patternProperties
-	 *            the patternProperties to set
-	 */
 	public void setPatternProperties(Map<String, JsonSchema> patternProperties) {
-		this.patternProperties = patternProperties;
+	    this.patternProperties = patternProperties;
 	}
 
-	/**
-	 * {@link ObjectSchema#properties}
-	 * 
-	 * @param properties
-	 *            the properties to set
-	 */
 	public void setProperties(Map<String, JsonSchema> properties) {
-		this.properties = properties;
+	    this.properties = properties;
 	}
 
 	public static abstract class AdditionalProperties {
-		
 		@JsonCreator
 		public AdditionalProperties jsonCreator() {
 			//KNOWN ISSUE: pending https://github.com/FasterXML/jackson-databind/issues/43
@@ -277,17 +226,13 @@ public class ObjectSchema extends ContainerTypeSchema {
 					getJsonSchema() == null ? ((SchemaAdditionalProperties)obj).getJsonSchema() == null :
 						getJsonSchema().equals(((SchemaAdditionalProperties)obj).getJsonSchema());
 		}
-		
-		/**
-		 * {@link ObjectSchema.SchemaAdditionalProperties#jsonSchema}
-		 * @return the jsonSchema
-		 */
+
 		public JsonSchema getJsonSchema() {
-			return jsonSchema;
+		    return jsonSchema;
 		}
 		
 		public SchemaAdditionalProperties(JsonSchema jsonSchema) {
-			this.jsonSchema = jsonSchema;
+		    this.jsonSchema = jsonSchema;
 		}
 	}
 
@@ -323,21 +268,13 @@ public class ObjectSchema extends ContainerTypeSchema {
 				return false;
 			}
 		}
-		
-		/**
-		 * {@link ObjectSchema.SchemaDependency#depender}
-		 * @return the depender
-		 */
+
 		public String getDepender() {
-			return depender;
+		    return depender;
 		}
-		
-		/**
-		 * {@link ObjectSchema.SchemaDependency#parentMustMatch}
-		 * @return the parentMustMatch
-		 */
+
 		public JsonSchema getParentMustMatch() {
-			return parentMustMatch;
+		    return parentMustMatch;
 		}
 	}
 
@@ -376,21 +313,13 @@ public class ObjectSchema extends ContainerTypeSchema {
 				return false;
 			}
 		}
-		
-		/**
-		 * {@link ObjectSchema.SimpleDependency#depender}
-		 * @return the depender
-		 */
+
 		public String getDepender() {
-			return depender;
+		    return depender;
 		}
-		
-		/**
-		 * {@link ObjectSchema.SimpleDependency#dependsOn}
-		 * @return the dependsOn
-		 */
+
 		public String getDependsOn() {
-			return dependsOn;
+		    return dependsOn;
 		}
 	}
 

@@ -27,6 +27,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public JsonSchema getSchema() {
         return schema;
     }

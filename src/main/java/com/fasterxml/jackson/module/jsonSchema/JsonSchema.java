@@ -286,57 +286,27 @@ public abstract class JsonSchema {
     						getExtends().equals(that.getExtends());
 	}
 	
-	/**
-	 * {@link JsonSchema#$ref}
-	 * 
-	 * @return the $ref
-	 */
 	public String get$ref() {
 		return $ref;
 	}
 
-	/**
-	 * {@link JsonSchema#$schema}
-	 * 
-	 * @return the $schema
-	 */
 	public String get$schema() {
 		return $schema;
 	}
 
-	/**
-	 * {@link JsonSchema#disallow}
-	 * 
-	 * @return the disallow
-	 */
 	public JsonSchema[] getDisallow() {
 		return disallow;
 	}
 
-	/**
-	 * {@link JsonSchema#extendsextends}
-	 * 
-	 * @return the extendsextends
-	 */
 	@JsonGetter("extends")
 	public JsonSchema[] getExtends() {
 		return extendsextends;
 	}
 
-	/**
-	 * {@link JsonSchema#id}
-	 * 
-	 * @return the id
-	 */
 	public String getId() {
 		return id;
 	}
 
-	/**
-	 * {@link JsonSchema#required}
-	 * 
-	 * @return the required
-	 */
 	public Boolean getRequired() {
 		return required;
 	}
@@ -466,63 +436,27 @@ public abstract class JsonSchema {
 		return false;
 	}
 
-	/**
-	 * {@link JsonSchema#$ref}
-	 * 
-	 * @param $ref
-	 *            the $ref to set
-	 */
 	public void set$ref(String $ref) {
 		this.$ref = $ref;
 	}
 
-	/**
-	 * {@link JsonSchema#$schema}
-	 * 
-	 * @param $schema
-	 *            the $schema to set
-	 */
 	public void set$schema(String $schema) {
 		this.$schema = $schema;
 	}
 
-	/**
-	 * {@link JsonSchema#disallow}
-	 * 
-	 * @param disallow
-	 *            the disallow to set
-	 */
 	public void setDisallow(JsonSchema[] disallow) {
 		this.disallow = disallow;
 	}
 
-	/**
-	 * {@link JsonSchema#extendsextends}
-	 * 
-	 * @param extendsextends
-	 *            the extendsextends to set
-	 */
 	@JsonSetter("extends")
 	public void setExtends(JsonSchema[] extendsextends) {
 		this.extendsextends = extendsextends;
 	}
 
-	/**
-	 * {@link JsonSchema#id}
-	 * 
-	 * @param id
-	 *            the id to set
-	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/**
-	 * {@link JsonSchema#required}
-	 * 
-	 * @param required
-	 *            the required to set
-	 */
 	public void setRequired(Boolean required) {
 		this.required = required;
 	}
@@ -554,40 +488,43 @@ public abstract class JsonSchema {
 		}
 	}
 	
-	public static class JsonSchemaIdResolver implements TypeIdResolver {
+	public static class JsonSchemaIdResolver implements TypeIdResolver
+	{
+	    /* This is Wrong: should not use defaultInstance() for anything.
+	     * But has to work for now...
+	     */
+         private static JavaType any = TypeFactory.defaultInstance().constructType(AnySchema.class);
+         private static JavaType array = TypeFactory.defaultInstance().constructType(ArraySchema.class);
+         private static JavaType booleanboolean = TypeFactory.defaultInstance().constructType(BooleanSchema.class);
+         private static JavaType integer = TypeFactory.defaultInstance().constructType(IntegerSchema.class);
+         private static JavaType nullnull = TypeFactory.defaultInstance().constructType(NullSchema.class);
+         private static JavaType number = TypeFactory.defaultInstance().constructType(NumberSchema.class);
+         private static JavaType object = TypeFactory.defaultInstance().constructType(ObjectSchema.class);
+         private static JavaType string = TypeFactory.defaultInstance().constructType(StringSchema.class);
 
+	    public JsonSchemaIdResolver() { }
+	    
+	    /* (non-Javadoc)
+	     * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromValue(java.lang.Object)
+	     */
+	    @Override
+	    public String idFromValue(Object value) {
+	        if ( value instanceof JsonSchema) {
+	            return ((JsonSchema)value).getType().value();
+	        }
+	        return null;
+	    }
 
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromValue(java.lang.Object)
-		 */
-		public String idFromValue(Object value) {
-			if ( value instanceof JsonSchema) {
-				return ((JsonSchema)value).getType().value();
-			} else {
-				return null;
-			}
-		}
+	    /* (non-Javadoc)
+	     * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromValueAndType(java.lang.Object, java.lang.Class)
+	     */
+         @Override
+         public String idFromValueAndType(Object value, Class<?> suggestedType) {
+             return idFromValue(value);
+         }
 
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromValueAndType(java.lang.Object, java.lang.Class)
-		 */
-		public String idFromValueAndType(Object value, Class<?> suggestedType) {
-			return idFromValue(value);
-		}
-		
-		private static JavaType any = TypeFactory.defaultInstance().constructType(AnySchema.class);
-		private static JavaType array = TypeFactory.defaultInstance().constructType(ArraySchema.class);
-		private static JavaType booleanboolean = TypeFactory.defaultInstance().constructType(BooleanSchema.class);
-		private static JavaType integer = TypeFactory.defaultInstance().constructType(IntegerSchema.class);
-		private static JavaType nullnull = TypeFactory.defaultInstance().constructType(NullSchema.class);
-		private static JavaType number = TypeFactory.defaultInstance().constructType(NumberSchema.class);
-		private static JavaType object = TypeFactory.defaultInstance().constructType(ObjectSchema.class);
-		private static JavaType string = TypeFactory.defaultInstance().constructType(StringSchema.class);
-		
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#typeFromId(java.lang.String)
-		 */
-		public JavaType typeFromId(String id) {
+         @Override
+         public JavaType typeFromId(String id) {
 			switch (JsonFormatTypes.forValue(id)) {
 			case ANY: 		return any;
 			case ARRAY: 	return array;
@@ -600,26 +537,19 @@ public abstract class JsonSchema {
 			default:
 				return null;
 			}
-		}
+         }
 
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#getMechanism()
-		 */
-		public Id getMechanism() {
-			return Id.CUSTOM;
-		}
+         @Override
+         public Id getMechanism() {
+             return Id.CUSTOM;
+         }
 
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#init(com.fasterxml.jackson.databind.JavaType)
-		 */
-		public void init(JavaType baseType) { }
+         @Override
+         public void init(JavaType baseType) { }
 
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromBaseType()
-		 */
-		public String idFromBaseType() {
-			return null;
-		}
-		
+         @Override
+         public String idFromBaseType() {
+             return null;
+         }
 	}
 }

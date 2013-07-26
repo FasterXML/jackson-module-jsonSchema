@@ -61,41 +61,23 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 		}	
 		return false;
 	}
-	
-	/**
-	 * {@link ValueTypeSchema#enums}
-	 * @return the enums
-	 */
+
 	public Set<String> getEnums() {
-		return enums;
+	    return enums;
 	}
-	/**
-	 * {@link ValueTypeSchema#format}
-	 * @return the format
-	 */
+
 	public JsonValueFormat getFormat() {
-		return format;
+	    return format;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isValueTypeSchema()
-	 */
+
 	@Override
 	public boolean isValueTypeSchema() { return true; }
-	
-	/**
-	 * {@link ValueTypeSchema#enums}
-	 * @param enums the enums to set
-	 */
+
 	public void setEnums(Set<String> enums) {
-		this.enums = enums;
+	    this.enums = enums;
 	}
-	
-	/**
-	 * {@link ValueTypeSchema#format}
-	 * @param format the format to set
-	 */
+
 	public void setFormat(JsonValueFormat format) {
-		this.format = format;
+	    this.format = format;
 	}
 }

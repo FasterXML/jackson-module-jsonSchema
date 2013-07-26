@@ -31,6 +31,7 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
     /*********************************************************************
      */
 
+    @Override
     public ObjectSchema getSchema() {
         return schema;
     }

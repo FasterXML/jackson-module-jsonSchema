@@ -62,34 +62,19 @@ public class NumberSchema extends ValueTypeSchema {
 			return false;
 		}
 	} 
-	
-	
-	/**
-	 * {@link NumberSchema#exclusiveMaximum}
-	 * @return the exclusiveMaximum
-	 */
+
 	public Boolean getExclusiveMaximum() {
 		return exclusiveMaximum;
 	}
-	
-	/**
-	 * {@link NumberSchema#exclusiveMinimum}
-	 * @return the exclusiveMinimum
-	 */
+
 	public Boolean getExclusiveMinimum() {
 		return exclusiveMinimum;
 	}
-	/**
-	 * {@link NumberSchema#maximum}
-	 * @return the maximum
-	 */
+
 	public Double getMaximum() {
 		return maximum;
 	}
-	/**
-	 * {@link NumberSchema#minimum}
-	 * @return the minimum
-	 */
+
 	public Double getMinimum() {
 		return minimum;
 	}
@@ -104,34 +89,20 @@ public class NumberSchema extends ValueTypeSchema {
 	
 	@Override
 	public boolean isNumberSchema() { return true; }
-	/**
-	 * {@link NumberSchema#exclusiveMaximum}
-	 * @param exclusiveMaximum the exclusiveMaximum to set
-	 */
+
 	public void setExclusiveMaximum(Boolean exclusiveMaximum) {
-		this.exclusiveMaximum = exclusiveMaximum;
-	}
-	/**
-	 * {@link NumberSchema#exclusiveMinimum}
-	 * @param exclusiveMinimum the exclusiveMinimum to set
-	 */
-	public void setExclusiveMinimum(Boolean exclusiveMinimum) {
-		this.exclusiveMinimum = exclusiveMinimum;
+	    this.exclusiveMaximum = exclusiveMaximum;
 	}
 
-	/**
-	 * {@link NumberSchema#maximum}
-	 * @param maximum the maximum to set
-	 */
-	public void setMaximum(Double maximum) {
-		this.maximum = maximum;
+	public void setExclusiveMinimum(Boolean exclusiveMinimum) {
+	    this.exclusiveMinimum = exclusiveMinimum;
 	}
-	
-	/**
-	 * {@link NumberSchema#minimum}
-	 * @param minimum the minimum to set
-	 */
+
+	public void setMaximum(Double maximum) {
+	    this.maximum = maximum;
+	}
+
 	public void setMinimum(Double minimum) {
-		this.minimum = minimum;
+	    this.minimum = minimum;
 	}
 }

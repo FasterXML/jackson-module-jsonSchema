@@ -88,37 +88,21 @@ public class ArraySchema extends ContainerTypeSchema {
 			return false;
 		}
 	}
-	
-	/**
-	 * {@link ArraySchema#additionalItems}
-	 * @return the additionalItems
-	 */
+
 	public ArraySchema.AdditionalItems getAdditionalItems() {
-		return additionalItems;
-	}
-	
-	/**
-	 * {@link ArraySchema#items}
-	 * @return the items
-	 */
-	public ArraySchema.Items getItems() {
-		return items;
-	}
-	/**
-	 * {@link ArraySchema#maxItems}
-	 * @return the maxItems
-	 */
-	public Integer getMaxItems() {
-		return maxItems;
+	    return additionalItems;
 	}
 
-	
-	/**
-	 * {@link ArraySchema#minItems}
-	 * @return the minItems
-	 */
+	public ArraySchema.Items getItems() {
+	    return items;
+	}
+
+	public Integer getMaxItems() {
+	    return maxItems;
+	}
+
 	public Integer getMinItems() {
-		return minItems;
+	    return minItems;
 	}
 	
 	/* (non-Javadoc)
@@ -128,65 +112,34 @@ public class ArraySchema extends ContainerTypeSchema {
 	public JsonFormatTypes getType() {
 		return type;
 	}
-	
-	/**
-	 * {@link ArraySchema#uniqueItems}
-	 * @return the uniqueItems
-	 */
+
 	public Boolean getUniqueItems() {
 		return uniqueItems;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isArraySchema()
-	 */
+
 	@Override
 	public boolean isArraySchema() { return true; }
-	
-	/**
-	 * {@link ArraySchema#additionalItems}
-	 * @param additionalItems the additionalItems to set
-	 */
+
 	public void setAdditionalItems(ArraySchema.AdditionalItems additionalItems) {
 		this.additionalItems = additionalItems;
 	}
-	
-	/**
-	 * {@link ArraySchema#items}
-	 * @param items the items to set
-	 */
+
 	public void setItems(ArraySchema.Items items) {
 		this.items = items;
 	}
-	
-	/**
-	 * Convenience method to set the json schema for the {@link ArraySchema#items}
-	 * field
-	 * @param jsonSchema
-	 */
+
 	public void setItemsSchema(JsonSchema jsonSchema) {
 		items = new SingleItems(jsonSchema);
 	}
-	/**
-	 * {@link ArraySchema#maxItems}
-	 * @param maxItems the maxItems to set
-	 */
+
 	public void setMaxItems(Integer maxItems) {
 		this.maxItems = maxItems;
 	}
-	
-	/**
-	 * {@link ArraySchema#minItems}
-	 * @param minItems the minItems to set
-	 */
+
 	public void setMinItems(Integer minItems) {
 		this.minItems = minItems;
 	}
-	
-	/**
-	 * {@link ArraySchema#uniqueItems}
-	 * @param uniqueItems the uniqueItems to set
-	 */
+
 	public void setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 	}
@@ -235,13 +188,9 @@ public class ArraySchema extends ContainerTypeSchema {
 				return false;
 			}
 		}
-		
-		/**
-		 * {@link ArraySchema.ArrayItems#jsonSchemas}
-		 * @return the jsonSchemas
-		 */
+
 		public JsonSchema[] getJsonSchemas() {
-			return jsonSchemas;
+		    return jsonSchemas;
 		}
 		
 		/* (non-Javadoc)
@@ -249,7 +198,6 @@ public class ArraySchema extends ContainerTypeSchema {
 		 */
 		@Override
 		public boolean isArrayItems() { return true; }
-		
 	}
 	
 	/**
@@ -352,22 +300,14 @@ public class ArraySchema extends ContainerTypeSchema {
 					getSchema() == null ? ((SingleItems)obj).getSchema() == null :
 						getSchema().equals(((SingleItems)obj).getSchema());
 		}
-		
-		/**
-		 * {@link ArraySchema.SingleItems#jsonSchema}
-		 * @return the jsonSchema
-		 */
+
 		@JsonValue
 		public JsonSchema getSchema() {
-			return jsonSchema;
+		    return jsonSchema;
 		}
-		
-		/**
-		 * {@link ArraySchema.SingleItems#jsonSchema}
-		 * @param jsonSchema the jsonSchema to set
-		 */
+
 		public void setSchema(JsonSchema jsonSchema) {
-			this.jsonSchema = jsonSchema;
+		    this.jsonSchema = jsonSchema;
 		}
 		
 		/* (non-Javadoc)
