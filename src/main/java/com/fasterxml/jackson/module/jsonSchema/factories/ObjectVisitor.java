@@ -56,8 +56,8 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
 	}
     
     @Override
-    public void optionalProperty(BeanProperty writer) throws JsonMappingException {
-        schema.putOptionalProperty(writer.getName(), propertySchema(writer));
+    public void optionalProperty(BeanProperty prop) throws JsonMappingException {
+        schema.putOptionalProperty(prop.getName(), propertySchema(prop));
     }
 	
     @Override
@@ -67,8 +67,8 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     }
 
     @Override
-    public void property(BeanProperty writer) throws JsonMappingException {
-        schema.putProperty(writer.getName(), propertySchema(writer));
+    public void property(BeanProperty prop) throws JsonMappingException {
+        schema.putProperty(prop.getName(), propertySchema(prop));
     }
 
     @Override
@@ -77,18 +77,18 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         schema.putProperty(name, propertySchema(handler, propertyTypeHint));
     }
 
-    protected JsonSchema propertySchema(BeanProperty writer)
+    protected JsonSchema propertySchema(BeanProperty prop)
         throws JsonMappingException
     {
-        if (writer == null) {
-            throw new IllegalArgumentException("Null writer");
+        if (prop == null) {
+            throw new IllegalArgumentException("Null property");
         }
         SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
-        JsonSerializer<Object> ser = getSer(writer);
+        JsonSerializer<Object> ser = getSer(prop);
         if (ser != null) {
-            JavaType type = writer.getType();
+            JavaType type = prop.getType();
             if (type == null) {
-                throw new IllegalStateException("Missing type for property '"+writer.getName()+"'");
+                throw new IllegalStateException("Missing type for property '"+prop.getName()+"'");
             }
             ser.acceptJsonFormatVisitor(visitor, type);
         }
@@ -103,15 +103,16 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
 		return visitor.finalSchema();
     }
 
-    protected JsonSerializer<Object> getSer(BeanProperty writer)
+    protected JsonSerializer<Object> getSer(BeanProperty prop)
         throws JsonMappingException
     {
         JsonSerializer<Object> ser = null;
-        if (writer instanceof BeanPropertyWriter) {
-            ser = ((BeanPropertyWriter)writer).getSerializer();
+        // 26-Jul-2013, tatu: This is ugly, should NOT require cast...
+        if (prop instanceof BeanPropertyWriter) {
+            ser = ((BeanPropertyWriter)prop).getSerializer();
         }
         if (ser == null) {
-            ser = getProvider().findValueSerializer(writer.getType(), writer);
+            ser = getProvider().findValueSerializer(prop.getType(), prop);
         }
         return ser;
     }

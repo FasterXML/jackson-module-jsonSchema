@@ -15,7 +15,6 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 /**
  * This type represents a {@link JsonSchema} as an object type
  * @author jphelan
- *
  */
 public class ObjectSchema extends ContainerTypeSchema {
 
@@ -68,7 +67,7 @@ public class ObjectSchema extends ContainerTypeSchema {
 	@JsonIgnore
 	private final JsonFormatTypes type = JsonFormatTypes.OBJECT;
 
-	// instance initializer block
+	public ObjectSchema()
 	{
 		dependencies = new ArrayList<Dependency>();
 		patternProperties = new HashMap<String, JsonSchema>();
@@ -96,22 +95,23 @@ public class ObjectSchema extends ContainerTypeSchema {
 	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ObjectSchema) {
-			ObjectSchema that = (ObjectSchema) obj;
-			return getAdditionalProperties() == null ? that.getAdditionalProperties() == null :
-						getAdditionalProperties().equals(that.getAdditionalProperties()) &&
-					getDependencies() == null ? that.getDependencies() == null :
-						getDependencies().equals(that.getDependencies()) &&
-					getPatternProperties() == null ? that.getPatternProperties() == null :
-						getPatternProperties().equals(that.getPatternProperties()) &&
-					getProperties() == null ? that.getProperties() == null :
-						getProperties().equals(that.getProperties()) &&
-					super.equals(obj);
-		} else {
-			return false;
-		}
-
+	public boolean equals(Object obj)
+	{
+	    if (obj == this) return true;
+	    if (obj == null) return false;
+	    if (!(obj instanceof ObjectSchema)) {
+	        return false;
+	    }
+	    ObjectSchema that = (ObjectSchema) obj;
+	    return getAdditionalProperties() == null ? that.getAdditionalProperties() == null :
+	        getAdditionalProperties().equals(that.getAdditionalProperties()) &&
+	        getDependencies() == null ? that.getDependencies() == null :
+	            getDependencies().equals(that.getDependencies()) &&
+	            getPatternProperties() == null ? that.getPatternProperties() == null :
+	                getPatternProperties().equals(that.getPatternProperties()) &&
+	                getProperties() == null ? that.getProperties() == null :
+	                    getProperties().equals(that.getProperties()) &&
+	                    super.equals(obj);
 	}
 
 	public AdditionalProperties getAdditionalProperties() {

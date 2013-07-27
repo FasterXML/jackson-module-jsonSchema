@@ -3,12 +3,12 @@
   <parent>
     <groupId>com.fasterxml</groupId>
     <artifactId>oss-parent</artifactId>
-    <version>10</version>
+    <version>11</version>
   </parent>
   <groupId>com.fasterxml.jackson.module</groupId>
   <artifactId>jackson-module-jsonSchema</artifactId>
   <name>jackson-module-jsonSchema</name>
-  <version>2.2.3-SNAPSHOT</version>
+  <version>2.3.0-SNAPSHOT</version>
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
 JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
   </description>
@@ -36,7 +36,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
     <javac.src.version>1.6</javac.src.version>
     <javac.target.version>1.6</javac.target.version>
     
-    <jackson.core.version>2.2.3-SNAPSHOT</jackson.core.version>
+    <jackson.core.version>2.3.0-SNAPSHOT</jackson.core.version>
     <!--
      | Configuration properties for the OSGi maven-bundle-plugin
     -->

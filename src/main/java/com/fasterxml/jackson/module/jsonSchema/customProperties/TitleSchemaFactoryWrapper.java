@@ -16,36 +16,19 @@ import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
  * 
  * @author jphelan
  */
-public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper {
+public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
+{
+    private WrapperFactory wrapperFactory = new WrapperFactory() {
+	    @Override
+	    public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
+	        SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
+	        wrapper.setProvider(p);
+	        return wrapper;
+	    };
+    };
 
-	/**
-	 * Adds writes the type as the title of the schema.
-	 * 
-	 * @param schema
-	 *            The schema who's title to set.
-	 * @param type
-	 *            The type of the object represented by the schema.
-	 */
-    private void addTitle(JsonSchema s, JavaType type) {
-		if (!s.isSimpleTypeSchema()) {
-			throw new RuntimeException("given non simple type schema: "
-					+ s.getType());
-		} else {
-			s.asSimpleTypeSchema().setTitle(type.getGenericSignature());
-		}
-
-	}
-
-	private WrapperFactory wrapperFactory = new WrapperFactory() {
-		public SchemaFactoryWrapper getWrapper(SerializerProvider provider) {
-			SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
-			wrapper.setProvider(getProvider());
-			return wrapper;
-		};
-	};
-
-	@Override
-	public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
+    @Override
+    public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
 		ObjectVisitor visitor = ((ObjectVisitor)super.expectObjectFormat(convertedType));
 		visitor.setWrapperFactory(wrapperFactory);
 		
@@ -53,10 +36,10 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper {
 		addTitle(visitor.getSchema(), convertedType);
 		
 		return visitor;
-	}
+    }
 
-	@Override
-	public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
+    @Override
+    public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
 		ArrayVisitor visitor = ((ArrayVisitor)super.expectArrayFormat(convertedType));
 		visitor.setWrapperFactory(wrapperFactory);
 		
@@ -64,6 +47,19 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper {
 		addTitle(visitor.getSchema(), convertedType);
 		
 		return visitor;
-	}
+    }
 
+    /**
+     * Adds writes the type as the title of the schema.
+     * 
+     * @param schema The schema who's title to set.
+     * @param type The type of the object represented by the schema.
+     */
+   private void addTitle(JsonSchema s, JavaType type)
+   {
+       if (!s.isSimpleTypeSchema()) {
+           throw new RuntimeException("given non simple type schema: "+ s.getType());
+       }
+       s.asSimpleTypeSchema().setTitle(type.getGenericSignature());
+   }
 }

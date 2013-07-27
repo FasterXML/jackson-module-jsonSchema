@@ -159,13 +159,13 @@ public abstract class JsonSchema {
 	 */
 	@JsonProperty
 	private String id;
+
 	/**
 	 * This attribute indicates if the instance must have a value, and not be
 	 * undefined. This is false by default, making the instance optional.
 	 */
 	@JsonProperty
 	private Boolean required = null;
-
 	
 	/**
 	 * Attempt to return this JsonSchema as an {@link AnySchema}
