@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
@@ -140,12 +141,23 @@ public class ObjectSchema extends ContainerTypeSchema {
 		return true;
 	}
 
+	public void putOptionalProperty(BeanProperty property, JsonSchema jsonSchema) {
+		jsonSchema.enrichWithBeanProperty(property);
+		properties.put(property.getName(), jsonSchema);
+	}
+	
 	public void putOptionalProperty(String name, JsonSchema jsonSchema) {
 		properties.put(name, jsonSchema);
 	}
 
 	public JsonSchema putPatternProperty(String regex, JsonSchema value) {
 		return patternProperties.put(regex, value);
+	}
+	
+	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
+		value.setRequired(true);
+		value.enrichWithBeanProperty(property);
+		return properties.put(property.getName(), value);		
 	}
 
 	public JsonSchema putProperty(String name, JsonSchema value) {

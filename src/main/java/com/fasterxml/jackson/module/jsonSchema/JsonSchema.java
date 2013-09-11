@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
@@ -459,6 +460,15 @@ public abstract class JsonSchema {
 
 	public void setRequired(Boolean required) {
 		this.required = required;
+	}
+
+	/**
+	 * Override this to add information specific to the property of bean
+	 * For example, bean validation annotations could be used to specify
+	 * value constraints in the schema
+	 * @param beanProperty
+	 */
+	public void enrichWithBeanProperty(BeanProperty beanProperty) {
 	}
 
 	/**
