@@ -57,7 +57,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     
     @Override
     public void optionalProperty(BeanProperty prop) throws JsonMappingException {
-        schema.putOptionalProperty(prop.getName(), propertySchema(prop));
+        schema.putOptionalProperty(prop, propertySchema(prop));
     }
 	
     @Override
@@ -68,7 +68,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
 
     @Override
     public void property(BeanProperty prop) throws JsonMappingException {
-        schema.putProperty(prop.getName(), propertySchema(prop));
+        schema.putProperty(prop, propertySchema(prop));
     }
 
     @Override
