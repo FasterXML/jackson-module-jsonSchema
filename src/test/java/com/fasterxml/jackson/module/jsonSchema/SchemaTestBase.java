@@ -122,6 +122,10 @@ public abstract class SchemaTestBase
 
     private final static ObjectMapper SHARED_MAPPER = new ObjectMapper();
 
+    protected ObjectMapper objectMapper() {
+        return SHARED_MAPPER;
+    }
+    
     protected ObjectWriter objectWriter() {
         return SHARED_MAPPER.writer();
     }

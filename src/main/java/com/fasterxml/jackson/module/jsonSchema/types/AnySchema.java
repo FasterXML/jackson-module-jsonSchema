@@ -3,7 +3,6 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
@@ -27,11 +26,7 @@ public class AnySchema extends SimpleTypeSchema {
 	@JsonProperty(value = "enum")
 	private Set<String> enums;
 	
-	@JsonIgnore
-	private final JsonFormatTypes type = JsonFormatTypes.ANY;
-	
-	//instance initializer block
-	{
+	public AnySchema() {
 		enums = new HashSet<String>();
 	}
 	
@@ -66,7 +61,7 @@ public class AnySchema extends SimpleTypeSchema {
 	 */
 	@Override
 	public JsonFormatTypes getType() {
-		return type;
+	    return JsonFormatTypes.ANY;
 	}
 	
 	public void setEnums(Set<String> enums) {

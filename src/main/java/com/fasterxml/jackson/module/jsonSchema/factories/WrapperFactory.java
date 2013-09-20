@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  * Exists to supply {@link SchemaFactoryWrapper} or its subclasses
  * to nested schema factories.
  * @author jphelan
- *
  */
 public class WrapperFactory {
 	

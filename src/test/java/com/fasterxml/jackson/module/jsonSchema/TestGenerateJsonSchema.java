@@ -4,18 +4,18 @@ import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema.Items;
 
-/**
- * @author Ryan Heaton
- */
+@SuppressWarnings("serial")
 public class TestGenerateJsonSchema
     extends SchemaTestBase
 {
@@ -94,7 +94,6 @@ public class TestGenerateJsonSchema
         public String value;
     }
 
-    
     @JsonFilter("filteredBean")
     protected static class FilteredBean {
         @JsonProperty
@@ -121,7 +120,6 @@ public class TestGenerateJsonSchema
         public Enumerated letter;
     }
 
-    @SuppressWarnings("serial")
     static class StringMap extends HashMap<String,String> { }
     
     /*
@@ -133,10 +131,9 @@ public class TestGenerateJsonSchema
     private final ObjectMapper MAPPER = new ObjectMapper();
     
     /**
-     * tests generating json-schema stuff.
+     * Test simple generation
      */
-    public void testGeneratingJsonSchema()
-        throws Exception
+    public void testGeneratingJsonSchema() throws Exception
     {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
@@ -237,7 +234,7 @@ public class TestGenerateJsonSchema
         assertFalse(result.containsKey("items"));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes", "serial" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void testSchemaId() throws Exception
     {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
@@ -255,7 +252,6 @@ public class TestGenerateJsonSchema
         	}}, result);
     }
 
-    @SuppressWarnings("serial")
     public void testWithEnum() throws Exception
     {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
@@ -288,7 +284,7 @@ public class TestGenerateJsonSchema
         // Maps are treated like ... "empty" Object. Not good, should be improved if possible
         assertEquals("{\"type\":\"object\"}", MAPPER.writeValueAsString(jsonSchema));
     }
-
+    
     /*
     /**********************************************************
     /* Tests cases, error detection/handling

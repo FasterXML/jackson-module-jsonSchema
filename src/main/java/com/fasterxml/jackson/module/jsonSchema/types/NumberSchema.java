@@ -1,17 +1,17 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
  * This class represents a {@link JsonSchema} as a number type
  * @author jphelan
- *
  */
-public class NumberSchema extends ValueTypeSchema {
-	
+public class NumberSchema extends ValueTypeSchema 
+{
 	/**
 	 * This attribute indicates if the value of the instance (if the
 	   instance is a number) can not equal the number defined by the
@@ -35,10 +35,7 @@ public class NumberSchema extends ValueTypeSchema {
 	/**This attribute defines the minimum value of the instance property*/
 	@JsonProperty
 	private Double minimum = null;
-	
-	@JsonIgnore
-	private final JsonFormatTypes type = JsonFormatTypes.NUMBER;
-	
+
 	@Override
 	public NumberSchema asNumberSchema() { return this; }
 	
@@ -58,9 +55,8 @@ public class NumberSchema extends ValueTypeSchema {
 				getMinimum() == null ? that.getMinimum() == null :
 					getMinimum().equals(that.getMinimum()) &&
 				super.equals(obj);
-		} else {
-			return false;
 		}
+		return false;
 	} 
 
 	public Boolean getExclusiveMaximum() {
@@ -83,8 +79,9 @@ public class NumberSchema extends ValueTypeSchema {
 	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
 	 */
 	@Override
-	public JsonFormatTypes getType() {
-		return type;
+	public JsonFormatTypes getType()
+	{
+	    return JsonFormatTypes.NUMBER;
 	}
 	
 	@Override

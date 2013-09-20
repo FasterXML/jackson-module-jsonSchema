@@ -15,8 +15,6 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
    empty jsonSchema which allows any value for items in the instance array.
  */
 public class ArraySchema extends ContainerTypeSchema {
-	
-	
 	/**
 	 * see {@link AdditionalItems}
 	 */
@@ -36,9 +34,6 @@ public class ArraySchema extends ContainerTypeSchema {
 	/**This attribute defines the minimum number of values in an array*/
 	@JsonProperty
 	private Integer minItems;
-	
-	@JsonIgnore
-	private final JsonFormatTypes type = JsonFormatTypes.ARRAY;
 	
 	/**
 	 * This attribute indicates that all items in an array instance MUST be
@@ -110,7 +105,7 @@ public class ArraySchema extends ContainerTypeSchema {
 	 */
 	@Override
 	public JsonFormatTypes getType() {
-		return type;
+	    return JsonFormatTypes.ARRAY;
 	}
 
 	public Boolean getUniqueItems() {

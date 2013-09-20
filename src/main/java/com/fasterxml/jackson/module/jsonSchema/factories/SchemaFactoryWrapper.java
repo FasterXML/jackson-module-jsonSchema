@@ -47,30 +47,30 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     
     @Override
     public JsonAnyFormatVisitor expectAnyFormat(JavaType convertedType) {
-        AnySchema anySchema = schemaProvider.anySchema();
-        schema = anySchema;
-        return visitorFactory.anyFormatVisitor(anySchema);
+        AnySchema s = schemaProvider.anySchema();
+        this.schema = s;
+        return visitorFactory.anyFormatVisitor(s);
     }
 	
     @Override
     public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
-        ArraySchema arraySchema = schemaProvider.arraySchema();
-        schema = arraySchema;
-        return visitorFactory.arrayFormatVisitor(provider, arraySchema);
+        ArraySchema s = schemaProvider.arraySchema();
+        this.schema = s;
+        return visitorFactory.arrayFormatVisitor(provider, s);
     }
 
     @Override
     public JsonBooleanFormatVisitor expectBooleanFormat(JavaType convertedType) {
-        BooleanSchema booleanSchema = schemaProvider.booleanSchema();
-        schema = booleanSchema;
-        return visitorFactory.booleanFormatVisitor(booleanSchema);
+        BooleanSchema s = schemaProvider.booleanSchema();
+        this.schema = s;
+        return visitorFactory.booleanFormatVisitor(s);
     }
 
     @Override
     public JsonIntegerFormatVisitor expectIntegerFormat(JavaType convertedType) {
-        IntegerSchema integerSchema = schemaProvider.integerSchema();
-        schema = integerSchema;
-        return visitorFactory.integerFormatVisitor(integerSchema);
+        IntegerSchema s = schemaProvider.integerSchema();
+        this.schema = s;
+        return visitorFactory.integerFormatVisitor(s);
     }
 
     @Override
@@ -89,16 +89,16 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
 	
     @Override
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
-        ObjectSchema objectSchema = schemaProvider.objectSchema();
-        schema = objectSchema;
-        return visitorFactory.objectFormatVisitor(provider, objectSchema);
+        ObjectSchema s = schemaProvider.objectSchema();
+        schema = s;
+        return visitorFactory.objectFormatVisitor(provider, s);
     }
 
     @Override
     public JsonStringFormatVisitor expectStringFormat(JavaType convertedType) {
-        StringSchema stringSchema = schemaProvider.stringSchema();
-        schema = stringSchema;
-        return visitorFactory.stringFormatVisitor(stringSchema);
+        StringSchema s = schemaProvider.stringSchema();
+        schema = s;
+        return visitorFactory.stringFormatVisitor(s);
     }
 
     @Override
@@ -109,9 +109,9 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
          *   concept of Map (distinct from Record or Object); so best
          *   we can do is to consider it a vague kind-a Object...
          */
-        ObjectSchema objectSchema = schemaProvider.objectSchema();
-        schema = objectSchema;
-        return visitorFactory.mapFormatVisitor(provider, objectSchema);
+        ObjectSchema s = schemaProvider.objectSchema();
+        schema = s;
+        return visitorFactory.mapFormatVisitor(provider, s);
     }
 
     /*

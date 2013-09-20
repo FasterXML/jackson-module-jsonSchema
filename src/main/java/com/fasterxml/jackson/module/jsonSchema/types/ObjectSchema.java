@@ -6,19 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
  * This type represents a {@link JsonSchema} as an object type
  * @author jphelan
  */
-public class ObjectSchema extends ContainerTypeSchema {
-
+public class ObjectSchema extends ContainerTypeSchema
+{
 	/**
 	 * This attribute defines a jsonSchema for all properties that are not
 	 * explicitly defined in an object type definition. If specified, the value
@@ -64,9 +65,6 @@ public class ObjectSchema extends ContainerTypeSchema {
 	 */
 	@JsonProperty
 	private Map<String, JsonSchema> properties;
-
-	@JsonIgnore
-	private final JsonFormatTypes type = JsonFormatTypes.OBJECT;
 
 	public ObjectSchema()
 	{
@@ -133,7 +131,7 @@ public class ObjectSchema extends ContainerTypeSchema {
 
 	@Override
 	public JsonFormatTypes getType() {
-		return type;
+	    return JsonFormatTypes.OBJECT;
 	}
 
 	@Override

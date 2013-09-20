@@ -1,6 +1,5 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
@@ -10,10 +9,6 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  *
  */
 public class BooleanSchema extends ValueTypeSchema {
-	
-	@JsonIgnore
-	private final JsonFormatTypes type = JsonFormatTypes.BOOLEAN;
-	
 	/* (non-Javadoc)
 	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isBooleanSchema()
 	 */
@@ -25,7 +20,7 @@ public class BooleanSchema extends ValueTypeSchema {
 	 */
 	@Override
 	public JsonFormatTypes getType() {
-		return type;
+	    return JsonFormatTypes.BOOLEAN;
 	}
 	
 	/* (non-Javadoc)

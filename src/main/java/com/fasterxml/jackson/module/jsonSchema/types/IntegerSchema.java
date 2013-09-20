@@ -9,45 +9,45 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  * @author jphelan
  *
  */
-public class IntegerSchema extends NumberSchema {
-	
+public class IntegerSchema extends NumberSchema
+{
 	/**
 	 * This attribute defines what value the number instance must be
 	   divisible by with no remainder (the result of the division must be an
 	   integer.)  The value of this attribute SHOULD NOT be 0.
 	 */
-	@JsonProperty
 	private Integer divisibleBy;
 	
-	@JsonProperty(required = true)
-	public final JsonFormatTypes type = JsonFormatTypes.INTEGER;
-	
-	@Override
-	public IntegerSchema asIntegerSchema() { return this; }
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.NumberSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof IntegerSchema) {
+     @Override
+     public boolean isIntegerSchema() { return true; }
+
+     @Override
+     public JsonFormatTypes getType() {
+         return JsonFormatTypes.INTEGER;
+     }
+
+     @Override
+     public IntegerSchema asIntegerSchema() { return this; }
+
+     @JsonProperty
+     public Integer getDivisibleBy() {
+         return divisibleBy;
+     }
+    
+     public void setDivisibleBy(Integer divisibleBy) {
+         this.divisibleBy = divisibleBy;
+     }
+
+     @Override
+	public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj instanceof IntegerSchema) {
 			IntegerSchema that = (IntegerSchema)obj;
 			return getDivisibleBy() == null ? that.getDivisibleBy() == null :
 				getDivisibleBy().equals(that.getDivisibleBy()) &&
 				super.equals(obj);
-		} else {
-			return false;
-		}
+         }
+         return false;
 	} 
-
-	public Integer getDivisibleBy() {
-		return divisibleBy;
-	}
-
-	@Override
-	public boolean isIntegerSchema() { return true; }
-
-	public void setDivisibleBy(Integer divisibleBy) {
-		this.divisibleBy = divisibleBy;
-	}
 }

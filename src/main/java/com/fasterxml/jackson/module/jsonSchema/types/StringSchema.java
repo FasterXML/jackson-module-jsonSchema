@@ -1,8 +1,9 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
@@ -26,9 +27,6 @@ public class StringSchema extends ValueTypeSchema {
 	 */
 	@JsonProperty
 	private String pattern;
-	
-	@JsonIgnore
-	private final JsonFormatTypes type = JsonFormatTypes.STRING;
 
 	/* (non-Javadoc)
 	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asStringSchema()
@@ -71,7 +69,7 @@ public class StringSchema extends ValueTypeSchema {
 
 	@Override
 	public JsonFormatTypes getType() {
-	    return type;
+	    return JsonFormatTypes.STRING;
 	}
 
 	@Override

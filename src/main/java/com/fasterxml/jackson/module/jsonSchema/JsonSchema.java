@@ -71,8 +71,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonTypeInfo(use = Id.CUSTOM, include = As.PROPERTY, property = "type")
 @JsonTypeIdResolver(JsonSchemaIdResolver.class)
-public abstract class JsonSchema {
-
+public abstract class JsonSchema
+{
 	/**
 	 * This attribute defines a URI of a schema that contains the full
 	 * representation of this schema. When a validator encounters this
@@ -293,7 +293,6 @@ public abstract class JsonSchema {
 
 	@JsonIgnore
 	public abstract JsonFormatTypes getType();
-
 
 	/**
 	 * determine if this JsonSchema is an {@link AnySchema}.
