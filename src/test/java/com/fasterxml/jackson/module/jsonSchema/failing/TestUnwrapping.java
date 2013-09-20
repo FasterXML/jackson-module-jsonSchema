@@ -27,7 +27,7 @@ public class TestUnwrapping extends SchemaTestBase
     /**********************************************************
      */
     
-    private final ObjectMapper MAPPER = new ObjectMapper();
+    private final ObjectMapper MAPPER = objectMapper();
 
     public void testUnwrapping()  throws Exception
     {

@@ -116,5 +116,4 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
         return ser;
     }
-
 }
