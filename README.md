@@ -8,7 +8,7 @@ currently in jackson databind (pre 2.1), in order to allow for the generation of
 Version 2.1 of this module is the first functioning version; but significant changes are possible for 2.2.
 This module is very new, and 2.2 is expected to be the first fully stable release.
 
-## Example Usage (from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/databind/jsonSchema/TestGenerateJsonSchema.java#L114))
+## Example Usage (from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
 
 simply add a dependency (this is from my gradle config)
 `"com.fasterxml.jackson.datatype:jackson-datatype-jsonSchema:2.1.0"`
