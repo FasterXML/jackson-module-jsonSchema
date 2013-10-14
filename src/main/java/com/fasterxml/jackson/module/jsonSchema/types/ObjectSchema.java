@@ -237,6 +237,7 @@ public class ObjectSchema extends ContainerTypeSchema
 						getJsonSchema().equals(((SchemaAdditionalProperties)obj).getJsonSchema());
 		}
 
+		@JsonValue
 		public JsonSchema getJsonSchema() {
 		    return jsonSchema;
 		}
