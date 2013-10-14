@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
 /**
@@ -58,10 +59,21 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
         // JSON Schema only allows String types so let's not bother too much
     }
 
-    @Override
+   @Override
     public void valueFormat(JsonFormatVisitable handler, JavaType valueType)
             throws JsonMappingException {
-        /* Also... not sure what to do with value type either.
-         */
+
+        // ISSUE #24: https://github.com/FasterXML/jackson-module-jsonSchema/issues/24
+        
+        JsonSchema valueSchema = propertySchema(handler, valueType);
+        ObjectSchema.AdditionalProperties ap = new ObjectSchema.SchemaAdditionalProperties(valueSchema.asSimpleTypeSchema());
+        this.schema.setAdditionalProperties(ap);
+    }
+
+    protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
+            throws JsonMappingException {
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+        handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
+        return visitor.finalSchema();
     }
 }
