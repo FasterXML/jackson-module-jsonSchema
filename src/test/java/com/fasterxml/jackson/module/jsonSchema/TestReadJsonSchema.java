@@ -62,7 +62,10 @@ public class TestReadJsonSchema
         String schemaStr = mapper.writeValueAsString(jsonSchema);
         assertNotNull(schemaStr);
         JsonSchema result = mapper.readValue(schemaStr, JsonSchema.class);
-        assertEquals("Trying to read from '" + schemaStr + "'", jsonSchema, result);
+        String resultStr = mapper.writeValueAsString(result);
+        JsonNode node = mapper.readTree(schemaStr);
+        JsonNode finalNode = mapper.readTree(resultStr);
+        assertEquals(node, finalNode);
     }
 
     /**
@@ -75,14 +78,14 @@ public class TestReadJsonSchema
         JsonSchema schema = mapper.readValue(schemaStr, JsonSchema.class);
         String newSchemaStr = mapper.writeValueAsString(schema);
         assertEquals(schemaStr.replaceAll("\\s", "").length(), newSchemaStr.replaceAll("\\s", "").length());
+        
         JsonNode node = mapper.readTree(schemaStr);
         JsonNode finalNode = mapper.readTree(newSchemaStr);
         assertEquals(node, finalNode);
     }
 
     /**
-     * Verifies that a true-valued additional property is
-     * deserialized properly
+     * Verifies that a true-valued additional property is deserialized properly
      */
     public void testDeserializeTrueAdditionalProperties() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
