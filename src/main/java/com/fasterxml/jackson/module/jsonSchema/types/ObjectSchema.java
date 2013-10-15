@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
@@ -184,6 +185,7 @@ public class ObjectSchema extends ContainerTypeSchema
 	    this.properties = properties;
 	}
 
+        @JsonDeserialize(using = AdditionalPropertiesDeserializer.class)
 	public static abstract class AdditionalProperties {
 		@JsonCreator
 		public AdditionalProperties jsonCreator() {
@@ -222,6 +224,7 @@ public class ObjectSchema extends ContainerTypeSchema
 		public static final NoAdditionalProperties instance = new NoAdditionalProperties();
 	}
 
+        
 	public static class SchemaAdditionalProperties extends AdditionalProperties {
 
 		@JsonProperty
@@ -237,6 +240,7 @@ public class ObjectSchema extends ContainerTypeSchema
 						getJsonSchema().equals(((SchemaAdditionalProperties)obj).getJsonSchema());
 		}
 
+		@JsonValue
 		public JsonSchema getJsonSchema() {
 		    return jsonSchema;
 		}
