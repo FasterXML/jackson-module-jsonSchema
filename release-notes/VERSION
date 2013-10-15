@@ -5,6 +5,8 @@ Version: 2.3.0 (xx-xxx-2013)
  (reported by Arul D; aruld@github)
 #18: Add mechanism to customize schema for property
  (suggested by rpdai)
+#24: Improved Schema generation for Maps
+ (contributed by idelvall@github)
 
 ------------------------------------------------------------------------
 === History: ===
