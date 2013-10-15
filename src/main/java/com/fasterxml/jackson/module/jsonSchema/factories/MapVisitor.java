@@ -20,6 +20,8 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
 
     protected SerializerProvider provider;
     
+    private WrapperFactory wrapperFactory = new WrapperFactory();
+    
     public MapVisitor(SerializerProvider provider, ObjectSchema schema)
     {
         this.provider = provider;
