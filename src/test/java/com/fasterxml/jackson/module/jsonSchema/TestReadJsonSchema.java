@@ -66,7 +66,7 @@ public class TestReadJsonSchema
     }
 
     /**
-     * Verifies that a false-valued and object-valued additional properties are
+     * Verifies that false-valued and object-valued additional properties are
      * deserialized properly
      */
     public void testDeserializeFalseAndObjectAdditionalProperties() throws Exception {
@@ -81,7 +81,7 @@ public class TestReadJsonSchema
     }
 
     /**
-     * Verifies that a false-valued and object-valued additional properties are
+     * Verifies that a true-valued additional property is
      * deserialized properly
      */
     public void testDeserializeTrueAdditionalProperties() throws Exception {
