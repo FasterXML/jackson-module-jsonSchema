@@ -15,9 +15,15 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
 
     private WrapperFactory wrapperFactory = new WrapperFactory();
     
-    public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
+    public ObjectVisitor(SerializerProvider provider, ObjectSchema schema)
+    {
+        this(provider, schema,  new WrapperFactory());
+    }
+    public ObjectVisitor(SerializerProvider provider, ObjectSchema schema, WrapperFactory wrapperFactory)
+    {
         this.provider = provider;
         this.schema = schema;
+        this.wrapperFactory = wrapperFactory;
     }
 
     /*
