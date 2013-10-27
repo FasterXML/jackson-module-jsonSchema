@@ -22,8 +22,9 @@ public class TestReadJsonSchema
 
     static class SchemableBasic
     {
-        SchemaEnum testEnum;
+        public SchemaEnum testEnum;
         public String name;
+        public JsonSerializable someSerializable;
     }
     
     static class SchemableArrays
@@ -42,10 +43,15 @@ public class TestReadJsonSchema
 
     static class SchemabeLists
     {
-        public JsonSerializable someSerializable;
-        public Iterable<Object> iterableOhYeahBaby;
-        public List<String> extra;
         public ArrayList<String> extra2;
+        public List<String> extra;
+    }
+
+    static class SchemabeIterableOverObjects {
+        public Iterable<Object> iterableOhYeahBaby;
+    }
+
+    static class SchemabeIteratorOverStringArray {
         public Iterator<String[]> extra3;
     }
     
@@ -53,9 +59,11 @@ public class TestReadJsonSchema
         public Map<String, Map<String, Double>> mapSizes;
     }
     
-    static class SchemableEnumStructs {
-        public EnumMap<SchemaEnum, List<String>> whatever;
+    static class SchemableEnumSet {
         public EnumSet<SchemaEnum> testEnums;
+    }
+    static class SchemableEnumMap {
+        public EnumMap<SchemaEnum, List<String>> whatever;
     }
 
     /*
@@ -81,13 +89,19 @@ public class TestReadJsonSchema
     public void testReadListTypes() throws Exception {
         _testSimple(SchemabeLists.class);
     }
+
+    public void testReadIterables() throws Exception {
+        _testSimple(SchemabeIterableOverObjects.class);
+        _testSimple(SchemabeIteratorOverStringArray.class);
+    }
     
     public void testMapTypes() throws Exception {
         _testSimple(SchemableMaps.class);
     }
 
     public void testStructuredEnumTypes() throws Exception {
-        _testSimple(SchemableEnumStructs.class);
+        _testSimple(SchemableEnumSet.class);
+        _testSimple(SchemableEnumMap.class);
     }
     
     public void _testSimple(Class<?> type) throws Exception
@@ -108,7 +122,8 @@ public class TestReadJsonSchema
         String json2 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(finalNode);
         
 //        assertEquals(node, finalNode);
-        assertEquals(json1, json2);
+        assertEquals("Schemas for "+type.getSimpleName()+" differ",
+                json1, json2);
     }
 
     /**
