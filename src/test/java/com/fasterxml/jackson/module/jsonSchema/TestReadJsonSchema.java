@@ -1,12 +1,8 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,9 +20,14 @@ public class TestReadJsonSchema
         YES, NO;
     }
 
-    static class Schemable {
-
+    static class SchemableBasic
+    {
+        SchemaEnum testEnum;
         public String name;
+    }
+    
+    static class SchemableArrays
+    {
         public char[] nameBuffer;
         // We'll include tons of stuff, just to force generation of schema
         public boolean[] states;
@@ -37,61 +38,102 @@ public class TestReadJsonSchema
         public float[] floats;
         public double[] doubles;
         public Object[] objects;
+    }
+
+    static class SchemabeLists
+    {
         public JsonSerializable someSerializable;
         public Iterable<Object> iterableOhYeahBaby;
         public List<String> extra;
         public ArrayList<String> extra2;
         public Iterator<String[]> extra3;
+    }
+    
+    static class SchemableMaps {
         public Map<String, Map<String, Double>> mapSizes;
+    }
+    
+    static class SchemableEnumStructs {
         public EnumMap<SchemaEnum, List<String>> whatever;
-        SchemaEnum testEnum;
         public EnumSet<SchemaEnum> testEnums;
     }
 
+    /*
+    /**********************************************************
+    /* Unit tests, success
+    /**********************************************************
+     */
+
+    private final ObjectMapper MAPPER = new ObjectMapper();
+    
     /**
      * Verifies that a simple schema that is serialized can be deserialized back
      * to equal schema instance
      */
-    public void testDeserializeSimple() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+    public void testReadSimpleTypes() throws Exception {
+        _testSimple(SchemableBasic.class);
+    }
+
+    public void testReadArrayTypes() throws Exception {
+        _testSimple(SchemableArrays.class);
+    }
+
+    public void testReadListTypes() throws Exception {
+        _testSimple(SchemabeLists.class);
+    }
+    
+    public void testMapTypes() throws Exception {
+        _testSimple(SchemableMaps.class);
+    }
+
+    public void testStructuredEnumTypes() throws Exception {
+        _testSimple(SchemableEnumStructs.class);
+    }
+    
+    public void _testSimple(Class<?> type) throws Exception
+    {
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
-        mapper.acceptJsonFormatVisitor(mapper.constructType(Schemable.class), visitor);
+        MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(type), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
 
-        String schemaStr = mapper.writeValueAsString(jsonSchema);
+        String schemaStr = MAPPER.writeValueAsString(jsonSchema);
         assertNotNull(schemaStr);
-        JsonSchema result = mapper.readValue(schemaStr, JsonSchema.class);
-        String resultStr = mapper.writeValueAsString(result);
-        JsonNode node = mapper.readTree(schemaStr);
-        JsonNode finalNode = mapper.readTree(resultStr);
-        assertEquals(node, finalNode);
+        JsonSchema result = MAPPER.readValue(schemaStr, JsonSchema.class);
+        String resultStr = MAPPER.writeValueAsString(result);
+        JsonNode node = MAPPER.readTree(schemaStr);
+        JsonNode finalNode = MAPPER.readTree(resultStr);
+
+        String json1 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+        String json2 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(finalNode);
+        
+//        assertEquals(node, finalNode);
+        assertEquals(json1, json2);
     }
 
     /**
      * Verifies that false-valued and object-valued additional properties are
      * deserialized properly
      */
-    public void testDeserializeFalseAndObjectAdditionalProperties() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+    public void testDeserializeFalseAndObjectAdditionalProperties() throws Exception
+    {
         String schemaStr = "{\"type\":\"object\",\"properties\":{\"mapSizes\":{\"type\":\"object\",\"additionalProperties\":{\"type\":\"number\"}}},\"additionalProperties\":false}";
-        JsonSchema schema = mapper.readValue(schemaStr, JsonSchema.class);
-        String newSchemaStr = mapper.writeValueAsString(schema);
+        JsonSchema schema = MAPPER.readValue(schemaStr, JsonSchema.class);
+        String newSchemaStr = MAPPER.writeValueAsString(schema);
         assertEquals(schemaStr.replaceAll("\\s", "").length(), newSchemaStr.replaceAll("\\s", "").length());
         
-        JsonNode node = mapper.readTree(schemaStr);
-        JsonNode finalNode = mapper.readTree(newSchemaStr);
+        JsonNode node = MAPPER.readTree(schemaStr);
+        JsonNode finalNode = MAPPER.readTree(newSchemaStr);
         assertEquals(node, finalNode);
     }
 
     /**
      * Verifies that a true-valued additional property is deserialized properly
      */
-    public void testDeserializeTrueAdditionalProperties() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+    public void testDeserializeTrueAdditionalProperties() throws Exception
+    {
         String schemaStr = "{\"type\":\"object\",\"additionalProperties\":true}";
-        ObjectSchema schema = mapper.readValue(schemaStr, ObjectSchema.class);
+        ObjectSchema schema = MAPPER.readValue(schemaStr, ObjectSchema.class);
         assertNull(schema.getAdditionalProperties());
-
     }
 }

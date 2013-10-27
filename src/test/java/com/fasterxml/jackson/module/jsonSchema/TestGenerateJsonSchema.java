@@ -17,15 +17,10 @@ import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema.Items;
 
 @SuppressWarnings("serial")
 public class TestGenerateJsonSchema
-        extends SchemaTestBase {
-    /*
-     /**********************************************************
-     /* Helper classes
-     /**********************************************************
-     */
-
-    public static class SimpleBean {
-
+    extends SchemaTestBase
+{
+    public static class SimpleBean
+    {
         private int property1;
         private String property2;
         private String[] property3;
@@ -124,11 +119,13 @@ public class TestGenerateJsonSchema
 
     static class StringMap extends HashMap<String, String> {
     }
+
     /*
-     /**********************************************************
-     /* Unit tests, success
-     /**********************************************************
+    /**********************************************************
+    /* Unit tests, success
+    /**********************************************************
      */
+
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
