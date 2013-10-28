@@ -13,7 +13,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
  */
 public class TestReadJsonSchema
-        extends SchemaTestBase {
+    extends SchemaTestBase
+{
 
     enum SchemaEnum {
 
@@ -50,20 +51,9 @@ public class TestReadJsonSchema
     static class SchemabeIterableOverObjects {
         public Iterable<Object> iterableOhYeahBaby;
     }
-
-    static class SchemabeIteratorOverStringArray {
-        public Iterator<String[]> extra3;
-    }
     
     static class SchemableMaps {
         public Map<String, Map<String, Double>> mapSizes;
-    }
-    
-    static class SchemableEnumSet {
-        public EnumSet<SchemaEnum> testEnums;
-    }
-    static class SchemableEnumMap {
-        public EnumMap<SchemaEnum, List<String>> whatever;
     }
 
     /*
@@ -92,18 +82,12 @@ public class TestReadJsonSchema
 
     public void testReadIterables() throws Exception {
         _testSimple(SchemabeIterableOverObjects.class);
-        _testSimple(SchemabeIteratorOverStringArray.class);
     }
     
     public void testMapTypes() throws Exception {
         _testSimple(SchemableMaps.class);
     }
 
-    public void testStructuredEnumTypes() throws Exception {
-        _testSimple(SchemableEnumSet.class);
-        _testSimple(SchemableEnumMap.class);
-    }
-    
     public void _testSimple(Class<?> type) throws Exception
     {
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
