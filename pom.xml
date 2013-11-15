@@ -37,7 +37,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
     <javac.src.version>1.6</javac.src.version>
     <javac.target.version>1.6</javac.target.version>
     
-    <jackson.core.version>2.3.0-rc1</jackson.core.version>
+    <jackson.core.version>2.3.0</jackson.core.version>
     <!--
      | Configuration properties for the OSGi maven-bundle-plugin
     -->
