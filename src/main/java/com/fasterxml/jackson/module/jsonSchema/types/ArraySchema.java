@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
@@ -143,6 +144,7 @@ public class ArraySchema extends ContainerTypeSchema {
 	 * This provides a definition for additional items in an array instance
    when tuple definitions of the items is provided.
 	 */
+	@JsonDeserialize(using = AdditionalItemsDeserializer.class)
 	public static abstract class AdditionalItems {
 		
 		@JsonCreator
