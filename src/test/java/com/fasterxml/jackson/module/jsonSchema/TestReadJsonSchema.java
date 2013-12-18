@@ -7,6 +7,7 @@ import java.util.*;
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
 /**
@@ -87,6 +88,22 @@ public class TestReadJsonSchema
     public void testMapTypes() throws Exception {
         _testSimple(SchemableMaps.class);
     }
+    
+    public void testAdditionalItems() throws Exception {
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(SchemableArrays.class), visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+        assertNotNull(jsonSchema);
+        
+        assertTrue(jsonSchema.isObjectSchema());
+        for (JsonSchema propertySchema : jsonSchema.asObjectSchema().getProperties().values())
+        {
+            assertTrue(propertySchema.isArraySchema());
+            propertySchema.asArraySchema().setAdditionalItems(new ArraySchema.NoAdditionalItems());
+        }
+        
+        _testSimple("SchemableArrays - additionalItems", jsonSchema);
+    }
 
     public void _testSimple(Class<?> type) throws Exception
     {
@@ -94,7 +111,12 @@ public class TestReadJsonSchema
         MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(type), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
+        
+        _testSimple(type.getSimpleName(), jsonSchema);
+    }
 
+    public void _testSimple(String name, JsonSchema jsonSchema) throws Exception
+    {
         String schemaStr = MAPPER.writeValueAsString(jsonSchema);
         assertNotNull(schemaStr);
         JsonSchema result = MAPPER.readValue(schemaStr, JsonSchema.class);
@@ -106,7 +128,7 @@ public class TestReadJsonSchema
         String json2 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(finalNode);
         
 //        assertEquals(node, finalNode);
-        assertEquals("Schemas for "+type.getSimpleName()+" differ",
+        assertEquals("Schemas for "+name+" differ",
                 json1, json2);
     }
 
