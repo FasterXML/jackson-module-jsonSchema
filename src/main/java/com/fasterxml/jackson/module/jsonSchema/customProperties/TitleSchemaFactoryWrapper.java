@@ -18,7 +18,7 @@ import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
  */
 public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
 {
-    private WrapperFactory wrapperFactory = new WrapperFactory() {
+    private static class TitleSchemaFactoryWrapperFactory extends WrapperFactory {
 	    @Override
 	    public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
 	        SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
@@ -27,10 +27,13 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
 	    };
     };
 
+	public TitleSchemaFactoryWrapper() {
+		super(new TitleSchemaFactoryWrapperFactory());
+	}
+
     @Override
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
 		ObjectVisitor visitor = ((ObjectVisitor)super.expectObjectFormat(convertedType));
-		visitor.setWrapperFactory(wrapperFactory);
 		
 		// could add other properties here
 		addTitle(visitor.getSchema(), convertedType);
@@ -41,7 +44,6 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
     @Override
     public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
 		ArrayVisitor visitor = ((ArrayVisitor)super.expectArrayFormat(convertedType));
-		visitor.setWrapperFactory(wrapperFactory);
 		
 		// could add other properties here
 		addTitle(visitor.getSchema(), convertedType);

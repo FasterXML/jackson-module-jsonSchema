@@ -31,7 +31,7 @@ public class TitleSchemaFactoryWrapperTest extends TestCase{
 		JsonSchema schema2 = schema.asObjectSchema().getProperties().get("pet");
 		assertTrue("schema should be an objectSchema.", schema2.isObjectSchema());
 		String title2 = schema2.asObjectSchema().getTitle();
-		assertNotNull(title);
+		assertNotNull(title2);
 		assertTrue("schema should have a title", title2.indexOf("Pet") != -1);
 	}
 }

@@ -17,8 +17,13 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     private WrapperFactory wrapperFactory = new WrapperFactory();
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
+        this(provider, schema, new WrapperFactory());
+    }
+    
+    public ArrayVisitor(SerializerProvider provider, ArraySchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
         this.schema = schema;
+        this.wrapperFactory = wrapperFactory;
     }
     
     /*
