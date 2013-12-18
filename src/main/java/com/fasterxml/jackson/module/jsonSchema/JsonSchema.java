@@ -244,6 +244,15 @@ public abstract class JsonSchema
 		return null;
 	}
 
+	/**
+	 * A utility method allowing to easily chain calls to equals() on members
+	 * without taking any risk regarding the ternary operator precedence.
+	 *  
+	 * @return (object1 == null ? object2 == null : object1.equals(object2))
+	 */
+	protected static boolean equals(Object object1, Object object2) {
+		return (object1 == null ? object2 == null : object1.equals(object2));
+	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -254,17 +263,12 @@ public abstract class JsonSchema
 	    if (obj == null) return false;
 	    if (!(obj instanceof JsonSchema)) return false;
 	    JsonSchema that = ((JsonSchema)obj);
-	    return that.getType() == getType() &&
-	            getRequired() == null ? that.getRequired() == null : 
-	                getRequired().equals(that.getRequired()) &&
-	                get$ref() == null ? that.get$ref() == null : 
-    					    get$ref().equals(that.get$ref()) &&
-    					    get$schema() == null ? that.get$schema() == null : 
-    						get$schema().equals(that.get$schema()) &&
-    					getDisallow() == null ? that.getDisallow() == null : 
-    						getDisallow().equals(that.getDisallow()) &&
-    					getExtends() == null ? that.getExtends() == null : 
-    						getExtends().equals(that.getExtends());
+	    return equals(getType(), getType()) &&
+	    		equals(getRequired(), that.getRequired()) &&
+	    		equals(get$ref(), that.get$ref()) &&
+	    		equals(get$schema(), that.get$schema()) &&
+	    		equals(getDisallow(), that.getDisallow()) &&
+	    		equals(getExtends(), that.getExtends());
 	}
 	
 	public String get$ref() {

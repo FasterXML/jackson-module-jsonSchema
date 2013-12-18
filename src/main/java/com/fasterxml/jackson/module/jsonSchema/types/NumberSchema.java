@@ -46,14 +46,10 @@ public class NumberSchema extends ValueTypeSchema
 	public boolean equals(Object obj) {
 		if (obj instanceof NumberSchema) {
 			NumberSchema that = (NumberSchema)obj;
-			return getExclusiveMaximum() == null ? that.getExclusiveMaximum() == null :
-				getExclusiveMaximum().equals(that.getExclusiveMaximum()) &&
-				getExclusiveMinimum() == null ? that.getExclusiveMinimum() == null :
-					getExclusiveMinimum().equals(that.getExclusiveMinimum()) &&
-				getMaximum() == null ? that.getMaximum() == null :
-					getMaximum().equals(that.getMaximum()) &&
-				getMinimum() == null ? that.getMinimum() == null :
-					getMinimum().equals(that.getMinimum()) &&
+			return equals(getExclusiveMaximum(), that.getExclusiveMaximum()) &&
+				equals(getExclusiveMinimum(), that.getExclusiveMinimum()) &&
+				equals(getMaximum(), that.getMaximum()) &&
+				equals(getMinimum(), that.getMinimum()) &&
 				super.equals(obj);
 		}
 		return false;
