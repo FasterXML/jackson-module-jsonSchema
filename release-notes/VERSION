@@ -1,5 +1,13 @@
 Project: jackson-module-jsonSchema
-Version: 2.3.0 (14-Nov-2013)
+Version: 2.3.1 (xx-Dec-2013)
+
+#28: Fix `equals()` implementations for schema components.
+
+------------------------------------------------------------------------
+=== History: ===
+------------------------------------------------------------------------
+
+2.3.0 (14-Nov-2013)
 
 #14: Generated schema contains multiple 'type' values
  (reported by Arul D; aruld@github)
@@ -7,10 +15,6 @@ Version: 2.3.0 (14-Nov-2013)
  (suggested by rpdai)
 #24: Improved Schema generation for Maps
  (contributed by idelvall@github)
-
-------------------------------------------------------------------------
-=== History: ===
-------------------------------------------------------------------------
 
 2.2.3 (26-Aug-2013)
 
