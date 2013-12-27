@@ -2,6 +2,9 @@ Project: jackson-module-jsonSchema
 Version: 2.3.1 (xx-Dec-2013)
 
 #28: Fix `equals()` implementations for schema components.
+ (contributed by fenrhil@github.com)
+#29: Support deserialiation of "ArraySchema.additionalItems"
+ (contributed by fenrhil@github.com)
 
 ------------------------------------------------------------------------
 === History: ===
