@@ -20,13 +20,21 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     protected JsonSchema schema;
 
     public SchemaFactoryWrapper() {
-        this(null);
+        this(null, null);
     }
     
     public SchemaFactoryWrapper(SerializerProvider p) {
+        this(p, null);
+    }
+    
+    protected SchemaFactoryWrapper(WrapperFactory wrapperFactory) {
+        this(null, wrapperFactory);
+    }
+    
+    protected SchemaFactoryWrapper(SerializerProvider p, WrapperFactory wrapperFactory) {
         provider = p;
         schemaProvider = new JsonSchemaFactory();
-        visitorFactory = new FormatVisitorFactory();
+        visitorFactory = new FormatVisitorFactory(wrapperFactory == null ? new WrapperFactory() : wrapperFactory);
     }
 
     /*

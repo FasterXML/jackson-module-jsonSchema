@@ -1,8 +1,10 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import com.fasterxml.jackson.databind.*;
-
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 
 /**
  * Convenience class that wraps JSON Schema generation functionality.
@@ -13,20 +15,27 @@ public class JsonSchemaGenerator
 {
     protected final ObjectMapper _mapper;
     
+	private final WrapperFactory _wrapperFactory;
+    
     public JsonSchemaGenerator(ObjectMapper mapper) {
+        this(mapper, null);
+    }
+    
+    public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
         _mapper = mapper;
+    	_wrapperFactory = wrapperFactory == null ? new WrapperFactory() : wrapperFactory;
     }
 
     public JsonSchema generateSchema(Class<?> type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(null);
+        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
         _mapper.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
 
     public JsonSchema generateSchema(JavaType type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(null);
+        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
         _mapper.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
