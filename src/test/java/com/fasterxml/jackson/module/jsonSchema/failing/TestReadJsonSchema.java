@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.SchemaTestBase;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
 /**
  * Trivial test to ensure that Schema instances can be also deserialized

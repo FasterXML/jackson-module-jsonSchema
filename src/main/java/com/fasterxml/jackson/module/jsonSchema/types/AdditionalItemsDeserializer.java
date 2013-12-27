@@ -18,26 +18,27 @@ import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 /**
  * @author Yoann Rodière (adapted from {@link AdditionalPropertiesDeserializer}, by Ignacio del Valle Alles)
  */
-public class AdditionalItemsDeserializer extends JsonDeserializer<ArraySchema.AdditionalItems> {
-
+public class AdditionalItemsDeserializer extends JsonDeserializer<ArraySchema.AdditionalItems>
+{
 	@Override
-	public ArraySchema.AdditionalItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		ObjectMapper mapper = (ObjectMapper) jp.getCodec();
-		TreeNode node = mapper.readTree(jp);
-		String nodeStr = mapper.writeValueAsString(node);
+	public ArraySchema.AdditionalItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException
+	{
+	    TreeNode node = jp.readValueAsTree();
+		
 		if (node instanceof ObjectNode) {
-			JsonSchema innerSchema = mapper.readValue(nodeStr, JsonSchema.class);
+		    // not clean, but has to do...
+	          ObjectMapper mapper = (ObjectMapper) jp.getCodec();
+			JsonSchema innerSchema = mapper.treeToValue(node, JsonSchema.class);
 			return new ArraySchema.SchemaAdditionalItems(innerSchema);
-		} else if (node instanceof BooleanNode) {
+		}
+		if (node instanceof BooleanNode) {
 			BooleanNode booleanNode = (BooleanNode) node;
 			if (booleanNode.booleanValue()) {
 				return null; // "additionalItems":true is the default
-			} else {
-				return new ArraySchema.NoAdditionalItems();
 			}
-		} else {
-			throw new JsonMappingException("additionalItems nodes can only be of "
-					+ "type boolean or object: " + nodeStr);
+			return new ArraySchema.NoAdditionalItems();
 		}
+		throw new JsonMappingException("additionalItems nodes can only be of "
+		        + "type Boolean or Object; instead found something starting with token " + node.asToken());
 	}
 }
