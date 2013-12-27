@@ -43,8 +43,8 @@ public class AnySchema extends SimpleTypeSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof AnySchema) {
 			AnySchema that = ((AnySchema)obj);
-			return super.equals(obj) && 
-					enums == null ? that.enums == null : enums.equals(that.enums);
+			return super.equals(obj) &&
+					equals(enums, that.enums);
 		} else {
 			return false;
 		}

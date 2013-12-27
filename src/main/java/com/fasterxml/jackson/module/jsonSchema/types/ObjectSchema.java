@@ -96,22 +96,20 @@ public class ObjectSchema extends ContainerTypeSchema
 	 */
 	@Override
 	public boolean equals(Object obj)
-	{
-	    if (obj == this) return true;
-	    if (obj == null) return false;
-	    if (!(obj instanceof ObjectSchema)) {
-	        return false;
-	    }
-	    ObjectSchema that = (ObjectSchema) obj;
-	    return getAdditionalProperties() == null ? that.getAdditionalProperties() == null :
-	        getAdditionalProperties().equals(that.getAdditionalProperties()) &&
-	        getDependencies() == null ? that.getDependencies() == null :
-	            getDependencies().equals(that.getDependencies()) &&
-	            getPatternProperties() == null ? that.getPatternProperties() == null :
-	                getPatternProperties().equals(that.getPatternProperties()) &&
-	                getProperties() == null ? that.getProperties() == null :
-	                    getProperties().equals(that.getProperties()) &&
-	                    super.equals(obj);
+ {
+		if ( obj == this )
+			return true;
+		if ( obj == null )
+			return false;
+		if ( !( obj instanceof ObjectSchema ) ) {
+			return false;
+		}
+		ObjectSchema that = (ObjectSchema) obj;
+		return equals(getAdditionalProperties(), that.getAdditionalProperties()) &&
+				equals(getDependencies(), that.getDependencies()) &&
+				equals(getPatternProperties(), that.getPatternProperties()) &&
+				equals(getProperties(), that.getProperties()) &&
+				super.equals(obj);
 	}
 
 	public AdditionalProperties getAdditionalProperties() {
@@ -236,8 +234,7 @@ public class ObjectSchema extends ContainerTypeSchema
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof SchemaAdditionalProperties &&
-					getJsonSchema() == null ? ((SchemaAdditionalProperties)obj).getJsonSchema() == null :
-						getJsonSchema().equals(((SchemaAdditionalProperties)obj).getJsonSchema());
+					JsonSchema.equals(getJsonSchema(), ((SchemaAdditionalProperties)obj).getJsonSchema());
 		}
 
 		@JsonValue
@@ -274,10 +271,8 @@ public class ObjectSchema extends ContainerTypeSchema
 		public boolean equals(Object obj) {
 			if (obj instanceof SchemaDependency) {
 				SchemaDependency that = (SchemaDependency) obj;
-				return getDepender() == null ? that.getDepender() == null :
-						getDepender().equals(that.getDepender()) &&
-					getParentMustMatch() == null ? that.getParentMustMatch() == null :
-						getParentMustMatch().equals(that.getParentMustMatch());
+				return JsonSchema.equals(getDepender(), that.getDepender()) &&
+					JsonSchema.equals(getParentMustMatch(), that.getParentMustMatch());
 			} else {
 				return false;
 			}
@@ -319,10 +314,8 @@ public class ObjectSchema extends ContainerTypeSchema
 		public boolean equals(Object obj) {
 			if (obj instanceof SchemaDependency) {
 				SimpleDependency that = (SimpleDependency) obj;
-				return getDepender() == null ? that.getDepender() == null :
-						getDepender().equals(that.getDepender()) &&
-					getDependsOn() == null ? that.getDependsOn() == null :
-						getDependsOn().equals(that.getDependsOn());
+				return JsonSchema.equals(getDepender(), that.getDepender()) &&
+					JsonSchema.equals(getDependsOn(), that.getDependsOn());
 			} else {
 				return false;
 			}

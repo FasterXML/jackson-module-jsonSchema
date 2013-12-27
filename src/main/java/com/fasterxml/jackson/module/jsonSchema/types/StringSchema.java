@@ -43,12 +43,9 @@ public class StringSchema extends ValueTypeSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof StringSchema) {
 			StringSchema that = (StringSchema)obj;
-			return getMaxLength() == null ? that.getMaxLength() == null :
-				getMaxLength().equals(that.getMaxLength()) &&
-				getMinLength() == null ? that.getMinLength() == null :
-					getMinLength().equals(that.getMinLength()) &&
-				getPattern() == null ? that.getPattern() == null :
-					getPattern().equals(that.getPattern()) &&
+			return equals(getMaxLength(), that.getMaxLength()) &&
+				equals(getMinLength(), that.getMinLength()) &&
+				equals(getPattern(), that.getPattern()) &&
 				super.equals(obj);
 		} else {
 			return false;

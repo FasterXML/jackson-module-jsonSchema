@@ -44,8 +44,7 @@ public class IntegerSchema extends NumberSchema
          if (obj == this) return true;
          if (obj instanceof IntegerSchema) {
 			IntegerSchema that = (IntegerSchema)obj;
-			return getDivisibleBy() == null ? that.getDivisibleBy() == null :
-				getDivisibleBy().equals(that.getDivisibleBy()) &&
+			return equals(getDivisibleBy(), that.getDivisibleBy()) &&
 				super.equals(obj);
          }
          return false;

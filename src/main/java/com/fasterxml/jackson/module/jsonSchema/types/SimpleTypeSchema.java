@@ -41,12 +41,9 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof SimpleTypeSchema) {
 			SimpleTypeSchema that = (SimpleTypeSchema)obj;
-			return getDefault() == null ? that.getDefault() == null :
-				getDefault().equals(that.getDefault()) &&
-				getDescription() == null ? that.getDescription() == null :
-					getDescription().equals(that.getDescription()) &&
-				getTitle() == null ? that.getTitle() == null :
-					getTitle().equals(that.getTitle()) &&
+			return equals(getDefault(), that.getDefault()) &&
+				equals(getDescription(), that.getDescription()) &&
+				equals(getTitle(), that.getTitle()) &&
 				super.equals(obj);
 		} else {
 			return false;
