@@ -53,10 +53,8 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof ValueTypeSchema) {
 			ValueTypeSchema that = (ValueTypeSchema) obj;
-			return getEnums() == null ? that.getEnums() == null :
-						getEnums().equals(that.getEnums()) &&
-					getFormat() == null ? that.getFormat() == null :
-						getFormat().equals(that.getFormat()) &&
+			return equals(getEnums(), that.getEnums()) &&
+					equals(getFormat(), that.getFormat()) &&
 					super.equals(obj);
 		}	
 		return false;

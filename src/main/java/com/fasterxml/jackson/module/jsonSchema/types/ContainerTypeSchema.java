@@ -43,8 +43,7 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof ContainerTypeSchema) {
 			ContainerTypeSchema that = (ContainerTypeSchema)obj;
-			return getEnums() == null ? that.getEnums() == null :
-				getEnums().equals(that.getEnums()) &&
+			return equals(getEnums(), that.getEnums()) &&
 				super.equals(obj);
 		} else {
 			return false;

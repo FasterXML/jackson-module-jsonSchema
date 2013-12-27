@@ -68,16 +68,11 @@ public class ArraySchema extends ContainerTypeSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof ArraySchema) {
 			ArraySchema that = (ArraySchema) obj;
-			return getAdditionalItems() == null ? that.getAdditionalItems() == null : 
-						getAdditionalItems().equals(that.getAdditionalItems()) &&
-					getItems() == null ? that.getItems() == null : 
-						getItems().equals(that.getItems()) &&
-					getMaxItems() == null ? that.getMaxItems() == null :
-						getMaxItems().equals(that.getMaxItems()) &&
-					getMinItems() == null ? that.getMinItems() == null :
-						getMinItems().equals(that.getMinItems()) &&
-					getUniqueItems() == null ? that.getUniqueItems() == null :
-						getUniqueItems().equals(that.getUniqueItems()) &&
+			return equals(getAdditionalItems(), that.getAdditionalItems()) &&
+					equals(getItems(), that.getItems()) &&
+					equals(getMaxItems(), that.getMaxItems()) &&
+					equals(getMinItems(), that.getMinItems()) &&
+					equals(getUniqueItems(), that.getUniqueItems()) &&
 					super.equals(obj);
 		} else {
 			return false;
@@ -177,8 +172,7 @@ public class ArraySchema extends ContainerTypeSchema {
 		public boolean equals(Object obj) {
 			if (obj instanceof Items) {
 				ArrayItems that = (ArrayItems) obj;
-				return getJsonSchemas() == null ? that.getJsonSchemas() == null :
-					getJsonSchemas().equals(that.getJsonSchemas());
+				return JsonSchema.equals(getJsonSchemas(), that.getJsonSchemas());
 			} else {
 				return false;
 			}
@@ -263,8 +257,7 @@ public class ArraySchema extends ContainerTypeSchema {
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof SchemaAdditionalItems &&
-					getJsonSchema() == null ? ((SchemaAdditionalItems)obj).getJsonSchema() == null :
-						getJsonSchema().equals(((SchemaAdditionalItems)obj).getJsonSchema());
+					JsonSchema.equals(getJsonSchema(), ((SchemaAdditionalItems)obj).getJsonSchema());
 		}
 		
 		@JsonValue
@@ -292,8 +285,7 @@ public class ArraySchema extends ContainerTypeSchema {
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof SingleItems &&
-					getSchema() == null ? ((SingleItems)obj).getSchema() == null :
-						getSchema().equals(((SingleItems)obj).getSchema());
+					JsonSchema.equals(getSchema(), ((SingleItems)obj).getSchema());
 		}
 
 		@JsonValue

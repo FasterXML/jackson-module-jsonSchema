@@ -32,8 +32,7 @@ public class UnionTypeSchema extends JsonSchema {
 	public boolean equals(Object obj) {
 		if (obj instanceof UnionTypeSchema) {
 			UnionTypeSchema that = (UnionTypeSchema) obj;
-			return getElements() == null ? that.getElements() == null :
-				getElements().equals(that.getElements()) && 
+			return equals(getElements(), that.getElements()) && 
 				super.equals(obj);
 		} else {
 			return false;
