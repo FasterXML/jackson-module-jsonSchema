@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.fasterxml</groupId>
     <artifactId>oss-parent</artifactId>
-    <version>11</version>
+    <version>12</version>
   </parent>
   <groupId>com.fasterxml.jackson.module</groupId>
   <artifactId>jackson-module-jsonSchema</artifactId>
@@ -37,7 +37,8 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
     <javac.src.version>1.6</javac.src.version>
     <javac.target.version>1.6</javac.target.version>
     
-    <jackson.core.version>2.3.0</jackson.core.version>
+    <jackson.annotations.version>2.3.0</jackson.annotations.version>
+    <jackson.core.version>2.3.1</jackson.core.version>
     <!--
      | Configuration properties for the OSGi maven-bundle-plugin
     -->
@@ -48,7 +49,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.core.version}</version>
+      <version>${jackson.annotations.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

@@ -1,5 +1,5 @@
 Project: jackson-module-jsonSchema
-Version: 2.3.1 (xx-Dec-2013)
+Version: 2.3.1 (28-Dec-2013)
 
 #28: Fix `equals()` implementations for schema components.
  (contributed by fenrhil@github.com)
