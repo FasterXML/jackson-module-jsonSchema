@@ -14,7 +14,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
 
     protected SerializerProvider provider;
     
-    private WrapperFactory wrapperFactory = new WrapperFactory();
+    private WrapperFactory wrapperFactory;
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema)
     {

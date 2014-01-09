@@ -13,7 +13,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     protected final ObjectSchema schema;
     protected SerializerProvider provider;
 
-    private WrapperFactory wrapperFactory = new WrapperFactory();
+    private WrapperFactory wrapperFactory;
     
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema)
     {
