@@ -1,5 +1,13 @@
 Project: jackson-module-jsonSchema
-Version: 2.3.1 (28-Dec-2013)
+Version: 2.3.2 (01-Mar-2014)
+
+No functional changes.
+
+------------------------------------------------------------------------
+=== History: ===
+------------------------------------------------------------------------
+
+2.3.1 (28-Dec-2013)
 
 #28: Fix `equals()` implementations for schema components.
  (contributed by fenrhil@github.com)
@@ -7,10 +15,6 @@ Version: 2.3.1 (28-Dec-2013)
  (contributed by fenrhil@github.com)
 #30: Easier customization of SchemaFactoryWrapper
  (contributed by fenrhil@github.com)
-
-------------------------------------------------------------------------
-=== History: ===
-------------------------------------------------------------------------
 
 2.3.0 (14-Nov-2013)
 
