@@ -26,6 +26,12 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	 */
 	private String title;
 
+    /**
+     * This attribute is a string that provides a links related to description of the
+     * instance property.
+     */
+    private LinkDescriptionObject[] links;
+
 	/* (non-Javadoc)
 	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asSimpleTypeSchema()
 	 */
@@ -61,6 +67,14 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	public String getTitle() {
 		return title;
 	}
+
+    public LinkDescriptionObject[] getLinks() {
+        return links;
+    }
+
+    public void setLinks(LinkDescriptionObject[] links) {
+        this.links = links;
+    }
 
 	@Override
 	public boolean isSimpleTypeSchema() {

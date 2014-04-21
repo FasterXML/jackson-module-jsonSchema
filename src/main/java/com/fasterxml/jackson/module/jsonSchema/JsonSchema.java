@@ -219,7 +219,7 @@ public abstract class JsonSchema
 	public SimpleTypeSchema asSimpleTypeSchema() {
 		return null;
 	}
-	
+
 	/**
 	 * Attempt to return this JsonSchema as a {@link StringSchema}
 	 * @return this as a StringSchema if possible, or null otherwise
