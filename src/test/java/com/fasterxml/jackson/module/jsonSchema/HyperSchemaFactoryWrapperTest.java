@@ -18,7 +18,7 @@ public class HyperSchemaFactoryWrapperTest extends SchemaTestBase {
         public String genus;
     }
 
-    @JsonHyperSchema(links = {
+    @JsonHyperSchema(pathStart = "/persons/", links = {
         @Link(href = "{name}", rel = "self"),
         @Link(href = "{name}/pet", rel = "pet", targetSchema = Pet.class)
     })
@@ -43,13 +43,13 @@ public class HyperSchemaFactoryWrapperTest extends SchemaTestBase {
         assertNotNull(links);
         assertEquals(links.length, 2);
         LinkDescriptionObject selfLink = links[0];
-        assertEquals("{name}", selfLink.getHref());
+        assertEquals("/persons/{name}", selfLink.getHref());
         assertEquals("self", selfLink.getRel());
         assertEquals("application/json", selfLink.getEnctype());
         assertEquals("GET", selfLink.getMethod());
 
         LinkDescriptionObject petLink = links[1];
-        assertEquals("{name}/pet", petLink.getHref());
+        assertEquals("/persons/{name}/pet", petLink.getHref());
         assertEquals("pet", petLink.getRel());
         assertEquals("application/json", petLink.getEnctype());
         assertEquals("GET", petLink.getMethod());

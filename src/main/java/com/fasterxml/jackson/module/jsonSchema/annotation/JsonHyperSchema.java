@@ -1,5 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema.annotation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.lang.annotation.*;
 
 /**
@@ -9,6 +11,24 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 public @interface JsonHyperSchema {
+
+    /**
+     * This attribute is a URI that defines what the instance's URI MUST
+     start with in order to validate.  The value of the "pathStart"
+     attribute MUST be resolved as per RFC 3986, Sec 5 [RFC3986], and is
+     relative to the instance's URI.
+
+     When multiple schemas have been referenced for an instance, the user
+     agent can determine if this jsonSchema is applicable for a particular
+     instance by determining if the URI of the instance begins with the
+     the value of the "pathStart" attribute.  If the URI of the instance
+     does not start with this URI, or if another jsonSchema specifies a
+     starting URI that is longer and also matches the instance, this
+     jsonSchema SHOULD NOT be applied to the instance.  Any jsonSchema that does
+     not have a pathStart attribute SHOULD be considered applicable to all
+     the instances for which it is referenced.
+     */
+    String pathStart() default "";
 
     /**
      * 6.2.1.  slash-delimited fragment resolution

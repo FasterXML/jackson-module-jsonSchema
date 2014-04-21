@@ -69,12 +69,13 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
         Class<?> rawClass = type.getRawClass();
         if (rawClass.isAnnotationPresent(JsonHyperSchema.class)) {
             JsonHyperSchema hyperSchema = rawClass.getAnnotation(JsonHyperSchema.class);
+            String pathStart = hyperSchema.pathStart();
             Link[] links = hyperSchema.links();
             LinkDescriptionObject[] linkDescriptionObjects = new LinkDescriptionObject[links.length];
             for(int i = 0; i < links.length; i++) {
                 Link link = links[i];
                 linkDescriptionObjects[i] = new LinkDescriptionObject()
-                    .setHref(link.href())
+                    .setHref(pathStart + link.href())
                     .setRel(link.rel())
                     .setMethod(link.method())
                     .setEnctype(link.enctype())
