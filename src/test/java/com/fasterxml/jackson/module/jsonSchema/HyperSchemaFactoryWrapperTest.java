@@ -1,7 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.annotation.HyperSchema;
+import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper;
@@ -13,11 +13,12 @@ import java.util.Date;
  * Created by mavarazy on 4/21/14.
  */
 public class HyperSchemaFactoryWrapperTest extends SchemaTestBase {
+
     public class Pet {
         public String genus;
     }
 
-    @HyperSchema(links = {
+    @JsonHyperSchema(links = {
         @Link(href = "{name}", rel = "self"),
         @Link(href = "{name}/pet", rel = "pet", targetSchema = Pet.class)
     })
@@ -26,7 +27,7 @@ public class HyperSchemaFactoryWrapperTest extends SchemaTestBase {
         public String hat;
     }
 
-    public void testAddingTitle() throws Exception {
+    public void testSimpleHyperSchema() throws Exception {
         HyperSchemaFactoryWrapper personVisitor = new HyperSchemaFactoryWrapper();
         ObjectMapper mapper = new ObjectMapper();
 

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.annotation.HyperSchema;
+import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
 import com.fasterxml.jackson.module.jsonSchema.factories.ArrayVisitor;
 import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
@@ -67,8 +67,8 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
             throw new RuntimeException("given non simple type schema: " + schema.getType());
         }
         Class<?> rawClass = type.getRawClass();
-        if (rawClass.isAnnotationPresent(HyperSchema.class)) {
-            HyperSchema hyperSchema = rawClass.getAnnotation(HyperSchema.class);
+        if (rawClass.isAnnotationPresent(JsonHyperSchema.class)) {
+            JsonHyperSchema hyperSchema = rawClass.getAnnotation(JsonHyperSchema.class);
             Link[] links = hyperSchema.links();
             LinkDescriptionObject[] linkDescriptionObjects = new LinkDescriptionObject[links.length];
             for(int i = 0; i < links.length; i++) {

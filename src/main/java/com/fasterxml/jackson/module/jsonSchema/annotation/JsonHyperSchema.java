@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-public @interface HyperSchema {
+public @interface JsonHyperSchema {
 
     /**
      * 6.2.1.  slash-delimited fragment resolution
