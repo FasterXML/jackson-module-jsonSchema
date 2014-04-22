@@ -14,6 +14,7 @@ import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 import com.fasterxml.jackson.module.jsonSchema.types.LinkDescriptionObject;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 
 /**
  * Adds a hyperlink to object schema, either root level or nested. Generally
@@ -22,6 +23,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.LinkDescriptionObject;
  * @author mavarazy
  */
 public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
+
+    private boolean ignoreDefaults = true;
 
     private static class HyperSchemaFactoryWrapperFactory extends WrapperFactory {
         @Override
@@ -56,6 +59,10 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
         return visitor;
     }
 
+    public void setIgnoreDefaults(boolean ignoreDefaults) {
+        this.ignoreDefaults = ignoreDefaults;
+    }
+
     /**
      * Adds writes the type as the title of the schema.
      *
@@ -77,12 +84,17 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
                 linkDescriptionObjects[i] = new LinkDescriptionObject()
                     .setHref(pathStart + link.href())
                     .setRel(link.rel())
-                    .setMethod(link.method())
-                    .setEnctype(link.enctype())
+                    .setMethod(ignoreDefaults && "GET".equals(link.method()) ? null : link.method())
+                    .setEnctype(ignoreDefaults && "application/json".equals(link.enctype()) ? null : link.enctype())
                     .setTargetSchema(fetchSchema(link.targetSchema()))
-                    .setJsonSchema(fetchSchema(link.jsonSchema()));
+                    .setSchema(fetchSchema(link.schema()))
+                    .setMediaType(ignoreDefaults && "application/json".equals(link.mediaType()) ? null : link.mediaType())
+                    .setTitle(link.title());
             }
-            schema.asSimpleTypeSchema().setLinks(linkDescriptionObjects);
+            SimpleTypeSchema simpleTypeSchema = schema.asSimpleTypeSchema();
+            simpleTypeSchema.setLinks(linkDescriptionObjects);
+            if(pathStart != null && pathStart.length() != 0)
+                simpleTypeSchema.setPathStart(pathStart);
         }
     }
 

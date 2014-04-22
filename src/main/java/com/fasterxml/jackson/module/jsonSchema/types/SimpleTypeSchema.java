@@ -27,6 +27,11 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	private String title;
 
     /**
+     * This attribute is a URI that defines what the instance's URI MUST start with in order to validate.
+     */
+    private String pathStart;
+
+    /**
      * This attribute is a string that provides a links related to description of the
      * instance property.
      */
@@ -68,6 +73,10 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 		return title;
 	}
 
+    public String getPathStart() {
+        return pathStart;
+    }
+
     public LinkDescriptionObject[] getLinks() {
         return links;
     }
@@ -92,4 +101,8 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+    public void setPathStart(String pathStart) {
+        this.pathStart = pathStart;
+    }
 }
