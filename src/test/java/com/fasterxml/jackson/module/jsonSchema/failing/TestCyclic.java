@@ -21,10 +21,10 @@ public class TestCyclic extends SchemaTestBase
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema schema = generator.generateSchema(Loop.class);
 
-        String json = MAPPER.writeValueAsString(schema).replace('"', '\'');
+        String json = MAPPER.writeValueAsString(schema);
         String EXP = "{'type':'object','properties':{"
                 +"'name':{'type':'string'}},'next':{'type':'object'}}}";
 //        System.err.println("JSON: "+json);
-        assertEquals(EXP, json);
+        assertEquals(aposToQuotes(EXP), json);
     }
 }

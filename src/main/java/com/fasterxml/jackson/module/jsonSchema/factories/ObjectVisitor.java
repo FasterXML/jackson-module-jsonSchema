@@ -15,6 +15,10 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
 
     private WrapperFactory wrapperFactory;
 
+    /**
+     * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
+     */
+    @Deprecated
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
         this(provider, schema, new WrapperFactory());
     }
@@ -47,19 +51,27 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         return provider;
     }
 
+    /**
+     * @deprecated Construct instances with provider instead
+     */
+    @Deprecated
     @Override
     public void setProvider(SerializerProvider p) {
         provider = p;
     }
     
-	public WrapperFactory getWrapperFactory() {
-		return wrapperFactory;
-	}
+    public WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
 
-	public void setWrapperFactory(WrapperFactory wrapperFactory) {
-		this.wrapperFactory = wrapperFactory;
-	}
-    
+    /**
+     * @deprecated Construct instances with provider instead
+     */
+    @Deprecated
+    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+        this.wrapperFactory = wrapperFactory;
+    }
+
     @Override
     public void optionalProperty(BeanProperty prop) throws JsonMappingException {
         schema.putOptionalProperty(prop, propertySchema(prop));
