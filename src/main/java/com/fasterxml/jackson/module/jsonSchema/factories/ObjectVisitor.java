@@ -118,7 +118,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     {
 		SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
-		return (SimpleTypeSchema)visitor.finalSchema();
+		return visitor.finalSchema();
     }
 
     protected JsonSerializer<Object> getSer(BeanProperty prop)
