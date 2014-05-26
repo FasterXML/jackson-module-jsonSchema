@@ -444,15 +444,6 @@ public abstract class JsonSchema
 	}
 
 	/**
-	 * Override this to add information specific to the property of bean
-	 * For example, bean validation annotations could be used to specify
-	 * value constraints in the schema
-	 * @param beanProperty
-	 */
-	public void enrichWithBeanProperty(BeanProperty beanProperty) {
-	}
-
-	/**
 	 * Create a schema which verifies only that an object is of the given format.
 	 * @param format the format to expect
 	 * @return the schema verifying the given format

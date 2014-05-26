@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 
 public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     implements JsonSchemaProducer
@@ -94,7 +95,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         schema.putProperty(name, propertySchema(handler, propertyTypeHint));
     }
 
-    protected JsonSchema propertySchema(BeanProperty prop)
+    protected SimpleTypeSchema propertySchema(BeanProperty prop)
         throws JsonMappingException
     {
         if (prop == null) {
@@ -112,12 +113,12 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         return visitor.finalSchema();
     }
 	
-    protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
+    protected SimpleTypeSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
 		SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
 		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
-		return visitor.finalSchema();
+		return (SimpleTypeSchema)visitor.finalSchema();
     }
 
     protected JsonSerializer<Object> getSer(BeanProperty prop)

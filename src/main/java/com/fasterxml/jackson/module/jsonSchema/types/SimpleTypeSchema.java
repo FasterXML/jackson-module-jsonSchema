@@ -1,5 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
@@ -78,4 +79,15 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+    /**
+     * Override this to add information specific to the property of bean
+     * For example, bean validation annotations could be used to specify
+     * value constraints in the schema
+     * @param beanProperty
+     */
+    public void enrichWithBeanProperty(BeanProperty beanProperty) {
+        setDescription(beanProperty.getMetadata().getDescription());
+    }
+
 }
