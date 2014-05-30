@@ -1,9 +1,8 @@
-package com.fasterxml.jackson.module.jsonSchema.failing;
+package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import com.fasterxml.jackson.module.jsonSchema.SchemaTestBase;
 
 public class TestCyclic extends SchemaTestBase
 {
@@ -23,7 +22,7 @@ public class TestCyclic extends SchemaTestBase
 
         String json = MAPPER.writeValueAsString(schema);
         String EXP = "{'type':'object','properties':{"
-                +"'name':{'type':'string'}},'next':{'type':'object'}}}";
+                +"'next':{'type':'object'},'name':{'type':'string'}}}";
 //        System.err.println("JSON: "+json);
         assertEquals(aposToQuotes(EXP), json);
     }

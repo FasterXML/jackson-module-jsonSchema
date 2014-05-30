@@ -3,6 +3,7 @@ package com.fasterxml.jackson.module.jsonSchema;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.CyclicProtector;
 
 public class TestJsonValue extends SchemaTestBase
 {
@@ -33,6 +34,8 @@ public class TestJsonValue extends SchemaTestBase
         JsonSchema schemaExp = visitor.finalSchema();
         assertNotNull(schemaExp);
         
+        // We need to have a starting point, and it is usually in JsonSchemaGenerator.generateSchema(...), but during internal unit tests we need this step 
+        CyclicProtector.reset();
         visitor = new SchemaFactoryWrapper();
         mapper.acceptJsonFormatVisitor(mapper.constructType(ContainerWithAsValue.class), visitor);
         JsonSchema schemaAct = visitor.finalSchema();

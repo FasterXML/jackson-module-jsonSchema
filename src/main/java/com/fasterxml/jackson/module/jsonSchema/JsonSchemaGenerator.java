@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.CyclicProtector;
 import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 
 /**
@@ -28,15 +29,29 @@ public class JsonSchemaGenerator
 
     public JsonSchema generateSchema(Class<?> type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
-        _mapper.acceptJsonFormatVisitor(type, visitor);
-        return visitor.finalSchema();
+        try
+        {
+            SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
+            _mapper.acceptJsonFormatVisitor(type, visitor);
+            return visitor.finalSchema();
+        }
+        finally
+        {
+            CyclicProtector.reset();
+        }
     }
 
     public JsonSchema generateSchema(JavaType type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
-        _mapper.acceptJsonFormatVisitor(type, visitor);
-        return visitor.finalSchema();
+        try
+        {
+            SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
+            _mapper.acceptJsonFormatVisitor(type, visitor);
+            return visitor.finalSchema();
+        }
+        finally
+        {
+            CyclicProtector.reset();
+        }
     }
 }
