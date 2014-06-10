@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.*;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.Schemas;
 import com.fasterxml.jackson.module.jsonSchema.types.*;
 
 /**
@@ -99,6 +100,10 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
         ObjectSchema s = schemaProvider.objectSchema();
         schema = s;
+        String schemaUri = Schemas.addSeenSchemaUri(convertedType);
+        if (schemaUri != null) {
+            s.setId(schemaUri);
+        }
         return visitorFactory.objectFormatVisitor(provider, s);
     }
 

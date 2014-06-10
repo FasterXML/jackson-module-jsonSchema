@@ -237,6 +237,7 @@ public class TestGenerateJsonSchema
         assertEquals(new HashMap() {
             {
                 put("type", "object");
+                put("id", "urn:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema$BeanWithId");
                 put("properties",
                         new HashMap() {
                     {
@@ -261,6 +262,7 @@ public class TestGenerateJsonSchema
         assertEquals(new HashMap<String, Object>() {
             {
                 put("type", "object");
+                put("id", "urn:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema$LetterBean");
                 put("properties",
                         new HashMap<String, Object>() {
                     {

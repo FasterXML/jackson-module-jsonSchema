@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.types.*;
 
+import java.util.Collection;
+
 /**
  * The type wraps the json schema specification at :
  * <a href="http://tools.ietf.org/id/draft-zyp-json-schema-03.txt"> Json JsonSchema
@@ -147,8 +149,14 @@ public abstract class JsonSchema
 	 */
 	@JsonProperty
 	private Boolean required = null;
-	
-	/**
+
+    /**
+     * This attribute is a string that provides a full description of the of
+     * purpose the instance property.
+     */
+    private String description;
+
+    /**
 	 * Attempt to return this JsonSchema as an {@link AnySchema}
 	 * @return this as an AnySchema if possible, or null otherwise
 	 */
@@ -295,7 +303,11 @@ public abstract class JsonSchema
 		return required;
 	}
 
-	@JsonIgnore
+    public String getDescription() {
+        return description;
+    }
+
+    @JsonIgnore
 	public abstract JsonFormatTypes getType();
 
 	/**
@@ -443,13 +455,18 @@ public abstract class JsonSchema
 		this.required = required;
 	}
 
-	/**
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
 	 * Override this to add information specific to the property of bean
 	 * For example, bean validation annotations could be used to specify
 	 * value constraints in the schema
 	 * @param beanProperty
 	 */
 	public void enrichWithBeanProperty(BeanProperty beanProperty) {
+        setDescription(beanProperty.getMetadata().getDescription());
 	}
 
 	/**
