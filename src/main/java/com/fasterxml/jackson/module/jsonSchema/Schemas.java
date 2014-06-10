@@ -19,7 +19,6 @@ public class Schemas {
     static public String addSeenSchemaUri(JavaType aSeenSchema)
     {
         if (aSeenSchema != null && !aSeenSchema.isPrimitive()) {
-            System.out.println("addSeenSchemaUri: " + aSeenSchema.toCanonical());
             seenSchemas.get().add(aSeenSchema);
             return "urn:" + aSeenSchema.toCanonical().replace('.', ':');
         }
