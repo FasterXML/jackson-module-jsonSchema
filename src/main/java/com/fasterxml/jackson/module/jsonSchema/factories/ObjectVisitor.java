@@ -6,17 +6,16 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.Schemas;
-import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 import java.util.HashMap;
 
 public class ObjectVisitor extends JsonObjectFormatVisitor.Base
-        implements JsonSchemaProducer {
+    implements JsonSchemaProducer
+{
     protected final ObjectSchema schema;
     protected SerializerProvider provider;
-    static protected HashMap<String, String> seenSchemas = new HashMap<String, String>();
 
     private WrapperFactory wrapperFactory;
 
@@ -126,7 +125,12 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-               SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+        String seenSchemaUri = Schemas.getSeenSchemaUri(propertyTypeHint);
+        if (seenSchemaUri != null) {
+            return new ReferenceSchema(seenSchemaUri);
+        }
+
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
                handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
                return visitor.finalSchema();
     }

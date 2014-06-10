@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 /**
- * Created by adb on 6/9/14.
+ * This type represents an JSON reference to a {@link JsonSchema}.
+ * @author adb
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class ReferenceSchema extends SimpleTypeSchema {
