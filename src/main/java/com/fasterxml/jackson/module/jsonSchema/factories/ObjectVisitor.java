@@ -105,6 +105,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
             throw new IllegalArgumentException("Null property");
         }
 
+        // check if we've seen this argument's sub-schema already and return a reference-schema if we have
         String seenSchemaUri = Schemas.getSeenSchemaUri(prop.getType());
         if (seenSchemaUri != null) {
             return new ReferenceSchema(seenSchemaUri);

@@ -20,13 +20,18 @@ public class Schemas {
     {
         if (aSeenSchema != null && !aSeenSchema.isPrimitive()) {
             seenSchemas.get().add(aSeenSchema);
-            return "urn:" + aSeenSchema.toCanonical().replace('.', ':');
+            return javaTypeToUrn(aSeenSchema);
         }
         return null;
     }
 
     static public String getSeenSchemaUri(JavaType aSeenSchema)
     {
-        return (seenSchemas.get().contains(aSeenSchema)) ? "urn:" + aSeenSchema.toCanonical().replace('.', ':') : null;
+        return (seenSchemas.get().contains(aSeenSchema)) ? javaTypeToUrn(aSeenSchema) : null;
+    }
+
+    static public String javaTypeToUrn(JavaType jt)
+    {
+        return "urn:jsonschema:" + jt.toCanonical().replace('.', ':').replace('$', ':');
     }
 }

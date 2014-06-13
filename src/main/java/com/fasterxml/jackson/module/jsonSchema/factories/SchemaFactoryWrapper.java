@@ -100,10 +100,13 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
         ObjectSchema s = schemaProvider.objectSchema();
         schema = s;
+
+        // give each object schema a reference id and keep track of the ones we've seen
         String schemaUri = Schemas.addSeenSchemaUri(convertedType);
         if (schemaUri != null) {
             s.setId(schemaUri);
         }
+
         return visitorFactory.objectFormatVisitor(provider, s);
     }
 

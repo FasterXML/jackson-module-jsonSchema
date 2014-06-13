@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.Schemas;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     implements JsonSchemaProducer
@@ -67,9 +69,17 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
-            handler.acceptJsonFormatVisitor(visitor, contentType);
-            schema.setItemsSchema(visitor.finalSchema());
+
+            // check if we've seen this sub-schema already and return a reference-schema if we have
+            String seenSchemaUri = Schemas.getSeenSchemaUri(contentType);
+            if (seenSchemaUri != null) {
+                schema.setItemsSchema(new ReferenceSchema(seenSchemaUri));
+            }
+            else {
+                SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+                handler.acceptJsonFormatVisitor(visitor, contentType);
+                schema.setItemsSchema(visitor.finalSchema());
+            }
         }
     }
 
