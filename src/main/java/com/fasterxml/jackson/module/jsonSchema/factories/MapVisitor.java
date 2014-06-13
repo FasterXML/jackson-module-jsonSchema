@@ -15,7 +15,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
  * to handle it here, produce JSON Schema Object type.
  */
 public class MapVisitor extends JsonMapFormatVisitor.Base
-    implements JsonSchemaProducer, RecursiveVisitor
+    implements JsonSchemaProducer, Visitor
 {
     protected final ObjectSchema schema;
 
@@ -23,7 +23,7 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
 
     private WrapperFactory wrapperFactory;
 
-    private RecursiveVisitorContext recursiveVisitorContext;
+    private VisitorContext visitorContext;
 
     public MapVisitor(SerializerProvider provider, ObjectSchema schema) {
         this(provider, schema, new WrapperFactory());
@@ -83,20 +83,20 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
             throws JsonMappingException {
 
         // check if we've seen this sub-schema already and return a reference-schema if we have
-        if (recursiveVisitorContext != null) {
-            String seenSchemaUri = RecursiveVisitorContext.getSeenSchemaUri(propertyTypeHint);
+        if (visitorContext != null) {
+            String seenSchemaUri = VisitorContext.getSeenSchemaUri(propertyTypeHint);
             if (seenSchemaUri != null) {
                 return new ReferenceSchema(seenSchemaUri);
             }
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
         handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
         return visitor.finalSchema();
     }
 
     @Override
-    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
-        recursiveVisitorContext = rvc;
+    public void setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
     }
 }

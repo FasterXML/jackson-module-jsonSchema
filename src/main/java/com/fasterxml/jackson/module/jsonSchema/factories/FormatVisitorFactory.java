@@ -48,23 +48,23 @@ public class FormatVisitorFactory {
 
 
     protected JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
-            ArraySchema arraySchema, RecursiveVisitorContext rvc) {
+            ArraySchema arraySchema, VisitorContext rvc) {
         ArrayVisitor v = new ArrayVisitor(provider, arraySchema, wrapperFactory);
-        v.setRecursiveVisitorContext(rvc);
+        v.setVisitorContext(rvc);
         return v;
     }
 
     protected JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
-            ObjectSchema objectSchema, RecursiveVisitorContext rvc) {
+            ObjectSchema objectSchema, VisitorContext rvc) {
         MapVisitor v = new MapVisitor(provider, objectSchema, wrapperFactory);
-        v.setRecursiveVisitorContext(rvc);
+        v.setVisitorContext(rvc);
         return v;
     }
 
     protected JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
-            ObjectSchema objectSchema, RecursiveVisitorContext rvc) {
+            ObjectSchema objectSchema, VisitorContext rvc) {
         ObjectVisitor v = new ObjectVisitor(provider, objectSchema, wrapperFactory);
-        v.setRecursiveVisitorContext(rvc);
+        v.setVisitorContext(rvc);
         return v;
     }
 

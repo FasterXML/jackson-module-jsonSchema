@@ -9,12 +9,12 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ObjectVisitor extends JsonObjectFormatVisitor.Base
-    implements JsonSchemaProducer, RecursiveVisitor
+    implements JsonSchemaProducer, Visitor
 {
     protected final ObjectSchema schema;
     protected SerializerProvider provider;
     private WrapperFactory wrapperFactory;
-    private RecursiveVisitorContext recursiveVisitorContext;
+    private VisitorContext visitorContext;
 
     /**
      * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
@@ -103,12 +103,12 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
 
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
-        String seenSchemaUri = RecursiveVisitorContext.getSeenSchemaUri(prop.getType());
+        String seenSchemaUri = VisitorContext.getSeenSchemaUri(prop.getType());
         if (seenSchemaUri != null) {
             return new ReferenceSchema(seenSchemaUri);
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
         JsonSerializer<Object> ser = getSer(prop);
         if (ser != null) {
             JavaType type = prop.getType();
@@ -124,14 +124,14 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         throws JsonMappingException
     {
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
-        if (recursiveVisitorContext != null) {
-            String seenSchemaUri = RecursiveVisitorContext.getSeenSchemaUri(propertyTypeHint);
+        if (visitorContext != null) {
+            String seenSchemaUri = VisitorContext.getSeenSchemaUri(propertyTypeHint);
             if (seenSchemaUri != null) {
                 return new ReferenceSchema(seenSchemaUri);
             }
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
         handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
         return visitor.finalSchema();
     }
@@ -151,7 +151,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     }
 
     @Override
-    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
-        recursiveVisitorContext = rvc;
+    public void setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
     }
 }

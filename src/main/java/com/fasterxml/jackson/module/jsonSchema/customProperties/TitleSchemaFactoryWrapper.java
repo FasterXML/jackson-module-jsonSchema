@@ -23,10 +23,10 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
 	        return wrapper;
 	    };
 
-        public SchemaFactoryWrapper getWrapper(SerializerProvider p, RecursiveVisitorContext rvc) {
+        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc) {
             SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
             wrapper.setProvider(p);
-            wrapper.setRecursiveVisitorContext(rvc);
+            wrapper.setVisitorContext(rvc);
             return wrapper;
         }
     };

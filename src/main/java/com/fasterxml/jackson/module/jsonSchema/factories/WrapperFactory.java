@@ -13,7 +13,9 @@ public class WrapperFactory {
 		return new SchemaFactoryWrapper(provider);
 	}
 
-    public SchemaFactoryWrapper getWrapper(SerializerProvider provider, RecursiveVisitorContext rvc) {
-        return new SchemaFactoryWrapper(provider, rvc);
+    public SchemaFactoryWrapper getWrapper(SerializerProvider provider, VisitorContext rvc) {
+        SchemaFactoryWrapper wrapper = new SchemaFactoryWrapper(provider);
+        wrapper.setVisitorContext(rvc);
+        return wrapper;
     }
 }

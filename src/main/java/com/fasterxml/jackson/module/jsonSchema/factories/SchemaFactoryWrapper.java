@@ -11,36 +11,30 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  * @author jphelan
  * @author tsaloranta
  */
-public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, RecursiveVisitor
+public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
 {
     protected FormatVisitorFactory visitorFactory;
     protected JsonSchemaFactory schemaProvider;
     protected SerializerProvider provider;
     protected JsonSchema schema;
-
-    protected RecursiveVisitorContext recursiveVisitorContext;
+    protected VisitorContext visitorContext;
 
     public SchemaFactoryWrapper() {
-        this(null, null, null);
+        this(null, null);
     }
     
     public SchemaFactoryWrapper(SerializerProvider p) {
-        this(p, null, null);
-    }
-
-    protected SchemaFactoryWrapper(SerializerProvider p, RecursiveVisitorContext rvc) {
-        this (p, null, rvc);
+        this(p, null);
     }
 
     protected SchemaFactoryWrapper(WrapperFactory wrapperFactory) {
-        this(null, wrapperFactory, null);
+        this(null, wrapperFactory);
     }
     
-    protected SchemaFactoryWrapper(SerializerProvider p, WrapperFactory wrapperFactory, RecursiveVisitorContext rvc) {
+    protected SchemaFactoryWrapper(SerializerProvider p, WrapperFactory wrapperFactory) {
         provider = p;
         schemaProvider = new JsonSchemaFactory();
         visitorFactory = new FormatVisitorFactory(wrapperFactory == null ? new WrapperFactory() : wrapperFactory);
-        recursiveVisitorContext = rvc;
     }
 
     /*
@@ -70,7 +64,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Recursive
     public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
         ArraySchema s = schemaProvider.arraySchema();
         this.schema = s;
-        return visitorFactory.arrayFormatVisitor(provider, s, recursiveVisitorContext);
+        return visitorFactory.arrayFormatVisitor(provider, s, visitorContext);
     }
 
     @Override
@@ -107,18 +101,18 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Recursive
         schema = s;
 
         // if we don't already have a recursive visitor context, create one
-        if (recursiveVisitorContext == null)
+        if (visitorContext == null)
         {
-            recursiveVisitorContext = new RecursiveVisitorContext();
+            visitorContext = new VisitorContext();
         }
 
         // give each object schema a reference id and keep track of the ones we've seen
-        String schemaUri = recursiveVisitorContext.addSeenSchemaUri(convertedType);
+        String schemaUri = visitorContext.addSeenSchemaUri(convertedType);
         if (schemaUri != null) {
             s.setId(schemaUri);
         }
 
-        return visitorFactory.objectFormatVisitor(provider, s, recursiveVisitorContext);
+        return visitorFactory.objectFormatVisitor(provider, s, visitorContext);
     }
 
     @Override
@@ -138,12 +132,12 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Recursive
          */
         ObjectSchema s = schemaProvider.objectSchema();
         schema = s;
-        return visitorFactory.mapFormatVisitor(provider, s, recursiveVisitorContext);
+        return visitorFactory.mapFormatVisitor(provider, s, visitorContext);
     }
 
     @Override
-    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
-        recursiveVisitorContext = rvc;
+    public void setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
     }
 
     /*

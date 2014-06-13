@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ArrayVisitor extends JsonArrayFormatVisitor.Base
-    implements JsonSchemaProducer, RecursiveVisitor
+    implements JsonSchemaProducer, Visitor
 {
     protected final ArraySchema schema;
 
@@ -17,7 +17,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
 
     private WrapperFactory wrapperFactory = new WrapperFactory();
 
-    private RecursiveVisitorContext recursiveVisitorContext;
+    private VisitorContext visitorContext;
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
         this(provider, schema, new WrapperFactory());
@@ -72,15 +72,15 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
         if (contentType.getRawClass() != Object.class) {
 
             // check if we've seen this sub-schema already and return a reference-schema if we have
-            if (recursiveVisitorContext != null) {
-                String seenSchemaUri = recursiveVisitorContext.getSeenSchemaUri(contentType);
+            if (visitorContext != null) {
+                String seenSchemaUri = visitorContext.getSeenSchemaUri(contentType);
                 if (seenSchemaUri != null) {
                     schema.setItemsSchema(new ReferenceSchema(seenSchemaUri));
                     return;
                 }
             }
 
-            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
+            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }
@@ -93,7 +93,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     }
 
     @Override
-    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
-        recursiveVisitorContext = rvc;
+    public void setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
     }
 }

@@ -7,7 +7,7 @@ import java.util.HashSet;
 /**
  * Created by adb on 6/9/14.
  */
-public class RecursiveVisitorContext {
+public class VisitorContext {
 
     private static HashSet<JavaType> seenSchemas = new HashSet<JavaType>();
 
