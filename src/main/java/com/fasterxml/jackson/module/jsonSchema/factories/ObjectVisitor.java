@@ -5,19 +5,16 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.Schemas;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
-import java.util.HashMap;
-
 public class ObjectVisitor extends JsonObjectFormatVisitor.Base
-    implements JsonSchemaProducer
+    implements JsonSchemaProducer, RecursiveVisitor
 {
     protected final ObjectSchema schema;
     protected SerializerProvider provider;
-
     private WrapperFactory wrapperFactory;
+    private RecursiveVisitorContext recursiveVisitorContext;
 
     /**
      * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
@@ -106,12 +103,12 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
 
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
-        String seenSchemaUri = Schemas.getSeenSchemaUri(prop.getType());
+        String seenSchemaUri = RecursiveVisitorContext.getSeenSchemaUri(prop.getType());
         if (seenSchemaUri != null) {
             return new ReferenceSchema(seenSchemaUri);
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
         JsonSerializer<Object> ser = getSer(prop);
         if (ser != null) {
             JavaType type = prop.getType();
@@ -126,12 +123,15 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-        String seenSchemaUri = Schemas.getSeenSchemaUri(propertyTypeHint);
-        if (seenSchemaUri != null) {
-            return new ReferenceSchema(seenSchemaUri);
+        // check if we've seen this argument's sub-schema already and return a reference-schema if we have
+        if (recursiveVisitorContext != null) {
+            String seenSchemaUri = RecursiveVisitorContext.getSeenSchemaUri(propertyTypeHint);
+            if (seenSchemaUri != null) {
+                return new ReferenceSchema(seenSchemaUri);
+            }
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
         handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
         return visitor.finalSchema();
     }
@@ -148,5 +148,10 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
             ser = getProvider().findValueSerializer(prop.getType(), prop);
         }
         return ser;
+    }
+
+    @Override
+    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
+        recursiveVisitorContext = rvc;
     }
 }

@@ -5,29 +5,30 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.Schemas;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ArrayVisitor extends JsonArrayFormatVisitor.Base
-    implements JsonSchemaProducer
+    implements JsonSchemaProducer, RecursiveVisitor
 {
     protected final ArraySchema schema;
 
     protected SerializerProvider provider;
-    
+
     private WrapperFactory wrapperFactory = new WrapperFactory();
+
+    private RecursiveVisitorContext recursiveVisitorContext;
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
         this(provider, schema, new WrapperFactory());
     }
-    
+
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
     }
-    
+
     /*
     /*********************************************************************
     /* JsonSchemaProducer
@@ -71,15 +72,17 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
         if (contentType.getRawClass() != Object.class) {
 
             // check if we've seen this sub-schema already and return a reference-schema if we have
-            String seenSchemaUri = Schemas.getSeenSchemaUri(contentType);
-            if (seenSchemaUri != null) {
-                schema.setItemsSchema(new ReferenceSchema(seenSchemaUri));
+            if (recursiveVisitorContext != null) {
+                String seenSchemaUri = recursiveVisitorContext.getSeenSchemaUri(contentType);
+                if (seenSchemaUri != null) {
+                    schema.setItemsSchema(new ReferenceSchema(seenSchemaUri));
+                    return;
+                }
             }
-            else {
-                SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
-                handler.acceptJsonFormatVisitor(visitor, contentType);
-                schema.setItemsSchema(visitor.finalSchema());
-            }
+
+            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
+            handler.acceptJsonFormatVisitor(visitor, contentType);
+            schema.setItemsSchema(visitor.finalSchema());
         }
     }
 
@@ -87,5 +90,10 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
     {
         schema.setItemsSchema(JsonSchema.minimalForFormat(format));
+    }
+
+    @Override
+    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
+        recursiveVisitorContext = rvc;
     }
 }

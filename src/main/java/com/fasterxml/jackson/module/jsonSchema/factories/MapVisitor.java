@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.Schemas;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
@@ -16,13 +15,15 @@ import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
  * to handle it here, produce JSON Schema Object type.
  */
 public class MapVisitor extends JsonMapFormatVisitor.Base
-    implements JsonSchemaProducer
+    implements JsonSchemaProducer, RecursiveVisitor
 {
     protected final ObjectSchema schema;
 
     protected SerializerProvider provider;
 
     private WrapperFactory wrapperFactory;
+
+    private RecursiveVisitorContext recursiveVisitorContext;
 
     public MapVisitor(SerializerProvider provider, ObjectSchema schema) {
         this(provider, schema, new WrapperFactory());
@@ -80,14 +81,22 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
 
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
             throws JsonMappingException {
+
         // check if we've seen this sub-schema already and return a reference-schema if we have
-        String seenSchemaUri = Schemas.getSeenSchemaUri(propertyTypeHint);
-        if (seenSchemaUri != null) {
-            return new ReferenceSchema(seenSchemaUri);
+        if (recursiveVisitorContext != null) {
+            String seenSchemaUri = RecursiveVisitorContext.getSeenSchemaUri(propertyTypeHint);
+            if (seenSchemaUri != null) {
+                return new ReferenceSchema(seenSchemaUri);
+            }
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), recursiveVisitorContext);
         handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
         return visitor.finalSchema();
+    }
+
+    @Override
+    public void setRecursiveVisitorContext(RecursiveVisitorContext rvc) {
+        recursiveVisitorContext = rvc;
     }
 }

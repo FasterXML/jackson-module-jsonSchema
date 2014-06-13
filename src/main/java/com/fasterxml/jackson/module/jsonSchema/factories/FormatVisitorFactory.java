@@ -45,7 +45,29 @@ public class FormatVisitorFactory {
             ObjectSchema objectSchema) {
         return new ObjectVisitor(provider, objectSchema, wrapperFactory);
     }
-    
+
+
+    protected JsonArrayFormatVisitor arrayFormatVisitor(SerializerProvider provider,
+            ArraySchema arraySchema, RecursiveVisitorContext rvc) {
+        ArrayVisitor v = new ArrayVisitor(provider, arraySchema, wrapperFactory);
+        v.setRecursiveVisitorContext(rvc);
+        return v;
+    }
+
+    protected JsonMapFormatVisitor mapFormatVisitor(SerializerProvider provider,
+            ObjectSchema objectSchema, RecursiveVisitorContext rvc) {
+        MapVisitor v = new MapVisitor(provider, objectSchema, wrapperFactory);
+        v.setRecursiveVisitorContext(rvc);
+        return v;
+    }
+
+    protected JsonObjectFormatVisitor objectFormatVisitor(SerializerProvider provider,
+            ObjectSchema objectSchema, RecursiveVisitorContext rvc) {
+        ObjectVisitor v = new ObjectVisitor(provider, objectSchema, wrapperFactory);
+        v.setRecursiveVisitorContext(rvc);
+        return v;
+    }
+
     /*
     /**********************************************************
     /* Factory methods for visitors, value types

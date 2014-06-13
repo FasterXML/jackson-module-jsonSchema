@@ -12,4 +12,8 @@ public class WrapperFactory {
 	public SchemaFactoryWrapper getWrapper(SerializerProvider provider) {
 		return new SchemaFactoryWrapper(provider);
 	}
+
+    public SchemaFactoryWrapper getWrapper(SerializerProvider provider, RecursiveVisitorContext rvc) {
+        return new SchemaFactoryWrapper(provider, rvc);
+    }
 }

@@ -1,4 +1,4 @@
-package com.fasterxml.jackson.module.jsonSchema;
+package com.fasterxml.jackson.module.jsonSchema.factories;
 
 import com.fasterxml.jackson.databind.JavaType;
 
@@ -7,19 +7,14 @@ import java.util.HashSet;
 /**
  * Created by adb on 6/9/14.
  */
-public class Schemas {
+public class RecursiveVisitorContext {
 
-    private static final ThreadLocal<HashSet<JavaType>> seenSchemas = new ThreadLocal<HashSet<JavaType>>() {
-        @Override
-        protected HashSet<JavaType> initialValue() {
-            return new HashSet<JavaType>();
-        }
-    };
+    private static HashSet<JavaType> seenSchemas = new HashSet<JavaType>();
 
     static public String addSeenSchemaUri(JavaType aSeenSchema)
     {
         if (aSeenSchema != null && !aSeenSchema.isPrimitive()) {
-            seenSchemas.get().add(aSeenSchema);
+            seenSchemas.add(aSeenSchema);
             return javaTypeToUrn(aSeenSchema);
         }
         return null;
@@ -27,7 +22,7 @@ public class Schemas {
 
     static public String getSeenSchemaUri(JavaType aSeenSchema)
     {
-        return (seenSchemas.get().contains(aSeenSchema)) ? javaTypeToUrn(aSeenSchema) : null;
+        return (seenSchemas.contains(aSeenSchema)) ? javaTypeToUrn(aSeenSchema) : null;
     }
 
     static public String javaTypeToUrn(JavaType jt)

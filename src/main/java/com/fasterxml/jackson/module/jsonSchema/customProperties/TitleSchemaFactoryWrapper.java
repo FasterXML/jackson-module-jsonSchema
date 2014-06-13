@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.factories.ArrayVisitor;
-import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
-import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.factories.*;
 
 /**
  * Adds a title to every object schema, either root level or nested. Generally
@@ -25,6 +22,13 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
 	        wrapper.setProvider(p);
 	        return wrapper;
 	    };
+
+        public SchemaFactoryWrapper getWrapper(SerializerProvider p, RecursiveVisitorContext rvc) {
+            SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
+            wrapper.setProvider(p);
+            wrapper.setRecursiveVisitorContext(rvc);
+            return wrapper;
+        }
     };
 
 	public TitleSchemaFactoryWrapper() {
