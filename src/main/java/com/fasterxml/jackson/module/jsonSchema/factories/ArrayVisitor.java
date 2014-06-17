@@ -93,7 +93,8 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     }
 
     @Override
-    public void setVisitorContext(VisitorContext rvc) {
+    public Visitor setVisitorContext(VisitorContext rvc) {
         visitorContext = rvc;
+        return this;
     }
 }

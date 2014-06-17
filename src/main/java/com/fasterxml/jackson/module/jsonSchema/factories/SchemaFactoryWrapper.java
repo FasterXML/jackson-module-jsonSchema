@@ -136,8 +136,9 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     }
 
     @Override
-    public void setVisitorContext(VisitorContext rvc) {
+    public Visitor setVisitorContext(VisitorContext rvc) {
         visitorContext = rvc;
+        return this;
     }
 
     /*
