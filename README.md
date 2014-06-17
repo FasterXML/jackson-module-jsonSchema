@@ -33,6 +33,75 @@ See com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryW
 
 JSON Schema has the ability to mark fields as required. This module supports this via the `@JsonProperty(required = true)` field annotation.
 
+## JsonSchema Hypermedia support
+### Generic support
+Current implementation is partial for IETF published draft v4 (http://json-schema.org/latest/json-schema-hypermedia.html).
+
+Currently 2 aspects of IETF supported:
+* pathStart - URI that defines what the instance's URI MUST start with in order to validate.
+* links - associated Link Description Objects with instances.
+
+You can enable HypermediaSupport using _com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper_.
+Example:
+
+         HyperSchemaFactoryWrapper personVisitor = new HyperSchemaFactoryWrapper();
+         ObjectMapper mapper = new ObjectMapper();
+         mapper.acceptJsonFormatVisitor(Person.class, personVisitor);
+         JsonSchema personSchema = personVisitor.finalSchema();`
+
+By default all default values for Link Description Object are ignored in the output (method = GET, enctype = application/json, mediaType = application/json), to enable default setIgnoreDefaults(true)
+
+
+
+### Describing json hyper schema
+
+You can describe hyperlinks, using annotations @JsonHyperSchema & @Link
+
+     public class Pet {
+         public String genus;
+     }
+
+     @JsonHyperSchema(
+         pathStart = "http://localhost:8080/persons/",
+         links = {
+             @Link(href = "{name}", rel = "self"),
+             @Link(href = "{name}/pet", rel = "pet", targetSchema = Pet.class)
+     })
+     public class Person {
+         public String name;
+         public String hat;
+     }
+
+Would generate following values:
+
+    {
+      "type" : "object",
+      "pathStart" : "http://localhost:8080/persons/",
+      "links" : [ {
+        "href" : "http://localhost:8080/persons/{name}",
+        "rel" : "self"
+      }, {
+        "href" : "http://localhost:8080/persons/{name}/pet",
+        "rel" : "pet",
+        "targetSchema" : {
+          "type" : "object",
+          "properties" : {
+            "genus" : {
+              "type" : "string"
+            }
+          }
+        }
+      } ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "hat" : {
+          "type" : "string"
+        }
+      }
+    }
+
 ## More
 
 Check out [Project Wiki](http://github.com/FasterXML/jackson-module-jsonSchema/wiki) for more information (javadocs, downloads).

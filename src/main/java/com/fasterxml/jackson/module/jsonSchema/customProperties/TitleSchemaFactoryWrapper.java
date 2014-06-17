@@ -61,11 +61,11 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
      * @param schema The schema who's title to set.
      * @param type The type of the object represented by the schema.
      */
-   private void addTitle(JsonSchema s, JavaType type)
+   private void addTitle(JsonSchema schema, JavaType type)
    {
-       if (!s.isSimpleTypeSchema()) {
-           throw new RuntimeException("given non simple type schema: "+ s.getType());
+       if (!schema.isSimpleTypeSchema()) {
+           throw new RuntimeException("given non simple type schema: " + schema.getType());
        }
-       s.asSimpleTypeSchema().setTitle(type.getGenericSignature());
+       schema.asSimpleTypeSchema().setTitle(type.getGenericSignature());
    }
 }
