@@ -5,6 +5,7 @@ import java.util.*;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
@@ -12,8 +13,11 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema.Items;
+import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 @SuppressWarnings("serial")
 public class TestGenerateJsonSchema
@@ -21,12 +25,16 @@ public class TestGenerateJsonSchema
 {
     public static class SimpleBean
     {
+        private static final String DESCRIPTION = "a test description";
+
         private int property1;
         private String property2;
         private String[] property3;
         private Collection<Float> property4;
         @JsonProperty(required = true)
         private String property5;
+        @JsonPropertyDescription(DESCRIPTION)
+        private String property6;
 
         public int getProperty1() {
             return property1;
@@ -66,6 +74,14 @@ public class TestGenerateJsonSchema
 
         public void setProperty5(String property5) {
             this.property5 = property5;
+        }
+
+        public String getProperty6() {
+            return property6;
+        }
+
+        public void setProperty6(String property6) {
+            this.property6 = property6;
         }
     }
 
@@ -150,16 +166,19 @@ public class TestGenerateJsonSchema
         JsonSchema prop1 = properties.get("property1");
         assertNotNull(prop1);
         assertTrue(prop1.isIntegerSchema());
+        assertNull(((IntegerSchema) prop1).getDescription());
         assertNull(prop1.getRequired());
 
         JsonSchema prop2 = properties.get("property2");
         assertNotNull(prop2);
         assertTrue(prop2.isStringSchema());
+        assertNull(((StringSchema)prop2).getDescription());
         assertNull(prop2.getRequired());
 
         JsonSchema prop3 = properties.get("property3");
         assertNotNull(prop3);
         assertTrue(prop3.isArraySchema());
+        assertNull(((ArraySchema)prop3).getDescription());
         assertNull(prop3.getRequired());
         Items items = prop3.asArraySchema().getItems();
         assertTrue(items.isSingleItems());
@@ -170,6 +189,7 @@ public class TestGenerateJsonSchema
         JsonSchema prop4 = properties.get("property4");
         assertNotNull(prop4);
         assertTrue(prop4.isArraySchema());
+        assertNull(((ArraySchema)prop4).getDescription());
         assertNull(prop4.getRequired());
         items = prop4.asArraySchema().getItems();
         assertTrue(items.isSingleItems());
@@ -181,6 +201,10 @@ public class TestGenerateJsonSchema
         assertNotNull(prop5);
         assertTrue(prop5.getRequired());
 
+        JsonSchema prop6 = properties.get("property6");
+        assertNotNull(prop2);
+        assertTrue(prop2.isStringSchema());
+        assertEquals(((StringSchema)prop6).getDescription(), SimpleBean.DESCRIPTION);
     }
 
     public void testGeneratingJsonSchemaWithFilters() throws Exception {

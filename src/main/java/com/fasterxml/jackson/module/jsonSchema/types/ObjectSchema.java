@@ -138,26 +138,26 @@ public class ObjectSchema extends ContainerTypeSchema
 		return true;
 	}
 
-	public void putOptionalProperty(BeanProperty property, JsonSchema jsonSchema) {
-		jsonSchema.enrichWithBeanProperty(property);
-		properties.put(property.getName(), jsonSchema);
+	public void putOptionalProperty(BeanProperty property, SimpleTypeSchema schema) {
+		schema.enrichWithBeanProperty(property);
+		properties.put(property.getName(), schema);
 	}
 	
-	public void putOptionalProperty(String name, JsonSchema jsonSchema) {
-		properties.put(name, jsonSchema);
+	public void putOptionalProperty(String name, JsonSchema schema) {
+		properties.put(name, schema);
 	}
 
 	public JsonSchema putPatternProperty(String regex, JsonSchema value) {
 		return patternProperties.put(regex, value);
 	}
 	
-	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
+	public JsonSchema putProperty(BeanProperty property, SimpleTypeSchema value) {
 		value.setRequired(true);
 		value.enrichWithBeanProperty(property);
 		return properties.put(property.getName(), value);		
 	}
 
-	public JsonSchema putProperty(String name, JsonSchema value) {
+	public JsonSchema putProperty(String name, SimpleTypeSchema value) {
 		value.setRequired(true);
 		return properties.put(name, value);
 	}

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 
 /**
  * Convenience class that wraps JSON Schema generation functionality.
@@ -26,14 +27,14 @@ public class JsonSchemaGenerator
     	_wrapperFactory = wrapperFactory == null ? new WrapperFactory() : wrapperFactory;
     }
 
-    public JsonSchema generateSchema(Class<?> type) throws JsonMappingException
+    public SimpleTypeSchema generateSchema(Class<?> type) throws JsonMappingException
     {
         SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
         _mapper.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
 
-    public JsonSchema generateSchema(JavaType type) throws JsonMappingException
+    public SimpleTypeSchema generateSchema(JavaType type) throws JsonMappingException
     {
         SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
         _mapper.acceptJsonFormatVisitor(type, visitor);

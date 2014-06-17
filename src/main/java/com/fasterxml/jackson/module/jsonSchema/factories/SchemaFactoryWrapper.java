@@ -17,7 +17,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     protected JsonSchemaFactory schemaProvider;
 
     protected SerializerProvider provider;
-    protected JsonSchema schema;
+    protected SimpleTypeSchema schema;
 
     public SchemaFactoryWrapper() {
         this(null, null);
@@ -128,7 +128,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     /*********************************************************************
      */
 	
-    public JsonSchema finalSchema() {
+    public SimpleTypeSchema finalSchema() {
         return schema;
     }
 }
