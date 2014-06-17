@@ -3,6 +3,8 @@ Version: 2.4.1 (xx-Jun-2014)
 
 #4: JSON schema generation with Jackson goes into infinite loop
  (fix by balthorium@github)
+#35: Add annotation based support for HyperSchema to JsonSchema
+ (contribute by Anton O, mavarazy@github)
 
 ------------------------------------------------------------------------
 === History: ===
