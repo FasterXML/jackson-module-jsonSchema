@@ -6,14 +6,15 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ObjectVisitor extends JsonObjectFormatVisitor.Base
-    implements JsonSchemaProducer
+    implements JsonSchemaProducer, Visitor
 {
     protected final ObjectSchema schema;
     protected SerializerProvider provider;
-
     private WrapperFactory wrapperFactory;
+    private VisitorContext visitorContext;
 
     /**
      * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
@@ -22,7 +23,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
         this(provider, schema, new WrapperFactory());
     }
-    
+
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
         this.schema = schema;
@@ -59,7 +60,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     public void setProvider(SerializerProvider p) {
         provider = p;
     }
-    
+
     public WrapperFactory getWrapperFactory() {
         return wrapperFactory;
     }
@@ -76,7 +77,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     public void optionalProperty(BeanProperty prop) throws JsonMappingException {
         schema.putOptionalProperty(prop, propertySchema(prop));
     }
-	
+
     @Override
     public void optionalProperty(String name, JsonFormatVisitable handler, JavaType propertyTypeHint)
             throws JsonMappingException {
@@ -100,7 +101,14 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         if (prop == null) {
             throw new IllegalArgumentException("Null property");
         }
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+
+        // check if we've seen this argument's sub-schema already and return a reference-schema if we have
+        String seenSchemaUri = VisitorContext.getSeenSchemaUri(prop.getType());
+        if (seenSchemaUri != null) {
+            return new ReferenceSchema(seenSchemaUri);
+        }
+
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
         JsonSerializer<Object> ser = getSer(prop);
         if (ser != null) {
             JavaType type = prop.getType();
@@ -111,13 +119,21 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
         return visitor.finalSchema();
     }
-	
+
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {
-		SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
-		handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
-		return visitor.finalSchema();
+        // check if we've seen this argument's sub-schema already and return a reference-schema if we have
+        if (visitorContext != null) {
+            String seenSchemaUri = VisitorContext.getSeenSchemaUri(propertyTypeHint);
+            if (seenSchemaUri != null) {
+                return new ReferenceSchema(seenSchemaUri);
+            }
+        }
+
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
+        handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
+        return visitor.finalSchema();
     }
 
     protected JsonSerializer<Object> getSer(BeanProperty prop)
@@ -132,5 +148,11 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
             ser = getProvider().findValueSerializer(prop.getType(), prop);
         }
         return ser;
+    }
+
+    @Override
+    public Visitor setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
+        return this;
     }
 }

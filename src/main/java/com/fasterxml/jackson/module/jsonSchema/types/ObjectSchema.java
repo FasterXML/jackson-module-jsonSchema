@@ -130,7 +130,7 @@ public class ObjectSchema extends ContainerTypeSchema
 
 	@Override
 	public JsonFormatTypes getType() {
-	    return JsonFormatTypes.OBJECT;
+           return JsonFormatTypes.OBJECT;
 	}
 
 	@Override
