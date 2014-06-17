@@ -1,12 +1,16 @@
 Project: jackson-module-jsonSchema
-Version: 2.3.3 (10-Apr-2014)
+Version: 2.4.1 (xx-Jun-2014)
 
-No changes since 2.3.2.
+#4: JSON schema generation with Jackson goes into infinite loop
+ (fix by balthorium@github)
 
 ------------------------------------------------------------------------
 === History: ===
 ------------------------------------------------------------------------
 
+2.4.0 (02-Jun-2014)
+
+2.3.3 (10-Apr-2014)
 2.3.2 (01-Mar-2014)
 
 No changes since 2.3.1.

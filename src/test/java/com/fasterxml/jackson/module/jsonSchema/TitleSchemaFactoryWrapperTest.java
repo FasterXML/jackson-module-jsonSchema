@@ -24,6 +24,7 @@ public class TitleSchemaFactoryWrapperTest extends TestCase{
 
 		mapper.acceptJsonFormatVisitor(Person.class, visitor);
 		JsonSchema schema = visitor.finalSchema();
+
 		assertTrue("schema should be an objectSchema.", schema.isObjectSchema());
 		String title = schema.asObjectSchema().getTitle();
 		assertNotNull(title);

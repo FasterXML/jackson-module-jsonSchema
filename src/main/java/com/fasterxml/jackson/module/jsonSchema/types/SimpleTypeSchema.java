@@ -15,12 +15,6 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 	private String defaultdefault;
 
 	/**
-	 * This attribute is a string that provides a full description of the of
-	 * purpose the instance property.
-	 */
-	private String description;
-
-	/**
 	 * This attribute is a string that provides a short description of the
 	 * instance property.
 	 */
@@ -65,10 +59,6 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 		return defaultdefault;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -92,10 +82,6 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 
 	public void setDefault(String defaultdefault) {
 		this.defaultdefault = defaultdefault;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public void setTitle(String title) {

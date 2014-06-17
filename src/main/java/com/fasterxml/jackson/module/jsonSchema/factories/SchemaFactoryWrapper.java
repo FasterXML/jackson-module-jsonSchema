@@ -11,13 +11,13 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  * @author jphelan
  * @author tsaloranta
  */
-public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
+public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
 {
     protected FormatVisitorFactory visitorFactory;
     protected JsonSchemaFactory schemaProvider;
-
     protected SerializerProvider provider;
     protected JsonSchema schema;
+    protected VisitorContext visitorContext;
 
     public SchemaFactoryWrapper() {
         this(null, null);
@@ -26,7 +26,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public SchemaFactoryWrapper(SerializerProvider p) {
         this(p, null);
     }
-    
+
     protected SchemaFactoryWrapper(WrapperFactory wrapperFactory) {
         this(null, wrapperFactory);
     }
@@ -64,7 +64,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonArrayFormatVisitor expectArrayFormat(JavaType convertedType) {
         ArraySchema s = schemaProvider.arraySchema();
         this.schema = s;
-        return visitorFactory.arrayFormatVisitor(provider, s);
+        return visitorFactory.arrayFormatVisitor(provider, s, visitorContext);
     }
 
     @Override
@@ -99,7 +99,20 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
         ObjectSchema s = schemaProvider.objectSchema();
         schema = s;
-        return visitorFactory.objectFormatVisitor(provider, s);
+
+        // if we don't already have a recursive visitor context, create one
+        if (visitorContext == null)
+        {
+            visitorContext = new VisitorContext();
+        }
+
+        // give each object schema a reference id and keep track of the ones we've seen
+        String schemaUri = visitorContext.addSeenSchemaUri(convertedType);
+        if (schemaUri != null) {
+            s.setId(schemaUri);
+        }
+
+        return visitorFactory.objectFormatVisitor(provider, s, visitorContext);
     }
 
     @Override
@@ -119,7 +132,13 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper
          */
         ObjectSchema s = schemaProvider.objectSchema();
         schema = s;
-        return visitorFactory.mapFormatVisitor(provider, s);
+        return visitorFactory.mapFormatVisitor(provider, s, visitorContext);
+    }
+
+    @Override
+    public Visitor setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
+        return this;
     }
 
     /*
