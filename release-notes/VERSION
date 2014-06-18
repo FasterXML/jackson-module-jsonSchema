@@ -1,5 +1,5 @@
 Project: jackson-module-jsonSchema
-Version: 2.4.1 (xx-Jun-2014)
+Version: 2.4.1 (17-Jun-2014)
 
 #4: JSON schema generation with Jackson goes into infinite loop
  (fix by balthorium@github)
