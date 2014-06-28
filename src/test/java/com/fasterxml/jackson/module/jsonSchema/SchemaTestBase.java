@@ -207,6 +207,10 @@ public abstract class SchemaTestBase
         return m.writeValueAsString(map);
     }
 
+    protected String aposToQuotes(String json) {
+        return json.replace("'", "\"");
+    }
+
     protected TimeZone getUTCTimeZone() {
         return TimeZone.getTimeZone("GMT");
     }

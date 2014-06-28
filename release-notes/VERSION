@@ -1,5 +1,23 @@
 Project: jackson-module-jsonSchema
-Version: 2.3.1 (28-Dec-2013)
+Version: 2.4.1 (17-Jun-2014)
+
+#4: JSON schema generation with Jackson goes into infinite loop
+ (fix by balthorium@github)
+#35: Add annotation based support for HyperSchema to JsonSchema
+ (contribute by Anton O, mavarazy@github)
+
+------------------------------------------------------------------------
+=== History: ===
+------------------------------------------------------------------------
+
+2.4.0 (02-Jun-2014)
+
+2.3.3 (10-Apr-2014)
+2.3.2 (01-Mar-2014)
+
+No changes since 2.3.1.
+
+2.3.1 (28-Dec-2013)
 
 #28: Fix `equals()` implementations for schema components.
  (contributed by fenrhil@github.com)
@@ -7,10 +25,6 @@ Version: 2.3.1 (28-Dec-2013)
  (contributed by fenrhil@github.com)
 #30: Easier customization of SchemaFactoryWrapper
  (contributed by fenrhil@github.com)
-
-------------------------------------------------------------------------
-=== History: ===
-------------------------------------------------------------------------
 
 2.3.0 (14-Nov-2013)
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonMapFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 /**
  * While JSON Schema does not have notion of "Map" type (unlimited property
@@ -14,13 +15,15 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
  * to handle it here, produce JSON Schema Object type.
  */
 public class MapVisitor extends JsonMapFormatVisitor.Base
-    implements JsonSchemaProducer
+    implements JsonSchemaProducer, Visitor
 {
     protected final ObjectSchema schema;
 
     protected SerializerProvider provider;
 
     private WrapperFactory wrapperFactory;
+
+    private VisitorContext visitorContext;
 
     public MapVisitor(SerializerProvider provider, ObjectSchema schema) {
         this(provider, schema, new WrapperFactory());
@@ -78,8 +81,23 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
 
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
             throws JsonMappingException {
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+
+        // check if we've seen this sub-schema already and return a reference-schema if we have
+        if (visitorContext != null) {
+            String seenSchemaUri = VisitorContext.getSeenSchemaUri(propertyTypeHint);
+            if (seenSchemaUri != null) {
+                return new ReferenceSchema(seenSchemaUri);
+            }
+        }
+
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
         handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
         return visitor.finalSchema();
+    }
+
+    @Override
+    public Visitor setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
+        return this;
     }
 }

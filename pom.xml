@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion> 
   <parent>
-    <groupId>com.fasterxml</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>12</version>
+    <groupId>com.fasterxml.jackson</groupId>
+    <artifactId>jackson-parent</artifactId>
+    <version>2.4</version>
   </parent>
   <groupId>com.fasterxml.jackson.module</groupId>
   <artifactId>jackson-module-jsonSchema</artifactId>
   <name>jackson-module-jsonSchema</name>
-  <version>2.3.2-SNAPSHOT</version>
+  <version>2.4.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
 JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
@@ -33,15 +33,9 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         </developer>
   </developers>
   <properties>
-     <!--  this module is 1.6 only -->
-    <javac.src.version>1.6</javac.src.version>
-    <javac.target.version>1.6</javac.target.version>
-    
-    <jackson.annotations.version>2.3.0</jackson.annotations.version>
-    <jackson.core.version>2.3.1</jackson.core.version>
-    <!--
-     | Configuration properties for the OSGi maven-bundle-plugin
-    -->
+    <version.jackson.annotations>2.4.0</version.jackson.annotations>
+    <version.jackson.core>2.4.1</version.jackson.core>
+
     <osgi.export>${project.groupId}.jsonSchema.*</osgi.export>
   </properties>
 
@@ -49,43 +43,24 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.annotations.version}</version>
+      <version>${version.jackson.annotations}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson.core.version}</version>
+      <version>${version.jackson.core}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.core.version}</version>
+      <version>${version.jackson.core}</version>
     </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
       <version>1.1.0.Final</version>
     </dependency>
-	
-     <!-- and for testing, JUnit is needed -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-      <scope>test</scope>
-    </dependency>
-	<dependency>
-	  <groupId>org.slf4j</groupId>
-	  <artifactId>slf4j-log4j12</artifactId>
-	  <version>1.6.1</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	  <groupId>log4j</groupId>
-	  <artifactId>log4j</artifactId>
-	  <version>1.2.16</version>
-	  <scope>test</scope>
-	</dependency>
+
   </dependencies>
   <build>
     <plugins>

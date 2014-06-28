@@ -6,26 +6,29 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ArrayVisitor extends JsonArrayFormatVisitor.Base
-    implements JsonSchemaProducer
+    implements JsonSchemaProducer, Visitor
 {
     protected final ArraySchema schema;
 
     protected SerializerProvider provider;
-    
+
     private WrapperFactory wrapperFactory = new WrapperFactory();
+
+    private VisitorContext visitorContext;
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
         this(provider, schema, new WrapperFactory());
     }
-    
+
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
     }
-    
+
     /*
     /*********************************************************************
     /* JsonSchemaProducer
@@ -67,7 +70,17 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     {
         // An array of object matches any values, thus we leave the schema empty.
         if (contentType.getRawClass() != Object.class) {
-            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider());
+
+            // check if we've seen this sub-schema already and return a reference-schema if we have
+            if (visitorContext != null) {
+                String seenSchemaUri = visitorContext.getSeenSchemaUri(contentType);
+                if (seenSchemaUri != null) {
+                    schema.setItemsSchema(new ReferenceSchema(seenSchemaUri));
+                    return;
+                }
+            }
+
+            SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
             handler.acceptJsonFormatVisitor(visitor, contentType);
             schema.setItemsSchema(visitor.finalSchema());
         }
@@ -77,5 +90,11 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
     {
         schema.setItemsSchema(JsonSchema.minimalForFormat(format));
+    }
+
+    @Override
+    public Visitor setVisitorContext(VisitorContext rvc) {
+        visitorContext = rvc;
+        return this;
     }
 }

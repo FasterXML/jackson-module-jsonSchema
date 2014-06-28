@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.factories.ArrayVisitor;
-import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
-import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.factories.*;
 
 /**
  * Adds a title to every object schema, either root level or nested. Generally
@@ -25,6 +22,13 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
 	        wrapper.setProvider(p);
 	        return wrapper;
 	    };
+
+        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc) {
+            SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
+            wrapper.setProvider(p);
+            wrapper.setVisitorContext(rvc);
+            return wrapper;
+        }
     };
 
 	public TitleSchemaFactoryWrapper() {
@@ -57,11 +61,11 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
      * @param schema The schema who's title to set.
      * @param type The type of the object represented by the schema.
      */
-   private void addTitle(JsonSchema s, JavaType type)
+   private void addTitle(JsonSchema schema, JavaType type)
    {
-       if (!s.isSimpleTypeSchema()) {
-           throw new RuntimeException("given non simple type schema: "+ s.getType());
+       if (!schema.isSimpleTypeSchema()) {
+           throw new RuntimeException("given non simple type schema: " + schema.getType());
        }
-       s.asSimpleTypeSchema().setTitle(type.getGenericSignature());
+       schema.asSimpleTypeSchema().setTitle(type.getGenericSignature());
    }
 }
