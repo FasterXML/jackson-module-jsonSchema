@@ -1,6 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.ValidationSchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * @author cponomaryov
  */
-public class TestSetValidationConstraints extends SchemaTestBase {
+public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     public static class ValidationBean {
 
@@ -261,11 +262,15 @@ public class TestSetValidationConstraints extends SchemaTestBase {
      * Test set validation constraints
      */
     @SuppressWarnings("SuspiciousMethodCalls")
-    public void testSetValidationConstraints() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
-        JsonSchema jsonSchema = generator.generateSchema(ValidationBean.class);
-        assertNotNull(jsonSchema);
-        assertTrue(jsonSchema.isObjectSchema());
+    public void testAddingValidationConstraints() throws Exception {
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper();
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+
+        assertNotNull("schema should not be null.", jsonSchema);
+        assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         Map<String, JsonSchema> properties = jsonSchema.asObjectSchema().getProperties();
         assertNotNull(properties);
         for (Object[] testCase : listTestData()) {

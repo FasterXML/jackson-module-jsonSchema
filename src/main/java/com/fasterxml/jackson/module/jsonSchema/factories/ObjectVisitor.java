@@ -5,11 +5,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
-import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
-import com.fasterxml.jackson.module.jsonSchema.validation.ValidationConstraintResolver;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 
 public class ObjectVisitor extends JsonObjectFormatVisitor.Base
@@ -121,25 +117,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
             }
             ser.acceptJsonFormatVisitor(visitor, type);
         }
-        return setValidationConstraints(visitor.finalSchema(), prop);
-    }
-
-    private JsonSchema setValidationConstraints(JsonSchema schema, BeanProperty prop) {
-        ValidationConstraintResolver constraintResolver = wrapperFactory.getValidationConstraintResolver();
-        if (schema.isArraySchema()) {
-            ArraySchema arraySchema = schema.asArraySchema();
-            arraySchema.setMaxItems(constraintResolver.getArrayMaxItems(prop));
-            arraySchema.setMinItems(constraintResolver.getArrayMinItems(prop));
-        } else if (schema.isNumberSchema()) {
-            NumberSchema numberSchema = schema.asNumberSchema();
-            numberSchema.setMaximum(constraintResolver.getNumberMaximum(prop));
-            numberSchema.setMinimum(constraintResolver.getNumberMinimum(prop));
-        } else if (schema.isStringSchema()) {
-            StringSchema stringSchema = schema.asStringSchema();
-            stringSchema.setMaxLength(constraintResolver.getStringMaxLength(prop));
-            stringSchema.setMinLength(constraintResolver.getStringMinLength(prop));
-        }
-        return schema;
+        return visitor.finalSchema();
     }
 	
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
