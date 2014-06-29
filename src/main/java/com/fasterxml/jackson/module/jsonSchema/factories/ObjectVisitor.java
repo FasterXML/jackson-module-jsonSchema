@@ -119,7 +119,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
         return visitor.finalSchema();
     }
-	
+
     protected JsonSchema propertySchema(JsonFormatVisitable handler, JavaType propertyTypeHint)
         throws JsonMappingException
     {

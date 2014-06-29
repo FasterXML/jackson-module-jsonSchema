@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  * @author jphelan
  */
 public class WrapperFactory {
-
-    public SchemaFactoryWrapper getWrapper(SerializerProvider provider) {
+	
+	public SchemaFactoryWrapper getWrapper(SerializerProvider provider) {
 		return new SchemaFactoryWrapper(provider);
 	}
 
