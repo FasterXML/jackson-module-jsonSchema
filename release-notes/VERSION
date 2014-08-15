@@ -1,14 +1,18 @@
 Project: jackson-module-jsonSchema
-Version: 2.4.1 (17-Jun-2014)
+Version: 2.4.2 (14-Aug-2014)
+
+No changes.
+
+------------------------------------------------------------------------
+=== History: ===
+------------------------------------------------------------------------
+
+2.4.1 (17-Jun-2014)
 
 #4: JSON schema generation with Jackson goes into infinite loop
  (fix by balthorium@github)
 #35: Add annotation based support for HyperSchema to JsonSchema
  (contribute by Anton O, mavarazy@github)
-
-------------------------------------------------------------------------
-=== History: ===
-------------------------------------------------------------------------
 
 2.4.0 (02-Jun-2014)
 
