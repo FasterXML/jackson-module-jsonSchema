@@ -1,5 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
+import java.util.Collection;
+
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
@@ -13,11 +15,16 @@ public class TestJsonValue extends SchemaTestBase
         @JsonValue
         public Leaf getValue() { return value; }
     }
-    
+
     static class Leaf {
         public int value;
     }
-    
+
+    static class Issue34Bean {
+        @JsonValue
+        public Collection<String> getNames() { return null; }
+    }
+
     /*
     /**********************************************************
     /* Unit tests, success
@@ -51,5 +58,19 @@ public class TestJsonValue extends SchemaTestBase
         String actStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schemaAct);
 
         assertEquals(expStr, actStr);
+    }
+
+    // For [Issue#34]
+    public void testJsonValueForCollection() throws Exception
+    {
+        ObjectMapper mapper = new ObjectMapper();
+ 
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        mapper.acceptJsonFormatVisitor(mapper.constructType(Issue34Bean.class), visitor);
+        JsonSchema schema = visitor.finalSchema();
+        assertNotNull(schema);
+        
+        String schemaStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
+        assertNotNull(schemaStr);
     }
 }

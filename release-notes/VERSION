@@ -1,11 +1,16 @@
 Project: jackson-module-jsonSchema
-Version: 2.4.2 (14-Aug-2014)
+Version: 2.4.3 (xx-xxx-2014)
 
-No changes.
+#34: NPE when generating schema for class with JsonValue annotation over Collection/Array
+ (reported by peshitz@github)
 
 ------------------------------------------------------------------------
 === History: ===
 ------------------------------------------------------------------------
+
+2.4.2 (14-Aug-2014)
+
+No changes since 2.4.1.
 
 2.4.1 (17-Jun-2014)
 
