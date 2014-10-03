@@ -16,10 +16,12 @@ public class ReferenceSchema extends SimpleTypeSchema {
         this.$ref = ref;
     }
 
+    @Override
     public String get$ref() {
         return $ref;
     }
 
+    @Override
     public void set$ref(String $ref) {
         this.$ref = $ref;
     }

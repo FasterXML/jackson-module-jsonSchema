@@ -1,10 +1,5 @@
 package com.fasterxml.jackson.module.jsonSchema.annotation;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.*;
-import com.fasterxml.jackson.module.jsonSchema.types.HyperSchema;
-
 /**
  *  A link description object is used to describe link relations.  In the
  context of a jsonSchema, it defines the link relations of the instances

@@ -1,7 +1,5 @@
 package com.fasterxml.jackson.module.jsonSchema.annotation;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.lang.annotation.*;
 
 /**

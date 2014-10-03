@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.LinkDescriptionObject;
-
-import java.util.Date;
 
 /**
  * Created by mavarazy on 4/21/14.

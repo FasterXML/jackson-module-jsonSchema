@@ -1,13 +1,9 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
-
-import java.lang.annotation.Annotation;
 
 /**
  *  A link description object is used to describe link relations.  In the
