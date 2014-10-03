@@ -1,5 +1,5 @@
 Project: jackson-module-jsonSchema
-Version: 2.4.3 (xx-xxx-2014)
+Version: 2.4.3 (03-Oct-2014)
 
 #34: NPE when generating schema for class with JsonValue annotation over Collection/Array
  (reported by peshitz@github)
