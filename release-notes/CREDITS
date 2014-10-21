@@ -11,3 +11,8 @@ Anton O (mavarazy@github)
 
 #35: Add annotation based support for HyperSchema to JsonSchema
  (2.4.1)
+
+Greg Adams (gadams00@github)
+
+#47: VisitorContext results in incomplete json schema output
+ (2.4.4)

@@ -101,8 +101,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
         schema = s;
 
         // if we don't already have a recursive visitor context, create one
-        if (visitorContext == null)
-        {
+        if (visitorContext == null) {
             visitorContext = new VisitorContext();
         }
 

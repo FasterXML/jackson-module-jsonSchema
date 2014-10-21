@@ -103,7 +103,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         }
 
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
-        String seenSchemaUri = VisitorContext.getSeenSchemaUri(prop.getType());
+        String seenSchemaUri = visitorContext.getSeenSchemaUri(prop.getType());
         if (seenSchemaUri != null) {
             return new ReferenceSchema(seenSchemaUri);
         }
@@ -125,7 +125,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     {
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
         if (visitorContext != null) {
-            String seenSchemaUri = VisitorContext.getSeenSchemaUri(propertyTypeHint);
+            String seenSchemaUri = visitorContext.getSeenSchemaUri(propertyTypeHint);
             if (seenSchemaUri != null) {
                 return new ReferenceSchema(seenSchemaUri);
             }
