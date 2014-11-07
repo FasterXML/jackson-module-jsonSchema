@@ -6,6 +6,8 @@ Project: jackson-module-jsonSchema
 
 2.4.4 (not yet released)
 
+#46: Incorrect number type for `Double`, `Float` and `BigDecimal`.
+ (reported by Alexei Z, alexei-zaycev@github)
 #47: VisitorContext results in incomplete json schema output
  (reported by Greg A)
 
