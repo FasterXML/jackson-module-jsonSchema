@@ -16,9 +16,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 public class TestReadJsonSchema
     extends SchemaTestBase
 {
-
     enum SchemaEnum {
-
         YES, NO;
     }
 
@@ -28,7 +26,7 @@ public class TestReadJsonSchema
         public String name;
         public JsonSerializable someSerializable;
     }
-    
+
     static class SchemableArrays
     {
         public char[] nameBuffer;
@@ -52,7 +50,7 @@ public class TestReadJsonSchema
     static class SchemabeIterableOverObjects {
         public Iterable<Object> iterableOhYeahBaby;
     }
-    
+
     static class SchemableMaps {
         public Map<String, Map<String, Double>> mapSizes;
     }
@@ -64,7 +62,7 @@ public class TestReadJsonSchema
      */
 
     private final ObjectMapper MAPPER = new ObjectMapper();
-    
+
     /**
      * Verifies that a simple schema that is serialized can be deserialized back
      * to equal schema instance

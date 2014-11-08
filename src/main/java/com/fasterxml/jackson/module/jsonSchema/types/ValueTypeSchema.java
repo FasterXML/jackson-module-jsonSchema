@@ -1,7 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
@@ -23,7 +22,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	   (Section 5.15).
 	 */
 	@JsonProperty(value = "enum")
-	private Set<String> enums = new HashSet<String>();
+	private Set<String> enums = new LinkedHashSet<String>();
 	
 	/**
 	 * This property defines the type of data, content type, or microformat to
