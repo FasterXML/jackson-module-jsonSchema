@@ -21,11 +21,11 @@ import java.util.List;
  *
  * @author wololock
  */
-public class ChainSchemaFactoryWrapper extends SchemaFactoryWrapper {
+public class FilterChainSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
 	private final List<BeanPropertyFilter> filters;
 
-	public ChainSchemaFactoryWrapper(ChainSchemaFactoryWrapperFactory wrapperFactory) {
+	public FilterChainSchemaFactoryWrapper(FilterChainSchemaFactoryWrapperFactory wrapperFactory) {
 		super(wrapperFactory);
 		this.filters = wrapperFactory.getFilters();
 	}

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.customProperties.ChainSchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.customProperties.ChainSchemaFactoryWrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.FilterChainSchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.FilterChainSchemaFactoryWrapperFactory;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.filter.BeanPropertyFilter;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.filter.RuntimeAnnotatedBeanPropertyFilter;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
@@ -22,7 +22,7 @@ import java.util.Map;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TestChainSchemaFactoryWrapper {
+public class TestFilterChainSchemaFactoryWrapper {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	private static @interface FilterThatOne {
@@ -84,9 +84,9 @@ public class TestChainSchemaFactoryWrapper {
 		}
 	}
 
-	private ChainSchemaFactoryWrapperFactory factory;
+	private FilterChainSchemaFactoryWrapperFactory factory;
 
-	private ChainSchemaFactoryWrapper visitor;
+	private FilterChainSchemaFactoryWrapper visitor;
 
 	private ObjectMapper objectMapper;
 
@@ -94,7 +94,7 @@ public class TestChainSchemaFactoryWrapper {
 
 	@Before
 	public void setup() throws JsonMappingException {
-		factory = new ChainSchemaFactoryWrapperFactory(
+		factory = new FilterChainSchemaFactoryWrapperFactory(
 				Arrays.<BeanPropertyFilter>asList(
 						new RuntimeAnnotatedBeanPropertyFilter(FilterThatOne.class, Deprecated.class),
 
@@ -109,7 +109,7 @@ public class TestChainSchemaFactoryWrapper {
 				)
 		);
 
-		visitor = new ChainSchemaFactoryWrapper(factory);
+		visitor = new FilterChainSchemaFactoryWrapper(factory);
 
 		objectMapper = new ObjectMapper();
 		objectMapper.acceptJsonFormatVisitor(TestBean.class, visitor);
