@@ -9,20 +9,29 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.FilterChainSchem
 import com.fasterxml.jackson.module.jsonSchema.customProperties.FilterChainSchemaFactoryWrapperFactory;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.filter.BeanPropertyFilter;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.filter.RuntimeAnnotatedBeanPropertyFilter;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.transformer.JsonSchemaTransformer;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+/**
+ * @author wololock
+ */
 public class TestFilterChainSchemaFactoryWrapper {
+
+	private static final String EXPECTED_NAME_ID = UUID.randomUUID().toString();
 
 	@Retention(RetentionPolicy.RUNTIME)
 	private static @interface FilterThatOne {
@@ -59,6 +68,8 @@ public class TestFilterChainSchemaFactoryWrapper {
 
 		private InternalValue internalValue;
 
+		private String lastName;
+
 		public String getName() {
 			return name;
 		}
@@ -82,6 +93,14 @@ public class TestFilterChainSchemaFactoryWrapper {
 		public void setInternalValue(InternalValue internalValue) {
 			this.internalValue = internalValue;
 		}
+
+		public String getLastName() {
+			return lastName;
+		}
+
+		public void setLastName(String lastName) {
+			this.lastName = lastName;
+		}
 	}
 
 	private FilterChainSchemaFactoryWrapperFactory factory;
@@ -94,27 +113,48 @@ public class TestFilterChainSchemaFactoryWrapper {
 
 	@Before
 	public void setup() throws JsonMappingException {
-		factory = new FilterChainSchemaFactoryWrapperFactory(
-				Arrays.<BeanPropertyFilter>asList(
-						new RuntimeAnnotatedBeanPropertyFilter(FilterThatOne.class, Deprecated.class),
 
-						// This test filter removes properties which names start
-						// with 'value'
-						new BeanPropertyFilter() {
-							@Override
-							public boolean test(BeanProperty property) {
-								return !property.getName().startsWith("value");
-							}
-						}
-				)
+		List<BeanPropertyFilter> filters = Arrays.<BeanPropertyFilter>asList(
+				new RuntimeAnnotatedBeanPropertyFilter(FilterThatOne.class, Deprecated.class),
+
+				// This test filter removes properties which names start
+				// with 'value'
+				new BeanPropertyFilter() {
+					@Override
+					public boolean test(BeanProperty property) {
+						return !property.getName().startsWith("value");
+					}
+				}
 		);
 
-		visitor = new FilterChainSchemaFactoryWrapper(factory);
+		List<JsonSchemaTransformer> transformers = Arrays.<JsonSchemaTransformer>asList(
+				new JsonSchemaTransformer() {
+					@Override
+					public JsonSchema transform(JsonSchema jsonSchema, BeanProperty beanProperty) {
+						if (jsonSchema.isStringSchema() && "name".equals(beanProperty.getName())) {
+							StringSchema stringSchema = jsonSchema.asStringSchema();
+							stringSchema.setId(EXPECTED_NAME_ID);
+						}
+						return jsonSchema;
+					}
+				}
+		);
 
+		factory = new FilterChainSchemaFactoryWrapperFactory(filters, transformers);
+		visitor = new FilterChainSchemaFactoryWrapper(factory);
 		objectMapper = new ObjectMapper();
 		objectMapper.acceptJsonFormatVisitor(TestBean.class, visitor);
-
 		jsonSchema = visitor.finalSchema();
+	}
+
+	/**
+	 * Un-ignore this test if you want to see how final json schema looks like.
+	 * @throws JsonProcessingException
+	 */
+	@Test
+	@Ignore
+	public void shouldPrintlnGeneratedJsonSchema() throws JsonProcessingException {
+		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema));
 	}
 
 
@@ -173,5 +213,27 @@ public class TestFilterChainSchemaFactoryWrapper {
 		Map<String,JsonSchema> properties = objectSchema.getProperties();
 		//then:
 		assertFalse(properties.containsKey("value"));
+	}
+
+	@Test
+	public void shouldAddStringIdToTheNamePropertyOfTestBeanClass() {
+		//when:
+		StringSchema stringSchema = jsonSchema.asObjectSchema()
+				.getProperties()
+				.get("name")
+				.asStringSchema();
+		//then:
+		assertEquals(EXPECTED_NAME_ID, stringSchema.getId());
+	}
+
+	@Test
+	public void shouldNotAddStringIdToTheLastNamePropertyOfTestBeanClass() {
+		//when:
+		StringSchema stringSchema = jsonSchema.asObjectSchema()
+				.getProperties()
+				.get("lastName")
+				.asStringSchema();
+		//then:
+		assertNull(stringSchema.getId());
 	}
 }
