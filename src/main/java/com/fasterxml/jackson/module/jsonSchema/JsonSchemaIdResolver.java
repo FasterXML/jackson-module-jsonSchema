@@ -1,21 +1,15 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.fasterxml.jackson.module.jsonSchema.types.AnySchema;
-import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
-import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.*;
 
-public class JsonSchemaIdResolver implements TypeIdResolver
- {
+public class JsonSchemaIdResolver extends TypeIdResolverBase
+{
      /* This is Wrong: should not use defaultInstance() for anything.
       * But has to work for now...
       */
@@ -30,9 +24,6 @@ public class JsonSchemaIdResolver implements TypeIdResolver
 
      public JsonSchemaIdResolver() { }
      
-     /* (non-Javadoc)
-      * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromValue(java.lang.Object)
-      */
      @Override
      public String idFromValue(Object value) {
          if ( value instanceof JsonSchema) {
@@ -41,27 +32,24 @@ public class JsonSchemaIdResolver implements TypeIdResolver
          return null;
      }
 
-     /* (non-Javadoc)
-      * @see com.fasterxml.jackson.databind.jsontype.TypeIdResolver#idFromValueAndType(java.lang.Object, java.lang.Class)
-      */
      @Override
      public String idFromValueAndType(Object value, Class<?> suggestedType) {
          return idFromValue(value);
      }
 
      @Override
-     public JavaType typeFromId(String id) {
+     public JavaType typeFromId(DatabindContext context, String id) {
  		switch (JsonFormatTypes.forValue(id)) {
- 		case ANY: 		return any;
- 		case ARRAY: 	return array;
- 		case BOOLEAN:	return booleanboolean;
- 		case INTEGER:	return integer;
- 		case NULL:		return nullnull;
- 		case NUMBER:	return number;
- 		case OBJECT:	return object;
- 		case STRING:	return string;
+ 		case ANY: return any;
+ 		case ARRAY: return array;
+ 		case BOOLEAN: return booleanboolean;
+ 		case INTEGER: return integer;
+ 		case NULL: return nullnull;
+ 		case NUMBER: return number;
+ 		case OBJECT: return object;
+ 		case STRING: return string;
  		default:
- 			return null;
+ 		    return null;
  		}
      }
 
