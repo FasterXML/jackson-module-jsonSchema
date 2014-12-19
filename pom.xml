@@ -55,6 +55,11 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
       <artifactId>jackson-databind</artifactId>
       <version>${version.jackson.core}</version>
     </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>1.1.0.Final</version>
+    </dependency>
 
   </dependencies>
   <build>
