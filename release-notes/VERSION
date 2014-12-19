@@ -4,6 +4,10 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.5.0 (not yet released)
+
+#32: Add support for Bean Validation (JSR-303) annotations
+
 2.4.4 (24-Nov-2014)
 
 #46: Incorrect number type for `Double`, `Float` and `BigDecimal`.
