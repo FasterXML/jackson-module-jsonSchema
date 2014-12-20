@@ -3,12 +3,12 @@
   <parent>
     <groupId>com.fasterxml.jackson</groupId>
     <artifactId>jackson-parent</artifactId>
-    <version>2.5-rc1</version>
+    <version>2.5</version>
   </parent>
   <groupId>com.fasterxml.jackson.module</groupId>
   <artifactId>jackson-module-jsonSchema</artifactId>
   <name>jackson-module-jsonSchema</name>
-  <version>2.5.0-SNAPSHOT</version>
+  <version>2.5.0-rc1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
 JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
@@ -33,8 +33,8 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         </developer>
   </developers>
   <properties>
-    <version.jackson.annotations>2.5.0-SNAPSHOT</version.jackson.annotations>
-    <version.jackson.core>2.5.0-SNAPSHOT</version.jackson.core>
+    <version.jackson.annotations>2.5.0-rc1</version.jackson.annotations>
+    <version.jackson.core>2.5.0-rc1</version.jackson.core>
 
     <osgi.export>${project.groupId}.jsonSchema.*</osgi.export>
   </properties>
