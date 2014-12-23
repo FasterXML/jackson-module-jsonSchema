@@ -30,8 +30,11 @@ public class ObjectVisitorDecorator implements JsonObjectFormatVisitor, JsonSche
     }
 
     @Override
+    @Deprecated // since 2.5
     public void setProvider(SerializerProvider serializerProvider) {
-        objectVisitor.setProvider(serializerProvider);
+        if (objectVisitor.getProvider() == null) {
+            objectVisitor.setProvider(serializerProvider);
+        }
     }
 
     @Override

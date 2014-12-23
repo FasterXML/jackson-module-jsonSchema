@@ -9,11 +9,9 @@ import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
-import com.fasterxml.jackson.module.jsonSchema.factories.ArrayVisitor;
-import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
-import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.factories.*;
 import com.fasterxml.jackson.module.jsonSchema.types.LinkDescriptionObject;
+import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 
 /**
@@ -108,7 +106,6 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
                         return new ReferenceSchema(seenSchemaUri);
                     }
                 }
-
                 HyperSchemaFactoryWrapper targetVisitor = new HyperSchemaFactoryWrapper();
                 targetVisitor.setVisitorContext(visitorContext);
 

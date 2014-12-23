@@ -230,8 +230,6 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     /**********************************************************
      */
 
-    private final ObjectMapper MAPPER = new ObjectMapper();
-
     private Object[][] listTestData() {
         return new Object[][] {{"listWithoutConstraints", null, null},
                 {"listWithMinSize", 1, null},
@@ -261,7 +259,6 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     /**
      * Test set validation constraints
      */
-    @SuppressWarnings("SuspiciousMethodCalls")
     public void testAddingValidationConstraints() throws Exception {
         ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper();
         ObjectMapper mapper = new ObjectMapper();
