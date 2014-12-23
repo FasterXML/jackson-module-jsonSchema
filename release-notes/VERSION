@@ -7,6 +7,7 @@ Project: jackson-module-jsonSchema
 2.5.0 (not yet released)
 
 #32: Add support for Bean Validation (JSR-303) annotations
+#56: Fixes to HyperSchemaFactory handling
 
 2.4.4 (24-Nov-2014)
 
