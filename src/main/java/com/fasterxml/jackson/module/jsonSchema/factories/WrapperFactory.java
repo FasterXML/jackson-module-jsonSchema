@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  * to nested schema factories.
  * @author jphelan
  */
-public class WrapperFactory {
-	
-	public SchemaFactoryWrapper getWrapper(SerializerProvider provider) {
-		return new SchemaFactoryWrapper(provider);
-	}
+public class WrapperFactory
+{
+    public SchemaFactoryWrapper getWrapper(SerializerProvider provider) {
+        return new SchemaFactoryWrapper(provider);
+    }
 
     public SchemaFactoryWrapper getWrapper(SerializerProvider provider, VisitorContext rvc) {
         SchemaFactoryWrapper wrapper = new SchemaFactoryWrapper(provider);

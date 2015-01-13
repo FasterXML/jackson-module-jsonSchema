@@ -19,14 +19,18 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
 	    @Override
 	    public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
 	        SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
-	        wrapper.setProvider(p);
+	        if (p != null) {
+	            wrapper.setProvider(p);
+	        }
 	        return wrapper;
 	    };
 
 	    @Override
-        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc) {
+	    public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc) {
             SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
-            wrapper.setProvider(p);
+            if (p != null) {
+                wrapper.setProvider(p);
+            }
             wrapper.setVisitorContext(rvc);
             return wrapper;
         }

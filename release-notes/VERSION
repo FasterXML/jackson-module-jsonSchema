@@ -4,6 +4,11 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.6.0 (not yet released)
+
+- Added `JsonSchemaGenerator(ObjectWriter)` to allow use of (re-)configured `ObjectWriter`
+  instead of `ObjectMapper` which can not be configured.
+
 2.5.1 (not yet released)
 
 ...

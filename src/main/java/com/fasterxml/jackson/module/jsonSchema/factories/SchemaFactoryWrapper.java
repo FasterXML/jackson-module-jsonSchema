@@ -22,7 +22,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     public SchemaFactoryWrapper() {
         this(null, new WrapperFactory());
     }
-    
+
     public SchemaFactoryWrapper(SerializerProvider p) {
         this(p, new WrapperFactory());
     }
@@ -30,7 +30,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     protected SchemaFactoryWrapper(WrapperFactory wrapperFactory) {
         this(null, wrapperFactory);
     }
-    
+
     protected SchemaFactoryWrapper(SerializerProvider p, WrapperFactory wrapperFactory) {
         provider = p;
         schemaProvider = new JsonSchemaFactory();
@@ -135,7 +135,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     }
 
     @Override
-    public Visitor setVisitorContext(VisitorContext rvc) {
+    public SchemaFactoryWrapper setVisitorContext(VisitorContext rvc) {
         visitorContext = rvc;
         return this;
     }

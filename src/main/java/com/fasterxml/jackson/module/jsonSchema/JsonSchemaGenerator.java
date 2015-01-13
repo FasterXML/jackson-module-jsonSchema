@@ -1,8 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 
@@ -13,7 +11,15 @@ import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
  */
 public class JsonSchemaGenerator
 {
+    /**
+     * @deprecated Since 2.6
+     */
     protected final ObjectMapper _mapper;
+
+    /**
+     * @since 2.6
+     */
+    protected final ObjectWriter _writer;
 
     private final WrapperFactory _wrapperFactory;
 
@@ -23,20 +29,37 @@ public class JsonSchemaGenerator
 
     public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
         _mapper = mapper;
-        _wrapperFactory = wrapperFactory == null ? new WrapperFactory() : wrapperFactory;
+        _writer = mapper.writer();
+        _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
     }
 
+    /**
+     * @since 2.6
+     */
+    public JsonSchemaGenerator(ObjectWriter w) {
+        this(w, null);
+    }
+
+    /**
+     * @since 2.6
+     */
+    public JsonSchemaGenerator(ObjectWriter w, WrapperFactory wrapperFactory) {
+        _mapper = null;
+        _writer = w;
+        _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
+    }
+    
     public JsonSchema generateSchema(Class<?> type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
-        _mapper.acceptJsonFormatVisitor(type, visitor);
+        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(null);
+        _writer.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
 
     public JsonSchema generateSchema(JavaType type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(_mapper == null ? null : _mapper.getSerializerProvider());
-        _mapper.acceptJsonFormatVisitor(type, visitor);
+        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(null);
+        _writer.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
 }
