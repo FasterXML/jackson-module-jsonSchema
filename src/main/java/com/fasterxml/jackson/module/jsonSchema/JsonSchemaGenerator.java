@@ -14,16 +14,16 @@ import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 public class JsonSchemaGenerator
 {
     protected final ObjectMapper _mapper;
-    
-	private final WrapperFactory _wrapperFactory;
-    
+
+    private final WrapperFactory _wrapperFactory;
+
     public JsonSchemaGenerator(ObjectMapper mapper) {
         this(mapper, null);
     }
-    
+
     public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
         _mapper = mapper;
-    	_wrapperFactory = wrapperFactory == null ? new WrapperFactory() : wrapperFactory;
+        _wrapperFactory = wrapperFactory == null ? new WrapperFactory() : wrapperFactory;
     }
 
     public JsonSchema generateSchema(Class<?> type) throws JsonMappingException

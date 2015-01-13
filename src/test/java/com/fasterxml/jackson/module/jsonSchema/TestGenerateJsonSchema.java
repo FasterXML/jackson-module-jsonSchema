@@ -107,16 +107,6 @@ public class TestGenerateJsonSchema
     public static FilterProvider secretFilterProvider = new SimpleFilterProvider()
             .addFilter("filteredBean", SimpleBeanPropertyFilter.filterOutAllExcept(new String[]{"obvious"}));
 
-    public enum Enumerated {
-
-        A, B, C;
-    }
-
-    public static class LetterBean {
-
-        public Enumerated letter;
-    }
-
     static class StringMap extends HashMap<String, String> {
     }
 
@@ -245,38 +235,6 @@ public class TestGenerateJsonSchema
                                 new HashMap() {
                             {
                                 put("type", "string");
-                            }
-                        });
-                    }
-                });
-            }
-        }, result);
-    }
-
-    public void testWithEnum() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
-        JsonSchema jsonSchema = generator.generateSchema(LetterBean.class);
-        Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
-        assertNotNull(result);
-
-        assertEquals(new HashMap<String, Object>() {
-            {
-                put("type", "object");
-                put("id", "urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:LetterBean");
-                put("properties",
-                        new HashMap<String, Object>() {
-                    {
-                        put("letter",
-                                new HashMap<String, Object>() {
-                            {
-                                put("type", "string");
-                                put("enum", new ArrayList<String>() {
-                                    {
-                                        add("A");
-                                        add("B");
-                                        add("C");
-                                    }
-                                });
                             }
                         });
                     }
