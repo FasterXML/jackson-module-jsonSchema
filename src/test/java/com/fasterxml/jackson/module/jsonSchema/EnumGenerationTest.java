@@ -16,6 +16,7 @@ public class EnumGenerationTest extends SchemaTestBase
             return "ToString:"+name();
         }
     }
+
     public static class LetterBean {
 
         public Enumerated letter;
@@ -28,11 +29,11 @@ public class EnumGenerationTest extends SchemaTestBase
      */
 
     private final ObjectMapper MAPPER = new ObjectMapper();
+    JsonSchemaGenerator SCHEMA_GEN = new JsonSchemaGenerator(MAPPER);
 
     public void testEnumDefault() throws Exception
     {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
-        JsonSchema jsonSchema = generator.generateSchema(LetterBean.class);
+        JsonSchema jsonSchema = SCHEMA_GEN.generateSchema(LetterBean.class);
         @SuppressWarnings("unchecked")
         Map<String, Object> result = (Map<String, Object>) MAPPER.convertValue(jsonSchema,  Map.class);
         assertNotNull(result);
