@@ -149,6 +149,13 @@ public abstract class JsonSchema
 	private Boolean required = null;
 
     /**
+     * This attribute indicates if the instance is not modifiable.
+     * This is false by defaul, making the instance modifiable.
+     */
+    @JsonProperty
+    private Boolean readonly = null;
+
+    /**
      * This attribute is a string that provides a full description of the of
      * purpose the instance property.
      */
@@ -271,6 +278,7 @@ public abstract class JsonSchema
 	    JsonSchema that = ((JsonSchema)obj);
 	    return equals(getType(), getType()) &&
 	    		equals(getRequired(), that.getRequired()) &&
+                equals(getReadonly(), that.getReadonly()) &&
 	    		equals(get$ref(), that.get$ref()) &&
 	    		equals(get$schema(), that.get$schema()) &&
 	    		equals(getDisallow(), that.getDisallow()) &&
@@ -300,6 +308,10 @@ public abstract class JsonSchema
 	public Boolean getRequired() {
 		return required;
 	}
+
+    public Boolean getReadonly() {
+        return readonly;
+    }
 
     public String getDescription() {
         return description;
@@ -452,6 +464,10 @@ public abstract class JsonSchema
 	public void setRequired(Boolean required) {
 		this.required = required;
 	}
+
+    public void setReadonly(Boolean readonly){
+        this.readonly = readonly;
+    }
 
     public void setDescription(String description) {
         this.description = description;

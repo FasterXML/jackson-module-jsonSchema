@@ -141,16 +141,19 @@ public class TestGenerateJsonSchema
         assertNotNull(prop1);
         assertTrue(prop1.isIntegerSchema());
         assertNull(prop1.getRequired());
+        assertNull(prop1.getReadonly());
 
         JsonSchema prop2 = properties.get("property2");
         assertNotNull(prop2);
         assertTrue(prop2.isStringSchema());
         assertNull(prop2.getRequired());
+        assertNull(prop2.getReadonly());
 
         JsonSchema prop3 = properties.get("property3");
         assertNotNull(prop3);
         assertTrue(prop3.isArraySchema());
         assertNull(prop3.getRequired());
+        assertNull(prop3.getReadonly());
         Items items = prop3.asArraySchema().getItems();
         assertTrue(items.isSingleItems());
         JsonSchema itemType = items.asSingleItems().getSchema();
@@ -161,6 +164,7 @@ public class TestGenerateJsonSchema
         assertNotNull(prop4);
         assertTrue(prop4.isArraySchema());
         assertNull(prop4.getRequired());
+        assertNull(prop4.getReadonly());
         items = prop4.asArraySchema().getItems();
         assertTrue(items.isSingleItems());
         itemType = items.asSingleItems().getSchema();
@@ -170,6 +174,7 @@ public class TestGenerateJsonSchema
         JsonSchema prop5 = properties.get("property5");
         assertNotNull(prop5);
         assertTrue(prop5.getRequired());
+        assertNull(prop5.getReadonly());
 
     }
 
