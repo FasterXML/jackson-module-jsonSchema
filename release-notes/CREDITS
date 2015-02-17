@@ -16,3 +16,8 @@ Greg Adams (gadams00@github)
 
 #47: VisitorContext results in incomplete json schema output
  (2.4.4)
+
+ciderale@github:
+
+#20: Support handling of "unwrapped" POJOs
+ (2.4.6 / 2.5.2)

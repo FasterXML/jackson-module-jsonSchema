@@ -4,6 +4,11 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.4.6 (not yet released)
+
+#20: Support handling of "unwrapped" POJOs
+ (contributed by ciderale@github)
+
 2.4.5 (13-Jan-2015)
 
 No changes since 2.4.4.

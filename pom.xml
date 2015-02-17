@@ -34,7 +34,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
   </developers>
   <properties>
     <version.jackson.annotations>2.4.0</version.jackson.annotations>
-    <version.jackson.core>2.4.5</version.jackson.core>
+    <version.jackson.core>2.4.6-SNAPSHOT</version.jackson.core>
 
     <osgi.export>${project.groupId}.jsonSchema.*</osgi.export>
   </properties>
