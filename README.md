@@ -6,6 +6,8 @@ currently in jackson databind (pre 2.1), in order to allow for the generation of
 
 ## Status
 
+[![Build Status](https://travis-ci.org/FasterXML/jackson-module-jsonSchema.svg)](https://travis-ci.org/FasterXML/jackson-module-jsonSchema)
+
 Version 2.1 of this module is the first functioning version; but significant changes are possible for 2.2.
 This module is very new, and 2.2 is expected to be the first fully stable release.
 
