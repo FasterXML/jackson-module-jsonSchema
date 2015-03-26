@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import junit.framework.Assert;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
@@ -126,7 +127,7 @@ public class TestReadJsonSchema
         String json2 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(finalNode);
         
 //        assertEquals(node, finalNode);
-        assertEquals("Schemas for "+name+" differ",
+        assertEquals("Schemas for " + name + " differ",
                 json1, json2);
     }
 
@@ -154,5 +155,50 @@ public class TestReadJsonSchema
         String schemaStr = "{\"type\":\"object\",\"additionalProperties\":true}";
         ObjectSchema schema = MAPPER.readValue(schemaStr, ObjectSchema.class);
         assertNull(schema.getAdditionalProperties());
+    }
+
+    /**
+     * Verifies that a true-valued additional property is deserialized properly
+     */
+    public void testOneOf() throws Exception
+    {
+        String schemaStr = "{\n" +
+                "    \"id\": \"http://some.site.somewhere/entry-schema#\",\n" +
+                "    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n" +
+                "    \"description\": \"schema for an fstab entry\",\n" +
+                "    \"type\": \"object\",\n" +
+                //"    \"required\": [ \"storage\" ],\n" +
+                "    \"properties\": {\n" +
+                "        \"storage\": {\n" +
+                "            \"type\": \"object\",\n" +
+                "            \"oneOf\": [\n" +
+                "                { \"$ref\": \"#/definitions/diskDevice\" },\n" +
+                "                { \"$ref\": \"#/definitions/diskUUID\" },\n" +
+                "                { \"$ref\": \"#/definitions/nfs\" },\n" +
+                "                { \"$ref\": \"#/definitions/tmpfs\" }\n" +
+                "            ]\n" +
+                "        },\n" +
+                "        \"fstype\": {\n" +
+                "            \"type\": \"object\",\n" +
+                "            \"enum\": [ \"ext3\", \"ext4\", \"btrfs\" ]\n" +
+                "        },\n" +
+                "        \"options\": {\n" +
+                "            \"type\": \"array\",\n" +
+                "            \"minItems\": 1,\n" +
+                "            \"items\": { \"type\": \"string\" },\n" +
+                "            \"uniqueItems\": true\n" +
+                "        },\n" +
+                "        \"readonly\": { \"type\": \"boolean\" }\n" +
+                "    }\n" +
+//                "    \"definitions\": {\n" +
+//                "        \"diskDevice\": {},\n" +
+//                "        \"diskUUID\": {},\n" +
+//                "        \"nfs\": {},\n" +
+//                "        \"tmpfs\": {}\n" +
+//                "    }\n" +
+                "}";
+        ObjectSchema schema = MAPPER.readValue(schemaStr, ObjectSchema.class);
+        assertNotNull(schema.getProperties().get("storage").asObjectSchema().getOneOf());
+        assertEquals(4,schema.getProperties().get("storage").asObjectSchema().getOneOf().size());
     }
 }

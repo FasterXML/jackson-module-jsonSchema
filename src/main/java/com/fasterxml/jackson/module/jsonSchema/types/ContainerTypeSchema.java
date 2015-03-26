@@ -24,15 +24,32 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	 */
 	@JsonProperty(value = "enum", required = true)
 	private Set<String> enums;
-	
-	//instance initializer block 
+
+	//instance initializer block
 	{
 		enums = new HashSet<String>();
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asContainerSchema()
+	/**
+	 * This provides an enumeration of all possible values that are valid
+	 for the instance property.  This MUST be an array, and each item in
+	 the array represents a possible value for the instance value.  If
+	 this attribute is defined, the instance value MUST be one of the
+	 values in the array in order for the schema to be valid.  Comparison
+	 of enum values uses the same algorithm as defined in "uniqueItems"
+	 (Section 5.15).
 	 */
+	@JsonProperty(value = "oneOf", required = true)
+	private Set<Object> oneOf;
+	//instance initializer block
+	{
+		oneOf = new HashSet<Object>();
+	}
+
+
+
+	/* (non-Javadoc)
+         * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asContainerSchema()
+         */
 	@Override
 	public ContainerTypeSchema asContainerSchema() { return this; }
 	
@@ -59,5 +76,13 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 
 	public void setEnums(Set<String> enums) {
 	    this.enums = enums;
+	}
+
+	public Set<Object> getOneOf() {
+		return oneOf;
+	}
+
+	public void setOneOf(Set<Object> oneOf) {
+		this.oneOf = oneOf;
 	}
 }
