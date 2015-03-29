@@ -7,6 +7,8 @@ Project: jackson-module-jsonSchema
 2.6.0 (not yet released)
 
 #60: Add `readonly` property to `JsonSchema`
+#64: Add support to oneOf
+ (contributed by Izek K, igreenfield@github)
 - Added `JsonSchemaGenerator(ObjectWriter)` to allow use of (re-)configured `ObjectWriter`
   instead of `ObjectMapper` which can not be configured.
 

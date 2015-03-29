@@ -1,5 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,6 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  * This class encapsulates the functionality of container type {@link JsonSchema}
  * Array and Object
  * @author jphelan
- *
  */
 public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	/**
@@ -23,12 +23,8 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	   (Section 5.15).
 	 */
 	@JsonProperty(value = "enum", required = true)
-	private Set<String> enums;
+	private Set<String> enums = Collections.emptySet();
 
-	//instance initializer block
-	{
-		enums = new HashSet<String>();
-	}
 	/**
 	 * This provides an enumeration of all possible values that are valid
 	 for the instance property.  This MUST be an array, and each item in
@@ -39,13 +35,7 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	 (Section 5.15).
 	 */
 	@JsonProperty(value = "oneOf", required = true)
-	private Set<Object> oneOf;
-	//instance initializer block
-	{
-		oneOf = new HashSet<Object>();
-	}
-
-
+	private Set<Object> oneOf = Collections.emptySet();
 
 	/* (non-Javadoc)
          * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asContainerSchema()
@@ -58,13 +48,13 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof ContainerTypeSchema) {
+	    if (obj == this) return true;
+	    if (obj instanceof ContainerTypeSchema) {
 			ContainerTypeSchema that = (ContainerTypeSchema)obj;
 			return equals(getEnums(), that.getEnums()) &&
 				super.equals(obj);
-		} else {
-			return false;
-		}
+	    }
+	    return false;
 	} 
 
 	public Set<String> getEnums() {

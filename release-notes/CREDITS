@@ -16,3 +16,9 @@ Greg Adams (gadams00@github)
 
 #47: VisitorContext results in incomplete json schema output
  (2.4.4)
+
+Izek Greenfield (igreenfield@github)
+
+#64: Add support to oneOf
+ (2.6.0)
+
