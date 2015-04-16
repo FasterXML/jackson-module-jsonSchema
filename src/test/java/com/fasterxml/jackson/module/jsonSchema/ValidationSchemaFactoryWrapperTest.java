@@ -87,6 +87,9 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         @Size(min = 15, max = 16)
         private String stringWithMinAndMaxSize;
 
+        @Pattern(regexp = "[a-z]+")
+        private String stringWithPattern;
+
         public List<String> getListWithoutConstraints() {
             return listWithoutConstraints;
         }
@@ -222,6 +225,14 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         public void setStringWithMinAndMaxSize(String stringWithMinAndMaxSize) {
             this.stringWithMinAndMaxSize = stringWithMinAndMaxSize;
         }
+
+        public String getStringWithPattern() {
+            return stringWithPattern;
+        }
+
+        public void setStringWithPattern(final String stringWithPattern) {
+            this.stringWithPattern = stringWithPattern;
+        }
     }
 
     /*
@@ -254,6 +265,11 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
                 {"stringWithMinSize", 13, null},
                 {"stringWithMaxSize", null, 14},
                 {"stringWithMinAndMaxSize", 15, 16}};
+    }
+
+    private Object[][] stringPatternTestData() {
+        return new Object[][] {{"stringWithPattern", "[a-z]+"},
+                {"stringWithoutConstraints", null}};
     }
 
     /**
@@ -293,6 +309,13 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
             StringSchema stringSchema = propertySchema.asStringSchema();
             assertEquals(testCase[1], stringSchema.getMinLength());
             assertEquals(testCase[2], stringSchema.getMaxLength());
+        }
+        for (Object[] testCase : stringPatternTestData()) {
+            JsonSchema propertySchema = properties.get(testCase[0]);
+            assertNotNull(propertySchema);
+            assertTrue(propertySchema.isStringSchema());
+            StringSchema stringSchema = propertySchema.asStringSchema();
+            assertEquals(testCase[1], stringSchema.getPattern());
         }
     }
 

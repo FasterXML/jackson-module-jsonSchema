@@ -81,6 +81,7 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
             StringSchema stringSchema = schema.asStringSchema();
             stringSchema.setMaxLength(constraintResolver.getStringMaxLength(prop));
             stringSchema.setMinLength(constraintResolver.getStringMinLength(prop));
+            stringSchema.setPattern(constraintResolver.getStringPattern(prop));
         }
         return schema;
     }
