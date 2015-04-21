@@ -1,7 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

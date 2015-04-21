@@ -52,7 +52,12 @@ public class EnumGenerationTest extends SchemaTestBase
         Map<String, Object> result = (Map<String, Object>) mapper.convertValue(jsonSchema,  Map.class);
         assertNotNull(result);
         assertTrue(jsonSchema.isObjectSchema());
-        assertEquals(expectedAsMap(true), result);
+        Map<String,Object> exp = expectedAsMap(true);
+        if (!exp.equals(result)) {
+            String expJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(exp);
+            String actJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result);
+            fail("Different JSON: expected:\n"+expJson+"\ngot:\n"+actJson);
+        }
     }
 
     @SuppressWarnings("serial")
