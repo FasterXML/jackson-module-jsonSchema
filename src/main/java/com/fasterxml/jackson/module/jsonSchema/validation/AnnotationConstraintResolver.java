@@ -63,4 +63,13 @@ public class AnnotationConstraintResolver implements ValidationConstraintResolve
     public Integer getStringMinLength(BeanProperty prop) {
         return getMinSize(prop);
     }
+
+    @Override
+    public String getStringPattern(final BeanProperty prop) {
+        Pattern patternAnnotation = prop.getAnnotation(Pattern.class);
+        if (patternAnnotation != null) {
+            return patternAnnotation.regexp();
+        }
+        return null;
+    }
 }

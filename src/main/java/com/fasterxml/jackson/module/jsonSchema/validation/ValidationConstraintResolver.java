@@ -19,4 +19,5 @@ public interface ValidationConstraintResolver {
 
     Integer getStringMinLength(BeanProperty prop);
 
+    String getStringPattern(BeanProperty prop);
 }
