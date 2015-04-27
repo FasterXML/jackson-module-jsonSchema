@@ -318,27 +318,27 @@ public abstract class JsonSchema
     }
 
     @JsonIgnore
-	public abstract JsonFormatTypes getType();
+    public abstract JsonFormatTypes getType();
 
-	/**
-	 * determine if this JsonSchema is an {@link AnySchema}.
-	 *
-	 * @return true if this JsonSchema is an AnySchema, false otherwise
-	 */
-	@JsonIgnore
-	public boolean isAnySchema() {
-		return false;
-	}
+    /**
+     * determine if this JsonSchema is an {@link AnySchema}.
+     *
+     * @return true if this JsonSchema is an AnySchema, false otherwise
+     */
+    @JsonIgnore
+    public boolean isAnySchema() {
+        return false;
+    }
 
-	/**
-	 * determine if this JsonSchema is an {@link ArraySchema}.
-	 *
-	 * @return true if this JsonSchema is an ArraySchema, false otherwise
-	 */
-	@JsonIgnore
-	public boolean isArraySchema() {
-		return false;
-	}
+    /**
+     * determine if this JsonSchema is an {@link ArraySchema}.
+     *
+     * @return true if this JsonSchema is an ArraySchema, false otherwise
+     */
+    @JsonIgnore
+    public boolean isArraySchema() {
+        return false;
+    }
 
 	/**
 	 * determine if this JsonSchema is an {@link BooleanSchema}.

@@ -1,32 +1,30 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.module.jsonSchema.types.*;
 
+/**
+ * Type id resolver needed to support polymorphic (de)serialization of all kinds of
+ * {@link JsonSchema} instances.
+ * Note that to support custom types, you will need to sub-lcass this resolver
+ * and override at least {@link #idFromValue(Object)}, {@link #idFromValueAndType(Object, Class)} and
+ * {@link #typeFromId(String)} methods; as well as associate this resolver using
+ * {@link JsonTypeInfo} annotation on all custom {@link JsonSchema} implementation classes.
+ */
 public class JsonSchemaIdResolver extends TypeIdResolverBase
 {
-     /* This is Wrong: should not use defaultInstance() for anything.
-      * But has to work for now...
-      */
-     private static JavaType any = TypeFactory.defaultInstance().constructType(AnySchema.class);
-     private static JavaType array = TypeFactory.defaultInstance().constructType(ArraySchema.class);
-     private static JavaType booleanboolean = TypeFactory.defaultInstance().constructType(BooleanSchema.class);
-     private static JavaType integer = TypeFactory.defaultInstance().constructType(IntegerSchema.class);
-     private static JavaType nullnull = TypeFactory.defaultInstance().constructType(NullSchema.class);
-     private static JavaType number = TypeFactory.defaultInstance().constructType(NumberSchema.class);
-     private static JavaType object = TypeFactory.defaultInstance().constructType(ObjectSchema.class);
-     private static JavaType string = TypeFactory.defaultInstance().constructType(StringSchema.class);
-
      public JsonSchemaIdResolver() { }
-     
+
      @Override
      public String idFromValue(Object value) {
-         if ( value instanceof JsonSchema) {
+         if (value instanceof JsonSchema) {
              return ((JsonSchema)value).getType().value();
          }
          return null;
@@ -38,19 +36,33 @@ public class JsonSchemaIdResolver extends TypeIdResolverBase
      }
 
      @Override
-     public JavaType typeFromId(DatabindContext context, String id) {
- 		switch (JsonFormatTypes.forValue(id)) {
- 		case ANY: return any;
- 		case ARRAY: return array;
- 		case BOOLEAN: return booleanboolean;
- 		case INTEGER: return integer;
- 		case NULL: return nullnull;
- 		case NUMBER: return number;
- 		case OBJECT: return object;
- 		case STRING: return string;
- 		default:
- 		    return null;
- 		}
+     public JavaType typeFromId(DatabindContext ctxt, String id)
+     {
+         JsonFormatTypes stdType = JsonFormatTypes.forValue(id);
+         if (stdType != null) {
+             switch (stdType) {
+             case ARRAY:
+                 return ctxt.constructType(ArraySchema.class);
+             case BOOLEAN:
+                 return ctxt.constructType(BooleanSchema.class);
+             case INTEGER:
+                 return ctxt.constructType(IntegerSchema.class);
+             case NULL:
+                 return ctxt.constructType(NullSchema.class);
+             case NUMBER:
+                 return ctxt.constructType(NumberSchema.class);
+             case OBJECT:
+                 return ctxt.constructType(ObjectSchema.class);
+             case STRING:
+                 return ctxt.constructType(StringSchema.class);
+             case ANY:
+             default:
+                 return ctxt.constructType(AnySchema.class);
+             }
+         }
+         // Not a standard type; should use a custom sub-type impl
+         throw new IllegalArgumentException("Can not resolve JsonSchema 'type' id of \""+id
+                 +"\", not recognized as one of standard values: "+Arrays.asList(JsonFormatTypes.values()));
      }
 
      @Override

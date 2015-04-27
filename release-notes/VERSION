@@ -9,6 +9,10 @@ Project: jackson-module-jsonSchema
 #60: Add `readonly` property to `JsonSchema`
 #64: Add support to oneOf
  (contributed by Izek K, igreenfield@github)
+#67: Unable to deserialize (extended/custom) Schema
+ (reported by Sebastian B)
+#69: Add support for @Pattern annotations in String schemas
+ (contributed by David S)
 - Added `JsonSchemaGenerator(ObjectWriter)` to allow use of (re-)configured `ObjectWriter`
   instead of `ObjectMapper` which can not be configured.
 
