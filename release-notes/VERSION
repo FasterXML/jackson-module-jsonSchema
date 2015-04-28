@@ -6,11 +6,11 @@ Project: jackson-module-jsonSchema
 
 2.6.0 (not yet released)
 
+#53: Add support to oneOf
+ (contributed by Izek K, igreenfield@github)
 #57: Enum types should generate a schema that includes the possible enum values
  (reported by StormeHawke@github)
 #60: Add `readonly` property to `JsonSchema`
-#64: Add support to oneOf
- (contributed by Izek K, igreenfield@github)
 #67: Unable to deserialize (extended/custom) Schema
  (reported by Sebastian B)
 #69: Add support for @Pattern annotations in String schemas
