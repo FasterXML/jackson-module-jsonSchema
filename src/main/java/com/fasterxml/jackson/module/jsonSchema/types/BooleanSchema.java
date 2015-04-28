@@ -8,24 +8,30 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  * @author jphelan
  *
  */
-public class BooleanSchema extends ValueTypeSchema {
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#isBooleanSchema()
-	 */
+public class BooleanSchema extends ValueTypeSchema
+{
 	@Override
 	public boolean isBooleanSchema() { return true; }
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
-	 */
+
 	@Override
 	public JsonFormatTypes getType() {
 	    return JsonFormatTypes.BOOLEAN;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asBooleanSchema()
-	 */
+
 	@Override
 	public BooleanSchema asBooleanSchema() { return this; }
+
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof BooleanSchema)) return false;
+         return _equals((BooleanSchema) obj);
+     }
+    
+     protected boolean _equals(BooleanSchema that)
+     {
+         return super._equals(that);
+     }
 }

@@ -15,26 +15,27 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
    MUST be a jsonSchema or an array of jsonSchemas.  The default value is an
    empty jsonSchema which allows any value for items in the instance array.
  */
-public class ArraySchema extends ContainerTypeSchema {
+public class ArraySchema extends ContainerTypeSchema
+{
 	/**
 	 * see {@link AdditionalItems}
 	 */
 	@JsonProperty
-	private ArraySchema.AdditionalItems additionalItems;
+	protected ArraySchema.AdditionalItems additionalItems;
 	
 	/**
 	 * see {@link Items}
 	 */
 	@JsonProperty
-	private ArraySchema.Items items;
+	protected ArraySchema.Items items;
 	
 	/**This attribute defines the maximum number of values in an array*/
 	@JsonProperty
-	private Integer maxItems;
+	protected Integer maxItems;
 	
 	/**This attribute defines the minimum number of values in an array*/
 	@JsonProperty
-	private Integer minItems;
+	protected Integer minItems;
 	
 	/**
 	 * This attribute indicates that all items in an array instance MUST be
@@ -54,31 +55,10 @@ public class ArraySchema extends ContainerTypeSchema {
 	      object.
 	 */
 	@JsonProperty
-	private Boolean uniqueItems = null;
-		
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asArraySchema()
-	 */
+	protected Boolean uniqueItems;
+
 	@Override
 	public ArraySchema asArraySchema() { return this; }
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ArraySchema) {
-			ArraySchema that = (ArraySchema) obj;
-			return equals(getAdditionalItems(), that.getAdditionalItems()) &&
-					equals(getItems(), that.getItems()) &&
-					equals(getMaxItems(), that.getMaxItems()) &&
-					equals(getMinItems(), that.getMinItems()) &&
-					equals(getUniqueItems(), that.getUniqueItems()) &&
-					super.equals(obj);
-		} else {
-			return false;
-		}
-	}
 
 	public ArraySchema.AdditionalItems getAdditionalItems() {
 	    return additionalItems;
@@ -134,6 +114,25 @@ public class ArraySchema extends ContainerTypeSchema {
 	public void setUniqueItems(Boolean uniqueItems) {
 		this.uniqueItems = uniqueItems;
 	}
+
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof ArraySchema)) return false;
+         return _equals((ArraySchema) obj);
+     }
+
+     protected boolean _equals(ArraySchema that)
+     {
+         return equals(getAdditionalItems(), that.getAdditionalItems())
+                 && equals(getItems(), that.getItems())
+                 && equals(getMaxItems(), that.getMaxItems())
+                 && equals(getMinItems(), that.getMinItems())
+                 && equals(getUniqueItems(), that.getUniqueItems())
+                 && super._equals(that);
+     }
 	
 	/**
 	 * This provides a definition for additional items in an array instance
@@ -252,10 +251,7 @@ public class ArraySchema extends ContainerTypeSchema {
 		public SchemaAdditionalItems(JsonSchema schema) {
 			jsonSchema = schema;
 		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
+
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof SchemaAdditionalItems &&
@@ -280,10 +276,7 @@ public class ArraySchema extends ContainerTypeSchema {
 		public SingleItems(JsonSchema jsonSchema) {
 			this.jsonSchema = jsonSchema;
 		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
+
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof SingleItems &&
@@ -298,10 +291,7 @@ public class ArraySchema extends ContainerTypeSchema {
 		public void setSchema(JsonSchema jsonSchema) {
 		    this.jsonSchema = jsonSchema;
 		}
-		
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items#isSingleItems()
-		 */
+
 		@Override
 		public boolean isSingleItems() { return true; }
 		
@@ -311,5 +301,4 @@ public class ArraySchema extends ContainerTypeSchema {
 		@Override
 		public SingleItems asSingleItems() { return this; }
 	}
-
- }
+}

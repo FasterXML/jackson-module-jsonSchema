@@ -8,11 +8,9 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
@@ -83,33 +81,19 @@ public class ObjectSchema extends ContainerTypeSchema
 		return dependencies.add(new SimpleDependency(depender, dependsOn));
 	}
 
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asObjectSchema()
-	 */
+     @Override
+     public JsonFormatTypes getType() {
+           return JsonFormatTypes.OBJECT;
+     }
+
+     @Override
+     public boolean isObjectSchema() {
+          return true;
+     }
+
 	@Override
 	public ObjectSchema asObjectSchema() {
 		return this;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj)
- {
-		if ( obj == this )
-			return true;
-		if ( obj == null )
-			return false;
-		if ( !( obj instanceof ObjectSchema ) ) {
-			return false;
-		}
-		ObjectSchema that = (ObjectSchema) obj;
-		return equals(getAdditionalProperties(), that.getAdditionalProperties()) &&
-				equals(getDependencies(), that.getDependencies()) &&
-				equals(getPatternProperties(), that.getPatternProperties()) &&
-				equals(getProperties(), that.getProperties()) &&
-				super.equals(obj);
 	}
 
 	public AdditionalProperties getAdditionalProperties() {
@@ -126,16 +110,6 @@ public class ObjectSchema extends ContainerTypeSchema
 
 	public Map<String, JsonSchema> getProperties() {
 	    return properties;
-	}
-
-	@Override
-	public JsonFormatTypes getType() {
-           return JsonFormatTypes.OBJECT;
-	}
-
-	@Override
-	public boolean isObjectSchema() {
-		return true;
 	}
 
 	public void putOptionalProperty(BeanProperty property, JsonSchema jsonSchema) {
@@ -183,7 +157,25 @@ public class ObjectSchema extends ContainerTypeSchema
 	    this.properties = properties;
 	}
 
-        @JsonDeserialize(using = AdditionalPropertiesDeserializer.class)
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof ObjectSchema)) return false;
+         return _equals((ObjectSchema) obj);
+     }
+
+     protected boolean _equals(ObjectSchema that)
+     {
+         return equals(getAdditionalProperties(), that.getAdditionalProperties())
+                 && equals(getDependencies(), that.getDependencies())
+                 && equals(getPatternProperties(), that.getPatternProperties())
+                 && equals(getProperties(), that.getProperties()) 
+                 && super._equals(that);
+     }
+	
+	@JsonDeserialize(using = AdditionalPropertiesDeserializer.class)
 	public static abstract class AdditionalProperties {
 		@JsonCreator
 		public AdditionalProperties jsonCreator() {

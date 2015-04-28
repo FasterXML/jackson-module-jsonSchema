@@ -1,9 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
@@ -38,22 +36,6 @@ public class NumberSchema extends ValueTypeSchema
 
 	@Override
 	public NumberSchema asNumberSchema() { return this; }
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.ValueTypeSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof NumberSchema) {
-			NumberSchema that = (NumberSchema)obj;
-			return equals(getExclusiveMaximum(), that.getExclusiveMaximum()) &&
-				equals(getExclusiveMinimum(), that.getExclusiveMinimum()) &&
-				equals(getMaximum(), that.getMaximum()) &&
-				equals(getMinimum(), that.getMinimum()) &&
-				super.equals(obj);
-		}
-		return false;
-	} 
 
 	public Boolean getExclusiveMaximum() {
 		return exclusiveMaximum;
@@ -98,4 +80,23 @@ public class NumberSchema extends ValueTypeSchema
 	public void setMinimum(Double minimum) {
 	    this.minimum = minimum;
 	}
+
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof NumberSchema)) return false;
+         return _equals((NumberSchema) obj);
+     }
+
+     protected boolean _equals(NumberSchema that)
+     {
+         return equals(getExclusiveMaximum(), that.getExclusiveMaximum()) &&
+                 equals(getExclusiveMinimum(), that.getExclusiveMinimum()) &&
+                 equals(getMaximum(), that.getMaximum()) &&
+                 equals(getMinimum(), that.getMinimum()) &&
+                 super._equals(that);
+     } 
+
 }

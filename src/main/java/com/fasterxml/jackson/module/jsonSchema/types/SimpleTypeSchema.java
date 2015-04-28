@@ -88,6 +88,6 @@ public abstract class SimpleTypeSchema extends JsonSchema
                 && equals(getTitle(), that.getTitle())
                 && equals(getPathStart(), that.getPathStart())
                 && arraysEqual(getLinks(), that.getLinks())
-                && super.equals(that);
+                && super._equals(that);
     }
 }

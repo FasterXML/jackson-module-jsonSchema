@@ -150,7 +150,7 @@ public abstract class JsonSchema
 
     /**
      * This attribute indicates if the instance is not modifiable.
-     * This is false by defaul, making the instance modifiable.
+     * This is false by default, making the instance modifiable.
      */
     @JsonProperty
     private Boolean readonly = null;

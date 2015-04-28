@@ -10,18 +10,16 @@ import java.lang.annotation.Annotation;
  * This class represents the HyperSchema portion of a {@link JsonSchema}
  * It is a skeleton intended as a starting point for customization.
  * @author jphelan
- *
  */
-public class HyperSchema extends JsonSchema {
-	
-	
+public class HyperSchema extends JsonSchema
+{
 	/**
 	 * This attribute indicates that the instance property SHOULD NOT be
 	   changed.  Attempts by a user agent to modify the value of this
 	   property are expected to be rejected by a server.
 	 */
 	@JsonProperty
-	private String readOnly;
+	protected String readOnly;
 	
 	/**
 	 * If the instance property value is a string, this attribute defines
@@ -30,9 +28,8 @@ public class HyperSchema extends JsonSchema {
 	   [RFC2045] lists the possible values for this property.
 	 */
 	@JsonProperty
-	private String contentEncoding;
-	
-	
+	protected String contentEncoding;
+
 	/**
 	 * This attribute is a URI that defines what the instance's URI MUST
 	   start with in order to validate.  The value of the "pathStart"
@@ -50,14 +47,14 @@ public class HyperSchema extends JsonSchema {
 	   the instances for which it is referenced.
 	 */
 	@JsonProperty
-	private String pathStart;
+	protected String pathStart;
 	
 	/**
 	 * This attribute defines the media type of the instance representations
 		that this jsonSchema is defining.
 	 */
 	@JsonProperty
-	private String mediaType;
+	protected String mediaType;
 	
 	/**
 	 * This property indicates the fragment resolution protocol to use for
@@ -73,7 +70,7 @@ public class HyperSchema extends JsonSchema {
 	   document.
 	 */
 	@JsonProperty
-	private String fragmentResolution;
+	protected String fragmentResolution;
 	/**
 	 * 6.2.1.  slash-delimited fragment resolution
 
@@ -137,9 +134,34 @@ public class HyperSchema extends JsonSchema {
 	*/
 	
 	@JsonProperty
-	private LinkDescriptionObject[] links;
+	protected LinkDescriptionObject[] links;
 
-	/**
+     @Override
+     public JsonFormatTypes getType() {
+          return null;
+     }
+
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof HyperSchema)) return false;
+         return _equals((HyperSchema) obj);
+     }
+
+     protected boolean _equals(HyperSchema that)
+     {
+         return equals(readOnly, that.readOnly)
+                 && equals(contentEncoding, that.contentEncoding)
+                 && equals(pathStart, that.pathStart)
+                 && equals(mediaType, that.mediaType)
+                 && equals(fragmentResolution, that.fragmentResolution)
+                 && arraysEqual(links, that.links)
+                 && super._equals(that);
+     }
+
+     /**
 	 *  A link description object is used to describe link relations.  In the
 	   context of a jsonSchema, it defines the link relations of the instances
 	   of the jsonSchema, and can be parameterized by the instance values.  The
@@ -148,8 +170,8 @@ public class HyperSchema extends JsonSchema {
 	   normative link description jsonSchema as the the jsonSchema for the data
 	   structure that uses the links.
 	 */
-	public static class LinkDescriptionObject {
-
+	public static class LinkDescriptionObject
+	{
 		/**
 		 * The value of the "href" link description property indicates the
 		   target URI of the related resource.  The value of the instance
@@ -185,7 +207,7 @@ public class HyperSchema extends JsonSchema {
 
 		 */
 		@JsonProperty
-		private String href;
+		protected String href;
 
 		/**
 		 * The value of the "rel" property indicates the name of the relation to
@@ -278,14 +300,14 @@ public class HyperSchema extends JsonSchema {
 		   "/Resource/?upId=thing".
 		 */
 		@JsonProperty
-		private String rel;
+		protected String rel;
 
 		/**
 		 * This property value is a jsonSchema that defines the expected structure
 			of the JSON representation of the target of the link.
 		 */
 		@JsonProperty
-		private JsonSchema targetSchema;
+		protected JsonSchema targetSchema;
 
 		/**
 		 * This attribute defines which method can be used to access the target
@@ -295,7 +317,7 @@ public class HyperSchema extends JsonSchema {
 		   defined here).  This defaults to "GET".
 		 */
 		@JsonProperty
-		private String method;
+		protected String method;
 
 		/**
 		 *  If present, this property indicates a query media type format that
@@ -328,7 +350,7 @@ public class HyperSchema extends JsonSchema {
 		   "application/json" is the default media type.
 		 */
 		@JsonProperty
-		private String enctype;
+		protected String enctype;
 
 		/**
 		 * This attribute contains a jsonSchema which defines the acceptable
@@ -337,20 +359,35 @@ public class HyperSchema extends JsonSchema {
 		   request, this would define the body).
 		 */
 		@JsonProperty
-		private JsonSchema jsonSchema;
+		protected JsonSchema jsonSchema;
 
+		public LinkDescriptionObject(Annotation link) { }
 
-        public LinkDescriptionObject(Annotation link) {
+	     @Override
+	     public boolean equals(Object obj)
+	     {
+	         if (obj == this) return true;
+	         if (obj == null) return false;
+	         if (!(obj instanceof HyperSchema)) return false;
+	         return _equals((LinkDescriptionObject) obj);
+	     }
 
-        }
+	     protected boolean _equals(LinkDescriptionObject that)
+	     {
+	         return equals(href, that.href)
+	                 && equals(rel, that.rel)
+                      && equals(targetSchema, that.targetSchema)
+                      && equals(method, that.method)
+                      && equals(enctype, that.enctype)
+                      && equals(jsonSchema, that.jsonSchema)
+	                 ;
+	     }
 
-	}
-
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
-	 */
-	@Override
-	public JsonFormatTypes getType() {
-		return null;
+	     protected static boolean equals(Object object1, Object object2) {
+	          if (object1 == null) {
+	              return object2 == null;
+	          }
+	          return object1.equals(object2);
+	     }
 	}
 }

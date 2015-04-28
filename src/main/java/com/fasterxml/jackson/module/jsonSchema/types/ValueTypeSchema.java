@@ -22,7 +22,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	   (Section 5.15).
 	 */
 	@JsonProperty(value = "enum")
-	private Set<String> enums = new LinkedHashSet<String>();
+	protected Set<String> enums = new LinkedHashSet<String>();
 	
 	/**
 	 * This property defines the type of data, content type, or microformat to
@@ -37,7 +37,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	 * expressed as an URI, and this URI MAY reference a schema of that
 	 */
 	@JsonProperty
-	private JsonValueFormat format;
+	protected JsonValueFormat format;
 
 	@Override
 	public ValueTypeSchema asValueSchemaSchema() { return this; }

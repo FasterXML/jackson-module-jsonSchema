@@ -11,7 +11,8 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  * Array and Object
  * @author jphelan
  */
-public abstract class ContainerTypeSchema extends SimpleTypeSchema {
+public abstract class ContainerTypeSchema extends SimpleTypeSchema
+{
 	/**
 	 * This provides an enumeration of all possible values that are valid
 	   for the instance property.  This MUST be an array, and each item in
@@ -22,7 +23,7 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	   (Section 5.15).
 	 */
 	@JsonProperty(value = "enum", required = true)
-	private Set<String> enums = Collections.emptySet();
+	protected Set<String> enums = Collections.emptySet();
 
 	/**
 	 * This provides an enumeration of all possible values that are valid
@@ -34,27 +35,10 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	 (Section 5.15).
 	 */
 	@JsonProperty(value = "oneOf", required = true)
-	private Set<Object> oneOf = Collections.emptySet();
+	protected Set<Object> oneOf = Collections.emptySet();
 
-	/* (non-Javadoc)
-         * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asContainerSchema()
-         */
 	@Override
 	public ContainerTypeSchema asContainerSchema() { return this; }
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.SimpleTypeSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-	    if (obj == this) return true;
-	    if (obj instanceof ContainerTypeSchema) {
-			ContainerTypeSchema that = (ContainerTypeSchema)obj;
-			return equals(getEnums(), that.getEnums()) &&
-				super.equals(obj);
-	    }
-	    return false;
-	} 
 
 	public Set<String> getEnums() {
 	    return enums;
@@ -74,4 +58,19 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema {
 	public void setOneOf(Set<Object> oneOf) {
 		this.oneOf = oneOf;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+	    if (obj == this) return true;
+	    if (obj == null) return false;
+	    if (!(obj instanceof ContainerTypeSchema)) return false;
+	    return _equals((ContainerTypeSchema) obj);
+	}
+    
+	protected boolean _equals(ContainerTypeSchema that)
+	{
+	    return equals(getOneOf(), that.getOneOf())
+	            && super._equals(that);
+     } 
 }

@@ -18,46 +18,45 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 public class UnionTypeSchema extends JsonSchema {
 
 	@JsonProperty
-	private ValueTypeSchema[] elements;
+	protected ValueTypeSchema[] elements;
 
-	@Override
+     @Override
+     public boolean isUnionTypeSchema() {
+          return true;
+     }
+
+     @Override
 	public UnionTypeSchema asUnionTypeSchema() {
 		return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof UnionTypeSchema) {
-			UnionTypeSchema that = (UnionTypeSchema) obj;
-			return equals(getElements(), that.getElements()) && 
-				super.equals(obj);
-		} else {
-			return false;
-		}
-	}
-
+     @Override
+     public JsonFormatTypes getType() {
+         // Hmmh. What should be returned here?
+         return null;
+     }
+     
 	public ValueTypeSchema[] getElements() {
 		return elements;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
-	 */
-	@Override
-	public JsonFormatTypes getType() {
-		return null;
-	}
-	
-	@Override
-	public boolean isUnionTypeSchema() {
-		return true;
 	}
 
 	public void setElements(ValueTypeSchema[] elements) {
 		assert elements.length >= 2 : "Union Type Schemas must contain two or more Simple Type Schemas";
 		this.elements = elements;
 	}
+
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof UnionTypeSchema)) return false;
+         return _equals((UnionTypeSchema) obj);
+     }
+
+     protected boolean _equals(UnionTypeSchema that)
+     {
+         return arraysEqual(getElements(), that.getElements())
+                 && super._equals(that);
+     }
 }

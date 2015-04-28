@@ -1,5 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.*;
@@ -21,6 +22,7 @@ public class TestReadJsonSchema
         YES, NO;
     }
 
+    @JsonPropertyOrder(alphabetic=true)
     static class SchemableBasic
     {
         public SchemaEnum testEnum;

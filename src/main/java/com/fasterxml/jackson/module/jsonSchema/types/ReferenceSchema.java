@@ -12,10 +12,19 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class ReferenceSchema extends SimpleTypeSchema
 {
+    @JsonProperty
+    protected String $ref;
+
     public ReferenceSchema(String ref) {
         this.$ref = ref;
     }
 
+    @Override
+    @JsonIgnore
+    public JsonFormatTypes getType() {
+        return JsonFormatTypes.OBJECT;
+    }
+    
     @Override
     public String get$ref() {
         return $ref;
@@ -26,24 +35,18 @@ public class ReferenceSchema extends SimpleTypeSchema
         this.$ref = $ref;
     }
 
-    @JsonProperty
-    private String $ref;
-
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ReferenceSchema that = (ReferenceSchema) o;
-
-        if ($ref != null ? !$ref.equals(that.$ref) : that.$ref != null) return false;
-
-        return true;
+    public boolean equals(Object obj)
+    {
+        if (obj == this) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof ReferenceSchema)) return false;
+        return _equals((ReferenceSchema) obj);
     }
 
-    @Override
-    @JsonIgnore
-    public JsonFormatTypes getType() {
-        return JsonFormatTypes.OBJECT;
+    protected boolean _equals(ReferenceSchema that)
+    {
+        return equals($ref, that.$ref)
+                && super._equals(that);
     }
 }

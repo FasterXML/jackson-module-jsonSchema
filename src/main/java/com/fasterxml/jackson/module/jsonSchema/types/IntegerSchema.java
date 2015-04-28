@@ -39,14 +39,17 @@ public class IntegerSchema extends NumberSchema
      }
 
      @Override
-	public boolean equals(Object obj)
+     public boolean equals(Object obj)
      {
          if (obj == this) return true;
-         if (obj instanceof IntegerSchema) {
-			IntegerSchema that = (IntegerSchema)obj;
-			return equals(getDivisibleBy(), that.getDivisibleBy()) &&
-				super.equals(obj);
-         }
-         return false;
+         if (obj == null) return false;
+         if (!(obj instanceof IntegerSchema)) return false;
+         return _equals((IntegerSchema) obj);
+     }
+    
+     protected boolean _equals(IntegerSchema that)
+     {
+         return equals(getDivisibleBy(), that.getDivisibleBy())
+                 && super.equals(that);
 	} 
 }
