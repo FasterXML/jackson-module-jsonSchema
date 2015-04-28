@@ -17,6 +17,11 @@ Greg Adams (gadams00@github)
 #47: VisitorContext results in incomplete json schema output
  (2.4.4)
 
+StormeHawke@github:
+
+#57: Enum types should generate a schema that includes the possible enum values
+ (2.6.0)
+
 Izek Greenfield (igreenfield@github)
 
 #64: Add support to oneOf
@@ -27,9 +32,7 @@ Sebastien Briquet (sebfz1@github)
 #67: Unable to deserialize (extended/custom) Schema
  (2.6.0)
 
-
 David Semke (dsemke@github)
 
 #69: Add support for @Pattern annotations in String schemas
  (2.6.0)
-
