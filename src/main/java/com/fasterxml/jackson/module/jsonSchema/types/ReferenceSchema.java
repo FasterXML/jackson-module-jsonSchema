@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 /**
- * This type represents an JSON reference to a {@link JsonSchema}.
+ * This type represents an JSON reference to a {@link com.fasterxml.jackson.module.jsonSchema.JsonSchema}.
  * @author adb
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
-public class ReferenceSchema extends SimpleTypeSchema {
-
+public class ReferenceSchema extends SimpleTypeSchema
+{
     public ReferenceSchema(String ref) {
         this.$ref = ref;
     }

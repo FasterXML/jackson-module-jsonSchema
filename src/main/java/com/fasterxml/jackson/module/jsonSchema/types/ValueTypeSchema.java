@@ -10,8 +10,8 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  * This class represents a {@link JsonSchema} 
  * A primitive type. 
  */
-public abstract class ValueTypeSchema extends SimpleTypeSchema {
-			
+public abstract class ValueTypeSchema extends SimpleTypeSchema
+{
 	/**
 	 * This provides an enumeration of all possible values that are valid
 	   for the instance property.  This MUST be an array, and each item in
@@ -38,26 +38,9 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	 */
 	@JsonProperty
 	private JsonValueFormat format;
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asValueSchemaSchema()
-	 */
+
 	@Override
 	public ValueTypeSchema asValueSchemaSchema() { return this; }
-
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ValueTypeSchema) {
-			ValueTypeSchema that = (ValueTypeSchema) obj;
-			return equals(getEnums(), that.getEnums()) &&
-					equals(getFormat(), that.getFormat()) &&
-					super.equals(obj);
-		}	
-		return false;
-	}
 
 	public Set<String> getEnums() {
 	    return enums;
@@ -77,4 +60,20 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema {
 	public void setFormat(JsonValueFormat format) {
 	    this.format = format;
 	}
+
+     @Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof ValueTypeSchema)) return false;
+         return _equals((ValueTypeSchema) obj);
+     }
+
+     protected boolean _equals(ValueTypeSchema that)
+     {
+         return equals(getFormat(), that.getFormat())
+                 && equals(getEnums(), that.getEnums())
+                 && super._equals(that);
+     }
 }

@@ -14,6 +14,7 @@ public class JsonSchemaGenerator
     /**
      * @deprecated Since 2.6
      */
+    @Deprecated
     protected final ObjectMapper _mapper;
 
     /**

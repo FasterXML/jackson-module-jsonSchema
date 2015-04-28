@@ -15,8 +15,9 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  * {@link JsonSchema} instances.
  * Note that to support custom types, you will need to sub-lcass this resolver
  * and override at least {@link #idFromValue(Object)}, {@link #idFromValueAndType(Object, Class)} and
- * {@link #typeFromId(String)} methods; as well as associate this resolver using
- * {@link JsonTypeInfo} annotation on all custom {@link JsonSchema} implementation classes.
+ * {@link #typeFromId} methods; as well as associate this resolver using
+ * {@link com.fasterxml.jackson.annotation.JsonTypeInfo} annotation on
+ * all custom {@link JsonSchema} implementation classes.
  */
 public class JsonSchemaIdResolver extends TypeIdResolverBase
 {

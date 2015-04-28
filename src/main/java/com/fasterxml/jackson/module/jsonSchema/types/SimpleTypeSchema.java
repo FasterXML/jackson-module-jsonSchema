@@ -6,54 +6,35 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  * This class encapsulates the functionality of {@link JsonSchema} simple types
  * @author jphelan
  */
-public abstract class SimpleTypeSchema extends JsonSchema {
-
+public abstract class SimpleTypeSchema extends JsonSchema
+{
 	/**
 	 * This attribute defines the default value of the instance when the
 	 * instance is undefined.
 	 */
-	private String defaultdefault;
+	protected String defaultdefault;
 
 	/**
 	 * This attribute is a string that provides a short description of the
 	 * instance property.
 	 */
-	private String title;
+	protected String title;
 
-    /**
-     * This attribute is a URI that defines what the instance's URI MUST start with in order to validate.
-     */
-    private String pathStart;
-
-    /**
-     * This attribute is a string that provides a links related to description of the
-     * instance property.
-     */
-    private LinkDescriptionObject[] links;
-
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#asSimpleTypeSchema()
+	/**
+	 * This attribute is a URI that defines what the instance's URI MUST start with in order to validate.
 	 */
+	protected String pathStart;
+
+	/**
+	 * This attribute is a string that provides a links related to description of the
+	 * instance property.
+	 */
+	protected LinkDescriptionObject[] links;
+
 	@Override
 	public SimpleTypeSchema asSimpleTypeSchema() {
 		return this;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof SimpleTypeSchema) {
-			SimpleTypeSchema that = (SimpleTypeSchema)obj;
-			return equals(getDefault(), that.getDefault()) &&
-				equals(getDescription(), that.getDescription()) &&
-				equals(getTitle(), that.getTitle()) &&
-				super.equals(obj);
-		} else {
-			return false;
-		}
-	} 
 
 	public String getDefault() {
 		return defaultdefault;
@@ -90,5 +71,23 @@ public abstract class SimpleTypeSchema extends JsonSchema {
 
     public void setPathStart(String pathStart) {
         this.pathStart = pathStart;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof SimpleTypeSchema)) return false;
+        return _equals((SimpleTypeSchema) obj);
+    }
+
+    protected boolean _equals(SimpleTypeSchema that)
+    {
+        return equals(getDefault(), that.getDefault())
+                && equals(getTitle(), that.getTitle())
+                && equals(getPathStart(), that.getPathStart())
+                && arraysEqual(getLinks(), that.getLinks())
+                && super.equals(that);
     }
 }

@@ -73,7 +73,20 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
 @JsonTypeIdResolver(JsonSchemaIdResolver.class)
 public abstract class JsonSchema
 {
-	/**
+    /**
+     * This attribute defines the current URI of this schema (this attribute is
+     * effectively a "self" link). This URI MAY be relative or absolute. If the
+     * URI is relative it is resolved against the current URI of the parent
+     * schema it is contained in. If this schema is not contained in any parent
+     * schema, the current URI of the parent schema is held to be the URI under
+     * which this schema was addressed. If id is missing, the current URI of a
+     * schema is defined to be that of the parent schema. The current URI of the
+     * schema is also used to construct relative references such as for $ref.
+     */
+    @JsonProperty
+    private String id;
+
+    /**
 	 * This attribute defines a URI of a schema that contains the full
 	 * representation of this schema. When a validator encounters this
 	 * attribute, it SHOULD replace the current schema with the schema
@@ -127,19 +140,6 @@ public abstract class JsonSchema
 	 * "extends":"http://json-schema.org/draft-03/schema" }
 	 */
 	private JsonSchema[] extendsextends;
-
-	/**
-	 * This attribute defines the current URI of this schema (this attribute is
-	 * effectively a "self" link). This URI MAY be relative or absolute. If the
-	 * URI is relative it is resolved against the current URI of the parent
-	 * schema it is contained in. If this schema is not contained in any parent
-	 * schema, the current URI of the parent schema is held to be the URI under
-	 * which this schema was addressed. If id is missing, the current URI of a
-	 * schema is defined to be that of the parent schema. The current URI of the
-	 * schema is also used to construct relative references such as for $ref.
-	 */
-	@JsonProperty
-	private String id;
 
 	/**
 	 * This attribute indicates if the instance must have a value, and not be
@@ -257,35 +257,11 @@ public abstract class JsonSchema
 		return null;
 	}
 
-	/**
-	 * A utility method allowing to easily chain calls to equals() on members
-	 * without taking any risk regarding the ternary operator precedence.
-	 *  
-	 * @return (object1 == null ? object2 == null : object1.equals(object2))
-	 */
-	protected static boolean equals(Object object1, Object object2) {
-		return (object1 == null ? object2 == null : object1.equals(object2));
-	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-	    if (obj == this) return true;
-	    if (obj == null) return false;
-	    if (!(obj instanceof JsonSchema)) return false;
-	    JsonSchema that = ((JsonSchema)obj);
-	    return equals(getType(), getType()) &&
-	    		equals(getRequired(), that.getRequired()) &&
-                equals(getReadonly(), that.getReadonly()) &&
-	    		equals(get$ref(), that.get$ref()) &&
-	    		equals(get$schema(), that.get$schema()) &&
-	    		equals(getDisallow(), that.getDisallow()) &&
-	    		equals(getExtends(), that.getExtends());
-	}
-	
-	public String get$ref() {
+     public String getId() {
+         return id;
+     }
+
+     public String get$ref() {
 		return $ref;
 	}
 
@@ -299,10 +275,6 @@ public abstract class JsonSchema
 
 	public JsonSchema[] getExtends() {
 		return extendsextends;
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public Boolean getRequired() {
@@ -488,25 +460,86 @@ public abstract class JsonSchema
 	 * @param format the format to expect
 	 * @return the schema verifying the given format
 	 */
-	public static JsonSchema minimalForFormat(JsonFormatTypes format) {
-		switch (format) {
-		case ARRAY:
-			return new ArraySchema();
-		case OBJECT:
-			return new ObjectSchema();
-		case BOOLEAN:
-			return new BooleanSchema();
-		case INTEGER:
-			return new IntegerSchema();
-		case NUMBER:
-			return new NumberSchema();
-		case STRING:
-			return new StringSchema();
-		case NULL:
-			return new NullSchema();
-
-		default:
-			return new AnySchema();
-		}
+	public static JsonSchema minimalForFormat(JsonFormatTypes format)
+	{
+	    if (format != null) {
+	        switch (format) {
+        		case ARRAY:
+        			return new ArraySchema();
+        		case OBJECT:
+        			return new ObjectSchema();
+        		case BOOLEAN:
+        			return new BooleanSchema();
+        		case INTEGER:
+        			return new IntegerSchema();
+        		case NUMBER:
+        			return new NumberSchema();
+        		case STRING:
+        			return new StringSchema();
+        		case NULL:
+        			return new NullSchema();
+        		case ANY:
+        		default:
+		    }
+	    }
+	    return new AnySchema();
 	}
+
+	@Override
+     public boolean equals(Object obj)
+     {
+         if (obj == this) return true;
+         if (obj == null) return false;
+         if (!(obj instanceof JsonSchema)) return false;
+         return _equals((JsonSchema) obj);
+     }
+         
+     protected boolean _equals(JsonSchema that)
+     {
+         return equals(getId(), getId())
+
+                 // 27-Apr-2015, tatu: Should not need to check type explicitly
+ //                 && equals(getType(), getType())
+                 && equals(getRequired(), that.getRequired())
+                 && equals(getReadonly(), that.getReadonly())
+                 && equals(get$ref(), that.get$ref())
+                 && equals(get$schema(), that.get$schema())
+                 && arraysEqual(getDisallow(), that.getDisallow())
+                 && arraysEqual(getExtends(), that.getExtends());
+     }
+
+     /**
+      * A utility method allowing to easily chain calls to equals() on members
+      * without taking any risk regarding the ternary operator precedence.
+      *  
+      * @return (object1 == null ? object2 == null : object1.equals(object2))
+      */
+     protected static boolean equals(Object object1, Object object2) {
+          if (object1 == null) {
+              return object2 == null;
+          }
+          return object1.equals(object2);
+     }
+
+     protected static <T> boolean arraysEqual(T[] arr1, T[] arr2) {
+         if (arr1 == null) {
+             return arr2 == null;
+         }
+         if (arr2 == null) {
+             return false;
+         }
+         int len = arr1.length;
+         if (len != arr2.length) {
+             return false;
+         }
+         for (int i = 0; i < len; ++i) {
+             T ob1 = arr1[i];
+             T ob2 = arr2[i];
+
+             if (!equals(ob1, ob2)) {
+                 return false;
+             }
+         }
+         return true;
+     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
@@ -62,6 +63,9 @@ public class TestReadJsonSchema
      */
 
     private final ObjectMapper MAPPER = new ObjectMapper();
+    {
+        MAPPER.enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+    }
 
     /**
      * Verifies that a simple schema that is serialized can be deserialized back
