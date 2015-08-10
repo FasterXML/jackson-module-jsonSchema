@@ -180,7 +180,7 @@ public class TestGenerateJsonSchema
 
     public void testGeneratingJsonSchemaWithFilters() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.setFilters(secretFilterProvider);
+        mapper.setFilterProvider(secretFilterProvider);
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
         JsonSchema jsonSchema = generator.generateSchema(FilteredBean.class);
         assertNotNull(jsonSchema);

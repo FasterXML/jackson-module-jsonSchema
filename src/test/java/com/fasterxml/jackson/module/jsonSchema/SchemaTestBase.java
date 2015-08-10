@@ -131,7 +131,7 @@ public abstract class SchemaTestBase
     }
 
     protected ObjectReader objectReader(Class<?> cls) {
-        return SHARED_MAPPER.reader(cls);
+        return SHARED_MAPPER.readerFor(cls);
     }
     
     /*
