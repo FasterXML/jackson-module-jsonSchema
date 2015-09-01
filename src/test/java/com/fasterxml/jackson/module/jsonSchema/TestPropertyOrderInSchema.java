@@ -82,7 +82,6 @@ public class TestPropertyOrderInSchema extends SchemaTestBase {
         ObjectMapper MAPPER = objectMapper();
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema jsonSchema = generator.generateSchema(Bean.class);
-        System.out.println(jsonSchema.asObjectSchema().getProperties().keySet());
         assertEquals(jsonSchema.asObjectSchema().getProperties().keySet().toString(), "[c, b, a]");
     }
     
@@ -90,7 +89,6 @@ public class TestPropertyOrderInSchema extends SchemaTestBase {
         final ObjectMapper MAPPER = objectMapper();
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema jsonSchema = generator.generateSchema(Bean2.class);
-        System.out.println(jsonSchema.asObjectSchema().getProperties().keySet());
         assertEquals(jsonSchema.asObjectSchema().getProperties().keySet().toString(), "[a, b, c]");
     }
 
