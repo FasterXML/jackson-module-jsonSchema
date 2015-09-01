@@ -19,12 +19,12 @@ public class TestReadJsonSchema
     extends SchemaTestBase
 {
     enum SchemaEnum {
-        NO,YES;
+        YES, NO;
     }
 
+    @JsonPropertyOrder(alphabetic=true)
     static class SchemableBasic
     {
-        public SchemaEnum testEnum;
         public String name;
         public JsonSerializable someSerializable;
     }
