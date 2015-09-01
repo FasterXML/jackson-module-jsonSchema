@@ -1,7 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import java.util.LinkedHashMap;
 
 /**
  * This type represents a {@link JsonSchema} as an object type
@@ -68,8 +68,8 @@ public class ObjectSchema extends ContainerTypeSchema
 	public ObjectSchema()
 	{
 		dependencies = new ArrayList<Dependency>();
-		patternProperties = new HashMap<String, JsonSchema>();
-		properties = new HashMap<String, JsonSchema>();
+		patternProperties = new LinkedHashMap<String, JsonSchema>();
+		properties = new LinkedHashMap<String, JsonSchema>();
 	}
 
 	public boolean addSchemaDependency(String depender, JsonSchema parentMustMatch) {
