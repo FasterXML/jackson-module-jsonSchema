@@ -25,7 +25,6 @@ public class TestReadJsonSchema
     @JsonPropertyOrder(alphabetic=true)
     static class SchemableBasic
     {
-        public SchemaEnum testEnum;
         public String name;
         public JsonSerializable someSerializable;
     }

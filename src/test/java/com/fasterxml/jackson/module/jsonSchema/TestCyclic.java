@@ -1,5 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 public class TestCyclic extends SchemaTestBase
 {
     // [Issue#4]
+    @JsonPropertyOrder({"next", "name"})
     public class Loop {
         public String name;
         public Loop next;
@@ -42,6 +44,9 @@ public class TestCyclic extends SchemaTestBase
             "\"properties\":{\"next\":{\"type\":\"object\"," +
             "\"$ref\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestCyclic:Loop\"}" +
             ",\"name\":{\"type\":\"string\"}}}";
+        
+        System.out.println(EXP);
+        System.out.println(json);
 
         assertEquals(aposToQuotes(EXP), json);
     }
