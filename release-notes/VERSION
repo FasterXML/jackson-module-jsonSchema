@@ -4,6 +4,12 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.6.2 (not yet released)
+
+#27: Object schema properties should adhere to `@JsonPropertyOrder` and
+  `@XmlType(propOrder)`
+ (requested by dmoebius, contributed by ignacio dva)
+
 2.6.1 (09-Aug-2015)
 
 No changes since 2.6.0

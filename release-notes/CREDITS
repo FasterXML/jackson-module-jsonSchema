@@ -36,3 +36,9 @@ David Semke (dsemke@github)
 
 #69: Add support for @Pattern annotations in String schemas
  (2.6.0)
+
+Ignacio del Valle Alles (idelvall@github)
+
+#27: Object schema properties should adhere to `@JsonPropertyOrder` and
+  `@XmlType(propOrder)`
+ (2.6.2)
