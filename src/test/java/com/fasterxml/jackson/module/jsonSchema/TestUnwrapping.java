@@ -1,10 +1,7 @@
-package com.fasterxml.jackson.module.jsonSchema.failing;
+package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import com.fasterxml.jackson.module.jsonSchema.SchemaTestBase;
 
 public class TestUnwrapping extends SchemaTestBase
 {
@@ -12,12 +9,11 @@ public class TestUnwrapping extends SchemaTestBase
     {
         public int age;
 
-        @JsonUnwrapped
+        @JsonUnwrapped(prefix="name.")
         public Name name;
     }
 
     static class Name {
-        @JsonUnwrapped(prefix="name.")
         public String first, last;
     }
 
@@ -37,9 +33,9 @@ public class TestUnwrapping extends SchemaTestBase
         String json = MAPPER.writeValueAsString(schema).replace('"', '\'');
         
 //System.err.println("JSON -> "+MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
-        String EXP = "{'type':'object','properties':{"
-        +"'name.last':{'type':'string'},'name.first':{'type':'string'},"
-        +"'age':{'type':'number','type':'integer'}}}";
+        String EXP = "{'type':'object'," +
+                     "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestUnwrapping:UnwrappingRoot'," +
+                     "'properties':{'age':{'type':'integer'},'name.first':{'type':'string'},'name.last':{'type':'string'}}}";
 
 System.err.println("EXP: "+EXP);
 System.err.println("ACT: "+json);
