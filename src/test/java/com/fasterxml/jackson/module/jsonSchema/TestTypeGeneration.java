@@ -1,10 +1,8 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
+
+import java.util.Date;
 
 public class TestTypeGeneration extends SchemaTestBase
 {
@@ -29,7 +27,7 @@ public class TestTypeGeneration extends SchemaTestBase
         String json = MAPPER.writeValueAsString(jsonSchema).replace('"', '\'');
         final String EXP = "{'type':'object'," +
                 "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestTypeGeneration:Issue14Bean'," +
-                "'properties':{'date':{'type':'integer','format':'UTC_MILLISEC'}}}";
+                "'properties':{'date':{'type':'integer','format':'utc-millisec'}}}";
         assertEquals(EXP, json);
     }
 

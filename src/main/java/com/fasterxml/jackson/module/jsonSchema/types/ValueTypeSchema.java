@@ -2,6 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
@@ -40,6 +41,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	 */
 	@JsonProperty
 	@JsonDeserialize(using = JsonValueFormatDeserializer.class)
+	@JsonSerialize(using = JsonValueFormatSerializer.class)
 	protected JsonValueFormat format;
 
 	@Override
