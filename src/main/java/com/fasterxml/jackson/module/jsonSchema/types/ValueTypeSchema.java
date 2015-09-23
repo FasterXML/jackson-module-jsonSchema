@@ -1,10 +1,12 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * This class represents a {@link JsonSchema} 
@@ -37,6 +39,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	 * expressed as an URI, and this URI MAY reference a schema of that
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonValueFormatDeserializer.class)
 	protected JsonValueFormat format;
 
 	@Override
