@@ -9,6 +9,7 @@ import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -130,29 +131,29 @@ public class TestReadJsonSchema
 
     public void _testSimple(Class<?> type) throws Exception
     {
+        // Create a schema
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
         MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(type), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
-        
+
         _testSimple(type.getSimpleName(), jsonSchema);
     }
 
-    public void _testSimple(String name, JsonSchema jsonSchema) throws Exception
-    {
-        String schemaStr = MAPPER.writeValueAsString(jsonSchema);
-        assertNotNull(schemaStr);
-        JsonSchema result = MAPPER.readValue(schemaStr, JsonSchema.class);
-        String resultStr = MAPPER.writeValueAsString(result);
-        JsonNode node = MAPPER.readTree(schemaStr);
-        JsonNode finalNode = MAPPER.readTree(resultStr);
+    private void _testSimple(String name, JsonSchema jsonSchema) throws java.io.IOException {
+        // Need to do this twice so that $ref schemas
+        JsonSchema reread = writeAndRead(jsonSchema);
+        JsonSchema rereadAgain = writeAndRead(reread);
 
-        String json1 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(node);
-        String json2 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(finalNode);
-        
-//        assertEquals(node, finalNode);
-        assertEquals("Schemas for " + name + " differ",
-                json1, json2);
+        assertEquals("Schemas for " + name + " differ", reread, rereadAgain);
+    }
+
+    private JsonSchema writeAndRead(JsonSchema jsonSchema) throws IOException {
+        String asString = MAPPER.writeValueAsString(jsonSchema);
+
+        assertNotNull(asString);
+
+        return MAPPER.readValue(asString, JsonSchema.class);
     }
 
     /**
