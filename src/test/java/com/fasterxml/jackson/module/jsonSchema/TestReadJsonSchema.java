@@ -10,9 +10,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
@@ -127,6 +125,18 @@ public class TestReadJsonSchema
         }
         
         _testSimple("SchemableArrays - additionalItems", jsonSchema);
+    }
+
+    static class SchemableEnumSet {
+        public EnumSet<SchemaEnum> testEnums;
+    }
+    static class SchemableEnumMap {
+        public EnumMap<SchemaEnum, List<String>> whatever;
+    }
+
+    public void testStructuredEnumTypes() throws Exception {
+        _testSimple(SchemableEnumSet.class);
+        _testSimple(SchemableEnumMap.class);
     }
 
     public void _testSimple(Class<?> type) throws Exception
