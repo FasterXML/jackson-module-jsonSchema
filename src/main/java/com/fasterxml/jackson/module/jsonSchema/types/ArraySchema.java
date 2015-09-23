@@ -1,14 +1,22 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+
+import java.io.IOException;
+import java.util.Map;
 
 /*
  * This attribute defines the allowed items in an instance array, and
@@ -27,6 +35,7 @@ public class ArraySchema extends ContainerTypeSchema
 	 * see {@link Items}
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = ItemsDeserializer.class)
 	protected ArraySchema.Items items;
 	
 	/**This attribute defines the maximum number of values in an array*/
@@ -133,6 +142,15 @@ public class ArraySchema extends ContainerTypeSchema
                  && equals(getUniqueItems(), that.getUniqueItems())
                  && super._equals(that);
      }
+
+	@Override
+	public String toString() {
+		try {
+			return new ObjectMapper().writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	/**
 	 * This provides a definition for additional items in an array instance
@@ -159,10 +177,14 @@ public class ArraySchema extends ContainerTypeSchema
 	public static class ArrayItems extends ArraySchema.Items {
 		@JsonProperty
 		private JsonSchema[] jsonSchemas;
-		
+
+		public ArrayItems(JsonSchema[] jsonSchemas) {
+			this.jsonSchemas = jsonSchemas;
+		}
+
 		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items#asArrayItems()
-		 */
+                 * @see com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items#asArrayItems()
+                 */
 		@Override
 		public ArrayItems asArrayItems() { return this; }
 		
@@ -189,6 +211,24 @@ public class ArraySchema extends ContainerTypeSchema
 		@Override
 		public boolean isArrayItems() { return true; }
 	}
+
+	public static class ItemsDeserializer extends JsonDeserializer<Items> {
+
+		@Override
+		public Items deserialize(JsonParser parser,
+								 DeserializationContext context) throws IOException, JsonProcessingException {
+			ObjectCodec mapper = parser.getCodec();
+			JsonNode node = parser.readValueAs(JsonNode.class);
+
+			if (node.isArray()) {
+				JsonSchema[] schemas = mapper.treeToValue(node, JsonSchema[].class);
+
+				return new ArrayItems(schemas);
+			}
+			else
+				return new SingleItems(mapper.treeToValue(node, JsonSchema.class));
+		}
+	}
 	
 	/**
 	 * This attribute defines the allowed items in an instance array, and
@@ -205,21 +245,6 @@ public class ArraySchema extends ContainerTypeSchema
 		
 		public SingleItems asSingleItems() { return null; }
 		public ArrayItems asArrayItems() { return null; }
-		
-		@JsonCreator
-		public static Items jsonCreator(Map<String,Object> props) {
-			//for now only support deserialization of singleItems
-			Object typeFound = props.get("type");
-			if (typeFound == null || ! (typeFound instanceof String)) {
-				return null;
-			}
-			String type = (String) typeFound;
-			JsonSchema schema = JsonSchema.minimalForFormat(JsonFormatTypes.forValue(type));
-			//KNOWN ISSUE: pending https://github.com/FasterXML/jackson-databind/issues/43
-			//only deserialize items as minimal schema for type
-			return new SingleItems(schema);
-		}
-		
 	}
 	
 	/**
