@@ -59,6 +59,12 @@ public class TestReadJsonSchema
 //        public ArrayList<CompoundProperty> basics2;
     }
 
+    static class GeneratesRef {
+        public CompoundProperty[] a;
+        // this property serializes as $ref to previous definition of CompoundProperty
+        public CompoundProperty[] b;
+    }
+
     static class SchemabeIterableOverObjects {
         public Iterable<Object> iterableOhYeahBaby;
     }
@@ -92,6 +98,10 @@ public class TestReadJsonSchema
 
     public void testReadListTypes() throws Exception {
         _testSimple(SchemabeLists.class);
+    }
+
+    public void testReadArray$ref() throws Exception {
+        _testSimple(GeneratesRef.class);
     }
 
     public void testReadIterables() throws Exception {
