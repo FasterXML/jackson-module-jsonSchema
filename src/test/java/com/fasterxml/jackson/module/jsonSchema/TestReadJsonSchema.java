@@ -2,15 +2,16 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.util.*;
-
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
@@ -29,6 +30,11 @@ public class TestReadJsonSchema
         public JsonSerializable someSerializable;
     }
 
+    @JsonPropertyOrder(alphabetic=true)
+    static class CompoundProperty {
+        public String a, b;
+    }
+
     static class SchemableArrays
     {
         public char[] nameBuffer;
@@ -41,12 +47,16 @@ public class TestReadJsonSchema
         public float[] floats;
         public double[] doubles;
         public Object[] objects;
+        public CompoundProperty[] basics;
     }
 
     static class SchemabeLists
     {
         public ArrayList<String> extra2;
         public List<String> extra;
+        public List<CompoundProperty> basics;
+        // TODO this generates a $ref which can't be read
+//        public ArrayList<CompoundProperty> basics2;
     }
 
     static class SchemabeIterableOverObjects {
