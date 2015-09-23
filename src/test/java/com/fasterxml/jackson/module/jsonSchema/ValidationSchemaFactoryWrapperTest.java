@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -250,14 +251,14 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     private Object[][] numberTestData() {
         return new Object[][] {{"numberWithoutConstraints", null, null},
-                {"numberWithMin", 5d, null},
-                {"numberWithDecimalMin", 5.5, null},
-                {"numberWithMax", null, 6d},
-                {"numberWithDecimalMax", null, 6.5},
-                {"numberWithMinAndMax", 7d, 8d},
-                {"numberWithMinAndDecimalMax", 9d, 9.5},
-                {"numberWithDecimalMinAndMax", 10.5, 11d},
-                {"numberWithDecimalMinAndDecimalMax", 11.5, 12.5}};
+                {"numberWithMin", new BigDecimal(5d), null},
+                {"numberWithDecimalMin", new BigDecimal(5.5), null},
+                {"numberWithMax", null, new BigDecimal(6d)},
+                {"numberWithDecimalMax", null, new BigDecimal(6.5)},
+                {"numberWithMinAndMax", new BigDecimal(7d), new BigDecimal(8d)},
+                {"numberWithMinAndDecimalMax", new BigDecimal(9d), new BigDecimal(9.5)},
+                {"numberWithDecimalMinAndMax", new BigDecimal(10.5), new BigDecimal(11d)},
+                {"numberWithDecimalMinAndDecimalMax", new BigDecimal(11.5), new BigDecimal(12.5)}};
     }
 
     private Object[][] stringTestData() {

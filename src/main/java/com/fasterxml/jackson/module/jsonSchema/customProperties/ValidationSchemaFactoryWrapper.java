@@ -14,6 +14,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 import com.fasterxml.jackson.module.jsonSchema.validation.AnnotationConstraintResolver;
 import com.fasterxml.jackson.module.jsonSchema.validation.ValidationConstraintResolver;
 
+import java.math.BigDecimal;
+
 /**
  * @author cponomaryov
  */
@@ -75,8 +77,10 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
             arraySchema.setMinItems(constraintResolver.getArrayMinItems(prop));
         } else if (schema.isNumberSchema()) {
             NumberSchema numberSchema = schema.asNumberSchema();
-            numberSchema.setMaximum(constraintResolver.getNumberMaximum(prop));
-            numberSchema.setMinimum(constraintResolver.getNumberMinimum(prop));
+            Double max = constraintResolver.getNumberMaximum(prop);
+            numberSchema.setMaximum(maybeBigDecimal(max));
+            Double min = constraintResolver.getNumberMinimum(prop);
+            numberSchema.setMinimum(maybeBigDecimal(min));
         } else if (schema.isStringSchema()) {
             StringSchema stringSchema = schema.asStringSchema();
             stringSchema.setMaxLength(constraintResolver.getStringMaxLength(prop));
@@ -84,6 +88,13 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
             stringSchema.setPattern(constraintResolver.getStringPattern(prop));
         }
         return schema;
+    }
+
+    private BigDecimal maybeBigDecimal(Double value) {
+        if (value == null)
+            return null;
+        else
+            return new BigDecimal(value);
     }
 
 }
