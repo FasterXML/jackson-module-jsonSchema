@@ -37,8 +37,20 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema
 	@JsonProperty(value = "oneOf", required = true)
 	protected Set<Object> oneOf = Collections.emptySet();
 
+	/**
+	 * @deprecated Since 2.7
+	 */
+	@Deprecated
 	@Override
-	public ContainerTypeSchema asContainerSchema() { return this; }
+	public ContainerTypeSchema asContainerSchema() {
+		return asContainerTypeSchema();
+	}
+
+	/**
+	 * @since 2.7
+	 */
+	@Override
+	public ContainerTypeSchema asContainerTypeSchema() { return this; }
 
 	public Set<String> getEnums() {
 	    return enums;

@@ -186,10 +186,20 @@ public abstract class JsonSchema
 	}
 
 	/**
+	 * @deprecated Since 2.7
+	 */
+	@Deprecated
+	public ContainerTypeSchema asContainerSchema() {
+		return asContainerTypeSchema();
+	}
+
+	/**
 	 * Attempt to return this JsonSchema as a {@link ContainerTypeSchema}
 	 * @return this as an ContainerTypeSchema if possible, or null otherwise
+	 *
+	 * @since 2.7
 	 */
-	public ContainerTypeSchema asContainerSchema() {
+	public ContainerTypeSchema asContainerTypeSchema() {
 		return null;
 	}
 
@@ -250,10 +260,20 @@ public abstract class JsonSchema
 	}
 
 	/**
+	 * @deprecated Since 2.7
+	 */
+	@Deprecated
+	public ValueTypeSchema asValueSchemaSchema() {
+		return asValueTypeSchema();
+	}
+
+	/**
 	 * Attempt to return this JsonSchema as a {@link ValueTypeSchema}
 	 * @return this as a ValueTypeSchema if possible, or null otherwise
+	 *
+	 * @since 2.7
 	 */
-	public ValueTypeSchema asValueSchemaSchema() {
+	public ValueTypeSchema asValueTypeSchema() {
 		return null;
 	}
 
