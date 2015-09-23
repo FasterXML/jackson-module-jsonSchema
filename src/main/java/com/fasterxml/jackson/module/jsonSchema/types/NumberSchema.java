@@ -108,6 +108,7 @@ public class NumberSchema extends ValueTypeSchema
                  equals(getExclusiveMinimum(), that.getExclusiveMinimum()) &&
                  equals(getMaximum(), that.getMaximum()) &&
                  equals(getMinimum(), that.getMinimum()) &&
+                 equals(getMultipleOf(), that.getMultipleOf()) &&
                  super._equals(that);
      }
 }
