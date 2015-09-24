@@ -29,10 +29,14 @@ public class NumberSchema extends ValueTypeSchema
 	/**This attribute defines the maximum value of the instance property*/
 	@JsonProperty
 	private Double maximum = null;
-	
+
 	/**This attribute defines the minimum value of the instance property*/
 	@JsonProperty
 	private Double minimum = null;
+
+	/** The value of the instance needs to be a multiple of this attribute */
+	@JsonProperty
+	private Double multipleOf = null;
 
 	@Override
 	public NumberSchema asNumberSchema() { return this; }
@@ -51,6 +55,10 @@ public class NumberSchema extends ValueTypeSchema
 
 	public Double getMinimum() {
 		return minimum;
+	}
+
+	public Double getMultipleOf() {
+		return multipleOf;
 	}
 	
 	/* (non-Javadoc)
@@ -81,6 +89,10 @@ public class NumberSchema extends ValueTypeSchema
 	    this.minimum = minimum;
 	}
 
+	public void setMultipleOf(Double multipleOf) {
+		this.multipleOf = multipleOf;
+	}
+
      @Override
      public boolean equals(Object obj)
      {
@@ -96,7 +108,7 @@ public class NumberSchema extends ValueTypeSchema
                  equals(getExclusiveMinimum(), that.getExclusiveMinimum()) &&
                  equals(getMaximum(), that.getMaximum()) &&
                  equals(getMinimum(), that.getMinimum()) &&
+                 equals(getMultipleOf(), that.getMultipleOf()) &&
                  super._equals(that);
-     } 
-
+     }
 }
