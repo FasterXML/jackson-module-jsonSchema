@@ -4,6 +4,11 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.7.0 (not yet released)
+
+#80: Support NumberFormat#multipleOf
+ (contributed by George F)
+
 2.6.2 (15-Sep-2015)
 
 #27: Object schema properties should adhere to `@JsonPropertyOrder` and

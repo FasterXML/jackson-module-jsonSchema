@@ -42,3 +42,9 @@ Ignacio del Valle Alles (idelvall@github)
 #27: Object schema properties should adhere to `@JsonPropertyOrder` and
   `@XmlType(propOrder)`
  (2.6.2)
+
+George W Fraser (georgewfraser@github)
+
+#80: Support NumberFormat#multipleOf
+ (2.7.0)
+
