@@ -1,13 +1,10 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import java.util.*;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * This class represents a {@link JsonSchema} 
@@ -38,10 +35,11 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	 * 
 	 * Additional custom formats MAY be created. These custom formats MAY be
 	 * expressed as an URI, and this URI MAY reference a schema of that
+	 *<p>
+	 * NOTE: serialization of `format` was fixed in Jackson 2.7; requires at least
+	 * this version of databind
 	 */
 	@JsonProperty
-	@JsonDeserialize(using = JsonValueFormatDeserializer.class)
-	@JsonSerialize(using = JsonValueFormatSerializer.class)
 	protected JsonValueFormat format;
 
 	/**

@@ -8,6 +8,8 @@ Project: jackson-module-jsonSchema
 
 #80: Support NumberFormat#multipleOf
  (contributed by George F)
+#81: Deserialize `ArrayItems` and `JsonValueFormat` correctly
+ (contributed by George F)
 
 2.6.2 (15-Sep-2015)
 
