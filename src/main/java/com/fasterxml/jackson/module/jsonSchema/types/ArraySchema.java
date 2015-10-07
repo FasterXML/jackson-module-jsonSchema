@@ -1,21 +1,18 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-
 import java.io.IOException;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.core.*;
+
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /*
  * This attribute defines the allowed items in an instance array, and
@@ -29,22 +26,22 @@ public class ArraySchema extends ContainerTypeSchema
 	 */
 	@JsonProperty
 	protected ArraySchema.AdditionalItems additionalItems;
-	
+
 	/**
 	 * see {@link Items}
 	 */
 	@JsonProperty
 	@JsonDeserialize(using = ItemsDeserializer.class)
 	protected ArraySchema.Items items;
-	
+
 	/**This attribute defines the maximum number of values in an array*/
 	@JsonProperty
 	protected Integer maxItems;
-	
+
 	/**This attribute defines the minimum number of values in an array*/
 	@JsonProperty
 	protected Integer minItems;
-	
+
 	/**
 	 * This attribute indicates that all items in an array instance MUST be
 	   unique (contains no two identical values).
@@ -172,15 +169,9 @@ public class ArraySchema extends ContainerTypeSchema
 			this.jsonSchemas = jsonSchemas;
 		}
 
-		/* (non-Javadoc)
-                 * @see com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items#asArrayItems()
-                 */
 		@Override
 		public ArrayItems asArrayItems() { return this; }
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof Items) {
@@ -194,38 +185,40 @@ public class ArraySchema extends ContainerTypeSchema
 		public JsonSchema[] getJsonSchemas() {
 		    return jsonSchemas;
 		}
-		
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items#isArrayItems()
-		 */
+
 		@Override
 		public boolean isArrayItems() { return true; }
 	}
 
-	public static class ItemsDeserializer extends JsonDeserializer<Items> {
+    public static class ItemsDeserializer extends StdDeserializer<Items>
+    {
+        private static final long serialVersionUID = 1L;
 
-		@Override
-		public Items deserialize(JsonParser parser,
-								 DeserializationContext context) throws IOException, JsonProcessingException {
-			ObjectCodec mapper = parser.getCodec();
-			JsonNode node = parser.readValueAs(JsonNode.class);
+        public ItemsDeserializer() {
+            super(Items.class);
+        }
 
-			if (node.isArray()) {
-				JsonSchema[] schemas = mapper.treeToValue(node, JsonSchema[].class);
+        @Override
+        public Items deserialize(JsonParser parser,
+                DeserializationContext context) throws IOException
+        {
+            // 07-Oct-2015, tatu: Could further optimize by fetching delegating
+            //     deserializer in `createContextual`, but should do for now
+            if (parser.isExpectedStartArrayToken()) {
+                JsonSchema[] schemas = context.readValue(parser, JsonSchema[].class);
+                return new ArrayItems(schemas);
+            }
+            JsonSchema schema = context.readValue(parser, JsonSchema.class);
+            return new SingleItems(schema);
+        }
+    }
 
-				return new ArrayItems(schemas);
-			}
-			else
-				return new SingleItems(mapper.treeToValue(node, JsonSchema.class));
-		}
-	}
-	
-	/**
-	 * This attribute defines the allowed items in an instance array, and
+    /**
+     * This attribute defines the allowed items in an instance array, and
 	   MUST be a jsonSchema or an array of jsonSchemas.  The default value is an
 	   empty jsonSchema which allows any value for items in the instance array.
-	 */
-	public static abstract class Items {
+     */
+    public static abstract class Items {
 		
 		@JsonIgnore
 		public boolean isSingleItems() { return false; }
@@ -242,10 +235,6 @@ public class ArraySchema extends ContainerTypeSchema
    		to indicate additional items in the array are not allowed
 	 */
 	public static class NoAdditionalItems extends AdditionalItems {
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof NoAdditionalItems;
