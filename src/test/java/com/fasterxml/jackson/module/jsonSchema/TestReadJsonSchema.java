@@ -2,15 +2,15 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import java.util.*;
-
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
@@ -29,6 +29,11 @@ public class TestReadJsonSchema
         public JsonSerializable someSerializable;
     }
 
+    @JsonPropertyOrder(alphabetic=true)
+    static class CompoundProperty {
+        public String a, b;
+    }
+
     static class SchemableArrays
     {
         public char[] nameBuffer;
@@ -41,12 +46,22 @@ public class TestReadJsonSchema
         public float[] floats;
         public double[] doubles;
         public Object[] objects;
+        public CompoundProperty[] basics;
     }
 
     static class SchemabeLists
     {
         public ArrayList<String> extra2;
         public List<String> extra;
+        public List<CompoundProperty> basics;
+        // TODO this generates a $ref which can't be read
+//        public ArrayList<CompoundProperty> basics2;
+    }
+
+    static class GeneratesRef {
+        public CompoundProperty[] a;
+        // this property serializes as $ref to previous definition of CompoundProperty
+        public CompoundProperty[] b;
     }
 
     static class SchemabeIterableOverObjects {
@@ -84,6 +99,10 @@ public class TestReadJsonSchema
         _testSimple(SchemabeLists.class);
     }
 
+    public void testReadArray$ref() throws Exception {
+        _testSimple(GeneratesRef.class);
+    }
+
     public void testReadIterables() throws Exception {
         _testSimple(SchemabeIterableOverObjects.class);
     }
@@ -108,31 +127,43 @@ public class TestReadJsonSchema
         _testSimple("SchemableArrays - additionalItems", jsonSchema);
     }
 
+    static class SchemableEnumSet {
+        public EnumSet<SchemaEnum> testEnums;
+    }
+    static class SchemableEnumMap {
+        public EnumMap<SchemaEnum, List<String>> whatever;
+    }
+
+    public void testStructuredEnumTypes() throws Exception {
+        _testSimple(SchemableEnumSet.class);
+        _testSimple(SchemableEnumMap.class);
+    }
+
     public void _testSimple(Class<?> type) throws Exception
     {
+        // Create a schema
         SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
         MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(type), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
-        
+
         _testSimple(type.getSimpleName(), jsonSchema);
     }
 
-    public void _testSimple(String name, JsonSchema jsonSchema) throws Exception
-    {
-        String schemaStr = MAPPER.writeValueAsString(jsonSchema);
-        assertNotNull(schemaStr);
-        JsonSchema result = MAPPER.readValue(schemaStr, JsonSchema.class);
-        String resultStr = MAPPER.writeValueAsString(result);
-        JsonNode node = MAPPER.readTree(schemaStr);
-        JsonNode finalNode = MAPPER.readTree(resultStr);
+    private void _testSimple(String name, JsonSchema jsonSchema) throws java.io.IOException {
+        // Need to do this twice so that $ref schemas
+        JsonSchema reread = writeAndRead(jsonSchema);
+        JsonSchema rereadAgain = writeAndRead(reread);
 
-        String json1 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(node);
-        String json2 = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(finalNode);
-        
-//        assertEquals(node, finalNode);
-        assertEquals("Schemas for " + name + " differ",
-                json1, json2);
+        assertEquals("Schemas for " + name + " differ", reread, rereadAgain);
+    }
+
+    private JsonSchema writeAndRead(JsonSchema jsonSchema) throws IOException {
+        String asString = MAPPER.writeValueAsString(jsonSchema);
+
+        assertNotNull(asString);
+
+        return MAPPER.readValue(asString, JsonSchema.class);
     }
 
     /**

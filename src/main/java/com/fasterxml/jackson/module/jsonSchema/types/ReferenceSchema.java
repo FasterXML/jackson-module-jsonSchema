@@ -1,6 +1,5 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
@@ -9,7 +8,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
  * This type represents an JSON reference to a {@link com.fasterxml.jackson.module.jsonSchema.JsonSchema}.
  * @author adb
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public class ReferenceSchema extends SimpleTypeSchema
 {
     @JsonProperty
@@ -20,7 +19,6 @@ public class ReferenceSchema extends SimpleTypeSchema
     }
 
     @Override
-    @JsonIgnore
     public JsonFormatTypes getType() {
         return JsonFormatTypes.OBJECT;
     }

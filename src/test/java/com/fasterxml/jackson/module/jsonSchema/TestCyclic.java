@@ -2,6 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,7 @@ public class TestCyclic extends SchemaTestBase
         String json = MAPPER.writeValueAsString(schema);
         String EXP = "{\"type\":\"object\"," +
             "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestCyclic:ListLoop\"," +
-            "\"properties\":{\"list\":{\"type\":\"array\",\"items\":{\"$ref\":\"" +
+            "\"properties\":{\"list\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"$ref\":\"" +
             "urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestCyclic:ListLoop\"}}}}";
 
         assertEquals(aposToQuotes(EXP), json);
@@ -73,7 +74,7 @@ public class TestCyclic extends SchemaTestBase
         String json = MAPPER.writeValueAsString(schema);
         String EXP = "{\"type\":\"object\"," +
              "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestCyclic:MapLoop\"," +
-             "\"properties\":{\"map\":{\"type\":\"object\",\"additionalProperties\":{" +
+             "\"properties\":{\"map\":{\"type\":\"object\",\"additionalProperties\":{\"type\":\"object\"," +
              "\"$ref\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestCyclic:MapLoop\"}}}}";
 
         assertEquals(aposToQuotes(EXP), json);
