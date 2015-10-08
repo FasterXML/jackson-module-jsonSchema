@@ -40,9 +40,6 @@ public class TestUnwrapping extends SchemaTestBase
         String EXP = "{'type':'object','properties':{"
         +"'name.last':{'type':'string'},'name.first':{'type':'string'},"
         +"'age':{'type':'number','type':'integer'}}}";
-
-System.err.println("EXP: "+EXP);
-System.err.println("ACT: "+json);
         
         assertEquals(EXP, json);
     }
