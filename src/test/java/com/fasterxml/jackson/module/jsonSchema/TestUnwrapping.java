@@ -36,10 +36,6 @@ public class TestUnwrapping extends SchemaTestBase
         String EXP = "{'type':'object'," +
                      "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestUnwrapping:UnwrappingRoot'," +
                      "'properties':{'age':{'type':'integer'},'name.first':{'type':'string'},'name.last':{'type':'string'}}}";
-
-System.err.println("EXP: "+EXP);
-System.err.println("ACT: "+json);
-        
         assertEquals(EXP, json);
     }
 }

@@ -45,10 +45,6 @@ public class TestCyclic extends SchemaTestBase
             "\"properties\":{\"next\":{\"type\":\"object\"," +
             "\"$ref\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestCyclic:Loop\"}" +
             ",\"name\":{\"type\":\"string\"}}}";
-        
-        System.out.println(EXP);
-        System.out.println(json);
-
         assertEquals(aposToQuotes(EXP), json);
     }
 
