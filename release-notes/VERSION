@@ -11,6 +11,10 @@ Project: jackson-module-jsonSchema
 #81: Deserialize `ArrayItems` and `JsonValueFormat` correctly
  (contributed by George F)
 
+2.6.3 (12-Oct-2015)
+
+No changes since 2.6.2
+
 2.6.2 (15-Sep-2015)
 
 #27: Object schema properties should adhere to `@JsonPropertyOrder` and
