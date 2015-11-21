@@ -33,7 +33,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         </developer>
   </developers>
   <properties>
-    <version.jackson.annotations>2.6.0</version.jackson.annotations>
+    <version.jackson.annotations>2.7.0-rc1</version.jackson.annotations>
     <version.jackson.core>2.7.0-SNAPSHOT</version.jackson.core>
     <osgi.export>${project.groupId}.jsonSchema.*</osgi.export>
   </properties>

@@ -19,13 +19,8 @@ public class TestJDKTypes extends SchemaTestBase
         schema = generator.generateSchema(Long.class);
         assertEquals("{\"type\":\"integer\"}", MAPPER.writeValueAsString(schema));
 
-        /* 07-Nov-2014, tatu: Won't work correctly before 2.5, due to various things; will work
-         *    with 2.5. Uncomment then.
-         */
-        /*
         schema = generator.generateSchema(BigInteger.class);
         assertEquals("{\"type\":\"integer\"}", MAPPER.writeValueAsString(schema));
-        */
 
         schema = generator.generateSchema(Double.class);
         assertEquals("{\"type\":\"number\"}", MAPPER.writeValueAsString(schema));
