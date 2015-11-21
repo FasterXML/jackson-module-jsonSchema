@@ -68,7 +68,7 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
         // JSON Schema only allows String types so let's not bother too much
     }
 
-   @Override
+    @Override
     public void valueFormat(JsonFormatVisitable handler, JavaType valueType)
             throws JsonMappingException {
 

@@ -263,6 +263,7 @@ public class TestGenerateJsonSchema
      /* Tests cases, error detection/handling
      /**********************************************************
      */
+
     public void testInvalidCall() throws Exception {
         // not ok to pass null
         try {
