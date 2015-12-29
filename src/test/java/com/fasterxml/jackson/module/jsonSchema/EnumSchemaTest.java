@@ -1,10 +1,9 @@
-package com.fasterxml.jackson.module.jsonSchema.failing;
+package com.fasterxml.jackson.module.jsonSchema;
 
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.TestBase;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;

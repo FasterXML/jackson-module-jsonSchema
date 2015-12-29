@@ -6,6 +6,8 @@ Project: jackson-module-jsonSchema
 
 2.7.0 (not yet released)
 
+#77: Schema with enum array - when deserialized, the enum values are lost
+ (reported by Jakub N)
 #80: Support NumberFormat#multipleOf
  (contributed by George F)
 #81: Deserialize `ArrayItems` and `JsonValueFormat` correctly

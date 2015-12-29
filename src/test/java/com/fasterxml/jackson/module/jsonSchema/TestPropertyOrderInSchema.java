@@ -1,7 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.MapperFeature;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

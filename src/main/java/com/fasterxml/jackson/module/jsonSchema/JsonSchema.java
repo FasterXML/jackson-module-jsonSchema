@@ -161,6 +161,8 @@ public abstract class JsonSchema
      */
     private String description;
 
+    protected JsonSchema() { }
+
     /**
 	 * Attempt to return this JsonSchema as an {@link AnySchema}
 	 * @return this as an AnySchema if possible, or null otherwise

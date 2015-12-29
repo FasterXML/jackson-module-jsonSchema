@@ -48,3 +48,7 @@ George W Fraser (georgewfraser@github)
 #80: Support NumberFormat#multipleOf
  (2.7.0)
 
+Jakub Neubauer (jakubneubauer@github)
+
+#77: Schema with enum array - when deserialized, the enum values are lost
+ (2.7.0)
