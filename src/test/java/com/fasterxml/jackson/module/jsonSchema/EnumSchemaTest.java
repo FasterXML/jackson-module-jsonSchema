@@ -27,7 +27,7 @@ public class EnumSchemaTest extends TestBase
 
         // serialize schema:
         String serializedSchema = mapper.writeValueAsString(schema);
-        System.out.println("Schema1: " + serializedSchema);
+//        System.out.println("Schema1: " + serializedSchema);
         assertTrue(serializedSchema.contains("FOO"));
 
         // deserialize the schema
