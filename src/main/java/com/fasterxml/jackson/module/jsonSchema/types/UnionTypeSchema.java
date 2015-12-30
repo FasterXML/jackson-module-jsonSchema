@@ -10,13 +10,11 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
       item in the array MUST be a simple type definition or a schema.
       The instance value is valid if it is of the same type as one of
       the simple type definitions, or valid by one of the schemas, in
-      the array."
 
  * @author jphelan
- *
  */
-public class UnionTypeSchema extends JsonSchema {
-
+public class UnionTypeSchema extends JsonSchema
+{
 	@JsonProperty
 	protected ValueTypeSchema[] elements;
 
@@ -30,9 +28,13 @@ public class UnionTypeSchema extends JsonSchema {
 		return this;
 	}
 
+     // Important: This is the Type Id, as defined by base class `JsonSchema`
      @Override
      public JsonFormatTypes getType() {
-         // Hmmh. What should be returned here?
+         // 29-Dec-2015, tatu: As per [module-jsonSchema#90], can not return null.
+         //  ... but, alas, there is no real suitable value to return. Just can not
+         //  be null; but if not null, will result in wrong deserialization.
+//         return JsonFormatTypes.UNION;
          return null;
      }
      
@@ -41,7 +43,9 @@ public class UnionTypeSchema extends JsonSchema {
 	}
 
 	public void setElements(ValueTypeSchema[] elements) {
-		assert elements.length >= 2 : "Union Type Schemas must contain two or more Simple Type Schemas";
+	    if (elements.length < 2) {
+	        throw new IllegalArgumentException("Union Type Schemas must contain two or more Simple Type Schemas");
+	    }
 		this.elements = elements;
 	}
 
