@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.TestBase;
 
+// for [module-jsonSchema#89]
 public class MapTest extends TestBase
 {
     static class MapBean {
@@ -30,7 +31,7 @@ public class MapTest extends TestBase
 
     private final ObjectMapper MAPPER = new ObjectMapper();
 
-    public void testSimpleMaps() throws Exception
+    public void testSimpleMapKeyType89() throws Exception
     {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema schema;
