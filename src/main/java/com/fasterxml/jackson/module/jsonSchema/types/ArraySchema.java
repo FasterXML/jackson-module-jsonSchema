@@ -1,7 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
 import java.io.IOException;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -80,10 +79,7 @@ public class ArraySchema extends ContainerTypeSchema
 	public Integer getMinItems() {
 	    return minItems;
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.fasterxml.jackson.databind.jsonSchema.types.JsonSchema#getType()
-	 */
+
 	@Override
 	public JsonFormatTypes getType() {
 	    return JsonFormatTypes.ARRAY;
@@ -141,17 +137,11 @@ public class ArraySchema extends ContainerTypeSchema
 	
 	/**
 	 * This provides a definition for additional items in an array instance
-   when tuple definitions of the items is provided.
+	 * when tuple definitions of the items is provided.
 	 */
 	@JsonDeserialize(using = AdditionalItemsDeserializer.class)
 	public static abstract class AdditionalItems {
-		
-		@JsonCreator
-		public static Items jsonCreator(Map<String,Object> props) {
-			// not implemented for jsonSchema
-			return null;
-			//KNOWN ISSUE: pending https://github.com/FasterXML/jackson-databind/issues/43
-		}
+	    // simple marker class, deserializer and concrete impl have all functionality
 	}
 	
 	/**
@@ -298,10 +288,7 @@ public class ArraySchema extends ContainerTypeSchema
 
 		@Override
 		public boolean isSingleItems() { return true; }
-		
-		/* (non-Javadoc)
-		 * @see com.fasterxml.jackson.databind.jsonSchema.types.ArraySchema.Items#asSingleItems()
-		 */
+
 		@Override
 		public SingleItems asSingleItems() { return this; }
 	}

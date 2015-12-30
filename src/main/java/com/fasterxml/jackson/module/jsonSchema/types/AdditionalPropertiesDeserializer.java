@@ -15,42 +15,37 @@
  */
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.*;
+
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+
 /**
- *
  * @author Ignacio del Valle Alles
  */
-public class AdditionalPropertiesDeserializer extends JsonDeserializer<ObjectSchema.AdditionalProperties> {
-
+public class AdditionalPropertiesDeserializer
+    extends JsonDeserializer<ObjectSchema.AdditionalProperties>
+{
     @Override
-    public ObjectSchema.AdditionalProperties deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        ObjectMapper mapper = (ObjectMapper) jp.getCodec();
-        TreeNode node = mapper.readTree(jp);
-        String nodeStr = mapper.writeValueAsString(node);
-        if (node instanceof ObjectNode) {
-            JsonSchema innerSchema = mapper.readValue(nodeStr, JsonSchema.class);
-            return new ObjectSchema.SchemaAdditionalProperties(innerSchema);
-        } else if (node instanceof BooleanNode) {
-            BooleanNode booleanNode = (BooleanNode) node;
-            if (booleanNode.booleanValue()) {
+    public ObjectSchema.AdditionalProperties deserialize(JsonParser p, DeserializationContext ctxt) throws IOException
+    {
+        if (p.hasCurrentToken()) {
+            switch (p.getCurrentTokenId()) {
+            case JsonTokenId.ID_TRUE:
                 return null; // "additionalProperties":true is the default
-            } else {
+            case JsonTokenId.ID_FALSE:
                 return ObjectSchema.NoAdditionalProperties.instance;
+            case JsonTokenId.ID_START_OBJECT:
+            case JsonTokenId.ID_FIELD_NAME:
+            case JsonTokenId.ID_END_OBJECT:
+                // 29-Dec-2015, tatu: may need/want to use property value reader in future but for now:
+                JsonSchema innerSchema = ctxt.readValue(p, JsonSchema.class);
+                return new ObjectSchema.SchemaAdditionalProperties(innerSchema);
             }
-        } else {
-            throw new JsonMappingException("additionalProperties nodes can only be of "
-                    + "type boolean or object: " + nodeStr);
         }
+        throw new JsonMappingException("additionalProperties nodes can only be of "
+                + "type boolean or object, got token of type: "+p.getCurrentToken());
     }
 }

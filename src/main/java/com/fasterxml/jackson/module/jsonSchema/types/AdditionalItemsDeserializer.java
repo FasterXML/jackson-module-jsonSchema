@@ -3,15 +3,13 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
+import com.fasterxml.jackson.core.JsonTokenId;
+
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+
 import com.fasterxml.jackson.module.jsonSchema.types.AdditionalPropertiesDeserializer;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 
@@ -21,24 +19,23 @@ import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 public class AdditionalItemsDeserializer extends JsonDeserializer<ArraySchema.AdditionalItems>
 {
 	@Override
-	public ArraySchema.AdditionalItems deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException
+	public ArraySchema.AdditionalItems deserialize(JsonParser p, DeserializationContext ctxt) throws IOException
 	{
-	    TreeNode node = jp.readValueAsTree();
-		
-		if (node instanceof ObjectNode) {
-		    // not clean, but has to do...
-	          ObjectMapper mapper = (ObjectMapper) jp.getCodec();
-			JsonSchema innerSchema = mapper.treeToValue(node, JsonSchema.class);
-			return new ArraySchema.SchemaAdditionalItems(innerSchema);
-		}
-		if (node instanceof BooleanNode) {
-			BooleanNode booleanNode = (BooleanNode) node;
-			if (booleanNode.booleanValue()) {
-				return null; // "additionalItems":true is the default
-			}
-			return new ArraySchema.NoAdditionalItems();
-		}
-		throw new JsonMappingException("additionalItems nodes can only be of "
-		        + "type Boolean or Object; instead found something starting with token " + node.asToken());
+	    if (p.hasCurrentToken()) {
+	        switch (p.getCurrentTokenId()) {
+	        case JsonTokenId.ID_TRUE:
+	            return null; // "additionalItems":true is the default
+	        case JsonTokenId.ID_FALSE:
+	            return new ArraySchema.NoAdditionalItems();
+	        case JsonTokenId.ID_START_OBJECT:
+	        case JsonTokenId.ID_FIELD_NAME:
+	        case JsonTokenId.ID_END_OBJECT:
+	            // 29-Dec-2015, tatu: may need/want to use property value reader in future but for now:
+	            JsonSchema innerSchema = ctxt.readValue(p, JsonSchema.class);
+	            return new ArraySchema.SchemaAdditionalItems(innerSchema);
+	        }
+	    }
+	    throw new JsonMappingException("additionalItems nodes can only be of "
+	            + "type boolean or object, got token of type: "+p.getCurrentToken());
 	}
 }

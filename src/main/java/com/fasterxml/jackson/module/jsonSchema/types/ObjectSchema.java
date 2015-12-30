@@ -177,17 +177,16 @@ public class ObjectSchema extends ContainerTypeSchema
 	
 	@JsonDeserialize(using = AdditionalPropertiesDeserializer.class)
 	public static abstract class AdditionalProperties {
-		@JsonCreator
-		public AdditionalProperties jsonCreator() {
-			//KNOWN ISSUE: pending https://github.com/FasterXML/jackson-databind/issues/43
-			return null;
-		}
+         // simple marker class, deserializer and concrete impl have all functionality
 	}
 
 	public static abstract class Dependency {
+         // simple marker class, deserializer and concrete impl have all functionality
 		@JsonCreator
 		public Dependency jsonCreator() {
 			//KNOWN ISSUE: pending https://github.com/FasterXML/jackson-databind/issues/43
+		    /* 29-Dec-2015, tatu: ... very unlikely above will be implemented anytime soon...
+		     */
 			return null;
 		}
 	}
@@ -195,12 +194,8 @@ public class ObjectSchema extends ContainerTypeSchema
 	public static class NoAdditionalProperties extends AdditionalProperties {
 		public final Boolean schema = false;
 
-		protected NoAdditionalProperties() {
-		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
+		protected NoAdditionalProperties() { }
+
 		@Override
 		public boolean equals(Object obj) {
 			return obj instanceof NoAdditionalProperties;
@@ -215,18 +210,15 @@ public class ObjectSchema extends ContainerTypeSchema
 	}
 
         
-	public static class SchemaAdditionalProperties extends AdditionalProperties {
-
+	public static class SchemaAdditionalProperties extends AdditionalProperties
+	{
 		@JsonProperty
 		private JsonSchema jsonSchema;
 
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
 		@Override
 		public boolean equals(Object obj) {
-			return obj instanceof SchemaAdditionalProperties &&
-					JsonSchema.equals(getJsonSchema(), ((SchemaAdditionalProperties)obj).getJsonSchema());
+			return (obj instanceof SchemaAdditionalProperties)
+			        && JsonSchema.equals(getJsonSchema(), ((SchemaAdditionalProperties)obj).getJsonSchema());
 		}
 
 		@JsonValue
@@ -255,19 +247,15 @@ public class ObjectSchema extends ContainerTypeSchema
 			this.depender = depender;
 			this.parentMustMatch = parentMustMatch;
 		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof SchemaDependency) {
 				SchemaDependency that = (SchemaDependency) obj;
 				return JsonSchema.equals(getDepender(), that.getDepender()) &&
 					JsonSchema.equals(getParentMustMatch(), that.getParentMustMatch());
-			} else {
-				return false;
 			}
+			return false;
 		}
 
 		public String getDepender() {
@@ -298,19 +286,15 @@ public class ObjectSchema extends ContainerTypeSchema
 			this.depender = depender;
 			this.dependsOn = dependsOn;
 		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Object#equals(java.lang.Object)
-		 */
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof SchemaDependency) {
 				SimpleDependency that = (SimpleDependency) obj;
 				return JsonSchema.equals(getDepender(), that.getDepender()) &&
 					JsonSchema.equals(getDependsOn(), that.getDependsOn());
-			} else {
-				return false;
 			}
+			return false;
 		}
 
 		public String getDepender() {
