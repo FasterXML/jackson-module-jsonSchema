@@ -33,8 +33,8 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         </developer>
   </developers>
   <properties>
-    <version.jackson.annotations>2.7.0-rc2</version.jackson.annotations>
-    <version.jackson.core>2.7.0-rc3-SNAPSHOT</version.jackson.core>
+    <version.jackson.annotations>2.7.0-rc3</version.jackson.annotations>
+    <version.jackson.core>2.7.0-rc3</version.jackson.core>
   </properties>
 
   <dependencies>
