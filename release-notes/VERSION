@@ -4,7 +4,7 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
-2.7.0 (not yet released)
+2.7.0 (10-Jan-2016)
 
 #77: Schema with enum array - when deserialized, the enum values are lost
  (reported by Jakub N)
