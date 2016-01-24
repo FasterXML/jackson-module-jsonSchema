@@ -51,7 +51,7 @@ Example:
          HyperSchemaFactoryWrapper personVisitor = new HyperSchemaFactoryWrapper();
          ObjectMapper mapper = new ObjectMapper();
          mapper.acceptJsonFormatVisitor(Person.class, personVisitor);
-         JsonSchema personSchema = personVisitor.finalSchema();`
+         JsonSchema personSchema = personVisitor.finalSchema();
 
 By default all default values for Link Description Object are ignored in the output (method = GET, enctype = application/json, mediaType = application/json), to enable default setIgnoreDefaults(true)
 
