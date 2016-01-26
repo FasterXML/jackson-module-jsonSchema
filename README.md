@@ -1,6 +1,6 @@
 # Jackson [JSON Schema](http://json-schema.org/) Module
 
-This module supports the creation of a json schema (roughly aligned with draft version 3) specifying the expected outfrom from a given jackson configured application for a given java type.
+This module supports the creation of a json schema (roughly aligned with draft version 3) specifying the expected output from a given jackson configured application for a given java type.
 This module is intended to be an upgrade path from the hardcoded JSON Schema generation 
 currently in jackson databind (pre 2.1), in order to allow for the generation of arbitrary formats specifying the expected output from a particular jackson enabled application. Thus, it might feasibly be extended or mirrored to produce xml or even google closure interfaces or classes in addition to the current json schema format. 
 
