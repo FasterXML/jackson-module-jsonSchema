@@ -1,12 +1,14 @@
 # Jackson [JSON Schema](http://json-schema.org/) Module
 
-This module supports the creation of a json schema (roughly aligned with draft version 3) specifying the expected outfrom from a given jackson configured application for a given java type.
+This module supports the creation of a json schema (roughly aligned with draft version 3) specifying the expected output from a given jackson configured application for a given java type.
 This module is intended to be an upgrade path from the hardcoded JSON Schema generation 
 currently in jackson databind (pre 2.1), in order to allow for the generation of arbitrary formats specifying the expected output from a particular jackson enabled application. Thus, it might feasibly be extended or mirrored to produce xml or even google closure interfaces or classes in addition to the current json schema format. 
 
 ## Status
 
 [![Build Status](https://travis-ci.org/FasterXML/jackson-module-jsonSchema.svg)](https://travis-ci.org/FasterXML/jackson-module-jsonSchema)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.module/jackson-module-jsonSchema/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.module/jackson-module-jsonSchema/)
+[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.module/jackson-module-jsonSchema/badge.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.module/jackson-module-jsonSchema)
 
 Version 2.1 of this module is the first functioning version; but significant changes are possible for 2.2.
 This module is very new, and 2.2 is expected to be the first fully stable release.
@@ -49,7 +51,7 @@ Example:
          HyperSchemaFactoryWrapper personVisitor = new HyperSchemaFactoryWrapper();
          ObjectMapper mapper = new ObjectMapper();
          mapper.acceptJsonFormatVisitor(Person.class, personVisitor);
-         JsonSchema personSchema = personVisitor.finalSchema();`
+         JsonSchema personSchema = personVisitor.finalSchema();
 
 By default all default values for Link Description Object are ignored in the output (method = GET, enctype = application/json, mediaType = application/json), to enable default setIgnoreDefaults(true)
 
