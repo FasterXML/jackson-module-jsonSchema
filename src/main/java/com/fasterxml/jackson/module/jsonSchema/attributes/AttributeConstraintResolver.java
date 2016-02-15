@@ -16,6 +16,8 @@ public interface AttributeConstraintResolver {
 
 //	String getFormat(BeanProperty prop);
 
+	String getValidationMessage(BeanProperty prop);
+	
 	Boolean getRequired(BeanProperty prop);
 
 	Boolean getReadonly(BeanProperty prop);

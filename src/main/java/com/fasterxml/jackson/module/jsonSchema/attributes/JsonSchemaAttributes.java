@@ -20,6 +20,8 @@ public @interface JsonSchemaAttributes {
 	String pattern() default "";
 
 //	String format() default "";
+	
+	String validationMessage() default "";
 
 	boolean required() default false;
 

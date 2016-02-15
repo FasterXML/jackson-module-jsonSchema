@@ -139,6 +139,9 @@ public class JsonSchemaFactoryWrapper extends SchemaFactoryWrapper {
 		String title = constraintResolver.getTitle(prop);
 		if (title != null) { schema.setTitle(title); }
 		
+		String validationMessage = constraintResolver.getValidationMessage(prop);
+		if (validationMessage != null) { schema.setValidationMessage(validationMessage); }
+		
 		return schema;
 	}
 }

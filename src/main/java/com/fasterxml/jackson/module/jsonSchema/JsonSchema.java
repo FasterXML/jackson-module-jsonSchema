@@ -166,6 +166,12 @@ public abstract class JsonSchema
      */
     private String description;
 
+    /**
+     * This attribute is a validation message to be displayed when the contents of an editable representation
+     * of the property is invalid.
+     */
+    private String validationMessage;
+    
     protected JsonSchema() { }
 
     /**
@@ -318,6 +324,10 @@ public abstract class JsonSchema
     
     public String getDescription() {
         return description;
+    }
+    
+    public String getValidationMessage() {
+        return validationMessage;
     }
 
     @JsonIgnore
@@ -478,6 +488,10 @@ public abstract class JsonSchema
     
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public void setValidationMessage(String validationMessage) {
+        this.validationMessage = validationMessage;
     }
 
     /**

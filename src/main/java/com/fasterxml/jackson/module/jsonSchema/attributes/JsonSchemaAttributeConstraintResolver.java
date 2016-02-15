@@ -93,6 +93,21 @@ public class JsonSchemaAttributeConstraintResolver implements AttributeConstrain
 //			return ret;
 //		}
 //	}
+	
+	@Override
+	public String getValidationMessage(BeanProperty prop) {
+		JsonSchemaAttributes attrs = prop.getAnnotation(JsonSchemaAttributes.class);
+		if (attrs == null) {
+			return null;
+		}
+		
+		String ret = attrs.validationMessage();
+		if ("".equals(ret)) {
+			return null;
+		} else {
+			return ret;
+		}
+	}
 
 	@Override
 	public Boolean getRequired(BeanProperty prop) {
