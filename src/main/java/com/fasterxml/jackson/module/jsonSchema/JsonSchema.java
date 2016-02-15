@@ -156,6 +156,11 @@ public abstract class JsonSchema
     private Boolean readonly = null;
 
     /**
+     * This attribute is a string that provides a readable title for the instance property.
+     */
+    private String title;
+    
+    /**
      * This attribute is a string that provides a full description of the of
      * purpose the instance property.
      */
@@ -307,6 +312,10 @@ public abstract class JsonSchema
         return readonly;
     }
 
+    public String getTitle() {
+        return title;
+    }
+    
     public String getDescription() {
         return description;
     }
@@ -463,6 +472,10 @@ public abstract class JsonSchema
         this.readonly = readonly;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
     public void setDescription(String description) {
         this.description = description;
     }
