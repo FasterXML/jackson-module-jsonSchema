@@ -35,7 +35,7 @@ public @interface JsonSchemaAttributes {
 
 	boolean exclusiveMinimum() default false;
 	
-//	String[] enums() default {};
+	String[] enums() default {};
 
 	int minItems() default -1;
 

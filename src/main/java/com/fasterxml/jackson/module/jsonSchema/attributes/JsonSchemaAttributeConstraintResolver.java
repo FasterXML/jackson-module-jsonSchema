@@ -199,14 +199,20 @@ public class JsonSchemaAttributeConstraintResolver implements AttributeConstrain
 		}
 	}
 
-//	@Override
-//	public String[] getEnums(BeanProperty prop) {
-//		JsonSchemaAttributes attrs = prop.getAnnotation(JsonSchemaAttributes.class);
-//		if (attrs == null) {
-//			return null;
-//		} else {
-//		return attrs.enums();
-//	}
+	@Override
+	public String[] getEnums(BeanProperty prop) {
+		JsonSchemaAttributes attrs = prop.getAnnotation(JsonSchemaAttributes.class);
+		if (attrs == null) {
+			return null;
+		}
+		
+		String[] ret = attrs.enums();
+		if (ret.length == 0) {
+			return null;
+		} else {
+			return ret;
+		}
+	}
 
 	@Override
 	public Integer getMinItems(BeanProperty prop) {

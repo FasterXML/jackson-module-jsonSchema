@@ -1,5 +1,8 @@
 package com.fasterxml.jackson.module.jsonSchema.attributes;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -86,6 +89,9 @@ public class JsonSchemaFactoryWrapper extends SchemaFactoryWrapper {
 			
 			Boolean exclusiveMinimum = constraintResolver.getExclusiveMinimum(prop);
 			if (exclusiveMinimum != null) { numberSchema.setExclusiveMinimum(exclusiveMinimum); }
+
+			String[] enums = constraintResolver.getEnums(prop);
+			if (enums != null) { numberSchema.setEnums(new HashSet<String>(Arrays.asList(enums))); }
 			
 		} else if (schema.isStringSchema()) {
 
@@ -100,6 +106,9 @@ public class JsonSchemaFactoryWrapper extends SchemaFactoryWrapper {
 			String pattern = constraintResolver.getPattern(prop);
 			if (pattern != null) { stringSchema.setPattern(pattern); }
 			
+			String[] enums = constraintResolver.getEnums(prop);
+			if (enums != null) { stringSchema.setEnums(new HashSet<String>(Arrays.asList(enums))); }
+			
 		} else if (schema.isArraySchema()) {
 			
 			ArraySchema arraySchema = schema.asArraySchema();
@@ -113,12 +122,19 @@ public class JsonSchemaFactoryWrapper extends SchemaFactoryWrapper {
 			Boolean uniqueItems = constraintResolver.getUniqueItems(prop);
 			if (uniqueItems != null) { arraySchema.setUniqueItems(uniqueItems); }
 
+			String[] enums = constraintResolver.getEnums(prop);
+			if (enums != null) { arraySchema.setEnums(new HashSet<String>(Arrays.asList(enums))); }
+			
 		} else if (schema.isObjectSchema()) {
 		
 			ObjectSchema objectSchema = schema.asObjectSchema();
 			
 //			Boolean required = constraintResolver.getRequired(prop);
 //			if (required != null) { objectSchema.setRequired(required); }			
+
+			String[] enums = constraintResolver.getEnums(prop);
+			if (enums != null) { objectSchema.setEnums(new HashSet<String>(Arrays.asList(enums))); }
+			
 		}
 		
 		String schemaRef = constraintResolver.getSchemaRef(prop);

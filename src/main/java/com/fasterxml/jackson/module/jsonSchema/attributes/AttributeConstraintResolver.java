@@ -30,7 +30,7 @@ public interface AttributeConstraintResolver {
 
 	Boolean getExclusiveMinimum(BeanProperty prop);
 	
-//	String[] getEnums(BeanProperty prop);
+	String[] getEnums(BeanProperty prop);
 
 	Integer getMinItems(BeanProperty prop);
 
