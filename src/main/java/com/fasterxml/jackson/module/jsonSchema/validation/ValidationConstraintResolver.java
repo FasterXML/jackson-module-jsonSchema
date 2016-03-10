@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.BeanProperty;
 
 /**
  * @author cponomaryov
+ * 
+ * @since 2.5
  */
 public interface ValidationConstraintResolver {
 

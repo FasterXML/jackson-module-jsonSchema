@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 
 /**
  * @author cponomaryov
+ * 
+ * @since 2.5
  */
 public class AnnotationConstraintResolver implements ValidationConstraintResolver {
 
