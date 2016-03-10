@@ -72,4 +72,10 @@ public class AnnotationConstraintResolver implements ValidationConstraintResolve
         }
         return null;
     }
+
+    @Override
+    public Boolean getRequired(BeanProperty prop) {
+        NotNull notNull = prop.getAnnotation(NotNull.class);
+        return notNull != null ? true : null;
+    }
 }
