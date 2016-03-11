@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.types.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The type wraps the json schema specification at :
  * <a href="http://tools.ietf.org/id/draft-zyp-json-schema-03.txt"> Json JsonSchema
@@ -142,11 +145,12 @@ public abstract class JsonSchema
 	private JsonSchema[] extendsextends;
 
 	/**
-	 * This attribute indicates if the instance must have a value, and not be
-	 * undefined. This is false by default, making the instance optional.
+	 * This attribute enumerates names of child properties that must have a value,
+	 * and not be undefined.
+	 * This is null by default, making all child properties optional.
 	 */
 	@JsonProperty
-	private Boolean required = null;
+	private List<String> required = null;
 
     /**
      * This attribute indicates if the instance is not modifiable.
@@ -299,7 +303,7 @@ public abstract class JsonSchema
 		return extendsextends;
 	}
 
-	public Boolean getRequired() {
+	public List<String> getRequired() {
 		return required;
 	}
 
@@ -455,8 +459,15 @@ public abstract class JsonSchema
 		this.id = id;
 	}
 
-	public void setRequired(Boolean required) {
+	public void setRequired(List<String> required) {
 		this.required = required;
+	}
+
+	public void addRequired(String required) {
+		if (this.required == null) {
+			this.required = new ArrayList<>();
+		}
+		this.required.add(required);
 	}
 
     public void setReadonly(Boolean readonly){

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 import javax.validation.constraints.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -299,10 +300,10 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
                 {"stringWithoutConstraints", null}};
     }
 
-    private Object[][] notNullTestData() {
-        return new Object[][] {
-                {"nullable", null},
-                {"notNullable", true}};
+    private Object[][] requiredData() {
+        return new Object[][]{
+                {Collections.singletonList("notNullable")}
+        };
     }
 
     /**
@@ -350,10 +351,9 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
             StringSchema stringSchema = propertySchema.asStringSchema();
             assertEquals(testCase[1], stringSchema.getPattern());
         }
-        for (Object[] testCase : notNullTestData()) {
-            JsonSchema propertySchema = properties.get(testCase[0]);
-            assertNotNull(propertySchema);
-            assertEquals(testCase[1], propertySchema.getRequired());
+        for (Object[] testCase : requiredData()) {
+            List<String> required = jsonSchema.getRequired();
+            assertEquals(testCase[0], required);
         }
     }
 

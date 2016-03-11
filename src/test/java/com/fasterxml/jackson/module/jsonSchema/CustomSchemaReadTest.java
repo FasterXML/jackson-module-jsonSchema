@@ -42,7 +42,7 @@ public class CustomSchemaReadTest extends SchemaTestBase
     // [module-jsonSchema#67]
     public void testSchema() throws Exception
     {
-         String input = "{ \"type\" : \"CUSTOM\" , \"id\" : \"7a2e8538-196b-423e-b714-13515848ec0c\" , \"description\" : \"My Schema\" , \"title\" : \"my-json-schema\" , \"properties\" : { \"myarray\" : { \"type\" : \"array\" , \"required\" : true , \"title\" : \"my property #2\" , \"items\" : { \"type\" : \"string\"} , \"maxItems\" : 5} , \"mystring\" : { \"type\" : \"string\" , \"required\" : true , \"title\" : \"my property #1\" , \"format\" : \"regex\" , \"pattern\" : \"\\\\w+\"} , \"myobject\" : { \"type\" : \"object\" , \"required\" : true , \"title\" : \"my property #3\" , \"properties\" : { \"subprop\" : { \"type\" : \"string\" , \"required\" : true , \"title\" : \"sub property #1\" , \"format\" : \"regex\" , \"pattern\" : \"\\\\w{3}\"}}}}}";
+         String input = "{ \"type\" : \"CUSTOM\" , \"id\" : \"7a2e8538-196b-423e-b714-13515848ec0c\" , \"description\" : \"My Schema\" , \"title\" : \"my-json-schema\" , \"required\" : [\"myarray\", \"mystring\", \"myobject\"] , \"properties\" : { \"myarray\" : { \"type\" : \"array\" , \"title\" : \"my property #2\" , \"items\" : { \"type\" : \"string\"} , \"maxItems\" : 5} , \"mystring\" : { \"type\" : \"string\" , \"title\" : \"my property #1\" , \"format\" : \"regex\" , \"pattern\" : \"\\\\w+\"} , \"myobject\" : { \"type\" : \"object\" , \"title\" : \"my property #3\" , \"required\" : [\"subprop\"] , \"properties\" : { \"subprop\" : { \"type\" : \"string\" , \"title\" : \"sub property #1\" , \"format\" : \"regex\" , \"pattern\" : \"\\\\w{3}\"}}}}}";
 
          ObjectMapper mapper = new ObjectMapper();
 

@@ -173,7 +173,7 @@ public class TestGenerateJsonSchema
 
         JsonSchema prop5 = properties.get("property5");
         assertNotNull(prop5);
-        assertTrue(prop5.getRequired());
+        assertEquals(Collections.singletonList("property5"), object.getRequired());
         assertNull(prop5.getReadonly());
 
     }
@@ -207,7 +207,7 @@ public class TestGenerateJsonSchema
         // no need to check out full structure, just basics...
         assertEquals("object", result.get("type"));
         // only add 'required' if it is true...
-        assertNull(result.get("required"));
+        assertEquals(Collections.singletonList("property5"), result.get("required"));
         assertNotNull(result.get("properties"));
     }
 
