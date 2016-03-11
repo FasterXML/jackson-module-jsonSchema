@@ -7,58 +7,26 @@ import com.fasterxml.jackson.databind.BeanProperty;
  *
  * @author cponomaryov
  * 
- * @since 2.5
+ * @since 2.5 NOTE: changed from interface (2.5 - 2.7) to abstract class in 2.8
  */
-public interface ValidationConstraintResolver
+public abstract class ValidationConstraintResolver
 {
-    Integer getArrayMaxItems(BeanProperty prop);
+    public abstract Integer getArrayMaxItems(BeanProperty prop);
 
-    Integer getArrayMinItems(BeanProperty prop);
+    public abstract Integer getArrayMinItems(BeanProperty prop);
 
-    Double getNumberMaximum(BeanProperty prop);
+    public abstract Double getNumberMaximum(BeanProperty prop);
 
-    Double getNumberMinimum(BeanProperty prop);
+    public abstract Double getNumberMinimum(BeanProperty prop);
 
-    Integer getStringMaxLength(BeanProperty prop);
+    public abstract Integer getStringMaxLength(BeanProperty prop);
 
-    Integer getStringMinLength(BeanProperty prop);
+    public abstract Integer getStringMinLength(BeanProperty prop);
 
-    String getStringPattern(BeanProperty prop);
+    public abstract String getStringPattern(BeanProperty prop);
 
     /**
      * @since 2.7
      */
-    Boolean getRequired(BeanProperty prop);
-
-    /**
-     * Helper class that implements all methods, allowing convenient sub-classing,
-     * as well as insulates implementations from problems if methods are added
-     * in the interface.
-     */
-    public static class Base implements ValidationConstraintResolver
-    {
-        @Override
-        public Integer getArrayMaxItems(BeanProperty prop) { return null; }
-
-        @Override
-        public Integer getArrayMinItems(BeanProperty prop) { return null; }
-
-        @Override
-        public Double getNumberMaximum(BeanProperty prop) { return null; }
-
-        @Override
-        public Double getNumberMinimum(BeanProperty prop) { return null; }
-
-        @Override
-        public Integer getStringMaxLength(BeanProperty prop) { return null; }
-
-        @Override
-        public Integer getStringMinLength(BeanProperty prop) { return null; }
-
-        @Override
-        public String getStringPattern(BeanProperty prop) { return null; }
-
-        @Override
-        public  Boolean getRequired(BeanProperty prop) { return null; }
-    }
+    public abstract Boolean getRequired(BeanProperty prop);
 }

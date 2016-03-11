@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @since 2.5
  */
 public class AnnotationConstraintResolver
-    extends ValidationConstraintResolver.Base
+    extends ValidationConstraintResolver
 {
     private Integer getMaxSize(BeanProperty prop) {
         Size ann = getSizeAnnotation(prop);
