@@ -68,7 +68,13 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
         };
     }
 
-    private JsonSchema addValidationConstraints(JsonSchema schema, BeanProperty prop) {
+    protected JsonSchema addValidationConstraints(JsonSchema schema, BeanProperty prop) {
+        {
+            Boolean required = constraintResolver.getRequired(prop);
+            if (required != null) {
+                schema.setRequired(required);
+            }
+        }
         if (schema.isArraySchema()) {
             ArraySchema arraySchema = schema.asArraySchema();
             arraySchema.setMaxItems(constraintResolver.getArrayMaxItems(prop));

@@ -7,21 +7,32 @@ import java.math.BigDecimal;
 
 /**
  * @author cponomaryov
+ * 
+ * @since 2.5
  */
-public class AnnotationConstraintResolver implements ValidationConstraintResolver {
-
-    private Size getSizeAnnotation(BeanProperty prop) {
-        return prop.getAnnotation(Size.class);
-    }
-
+public class AnnotationConstraintResolver
+    extends ValidationConstraintResolver
+{
     private Integer getMaxSize(BeanProperty prop) {
-        Size sizeAnnotation = getSizeAnnotation(prop);
-        return sizeAnnotation != null && sizeAnnotation.max() != Integer.MAX_VALUE ? sizeAnnotation.max() : null;
+        Size ann = getSizeAnnotation(prop);
+        if (ann != null) {
+            int value = ann.max();
+            if (value != Integer.MAX_VALUE) {
+                return value;
+            }
+        }
+        return null;
     }
 
     private Integer getMinSize(BeanProperty prop) {
-        Size sizeAnnotation = getSizeAnnotation(prop);
-        return sizeAnnotation != null && sizeAnnotation.min() != 0 ? sizeAnnotation.min() : null;
+        Size ann = getSizeAnnotation(prop);
+        if (ann != null) {
+            int value = ann.min();
+            if (value != 0) {
+                return value;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -71,5 +82,15 @@ public class AnnotationConstraintResolver implements ValidationConstraintResolve
             return patternAnnotation.regexp();
         }
         return null;
+    }
+
+    @Override
+    public Boolean getRequired(BeanProperty prop) {
+        NotNull notNull = prop.getAnnotation(NotNull.class);
+        return notNull != null ? true : null;
+    }
+
+    private Size getSizeAnnotation(BeanProperty prop) {
+        return prop.getAnnotation(Size.class);
     }
 }

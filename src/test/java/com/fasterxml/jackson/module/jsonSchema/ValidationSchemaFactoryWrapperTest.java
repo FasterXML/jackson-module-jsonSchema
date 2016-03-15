@@ -90,6 +90,17 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         @Pattern(regexp = "[a-z]+")
         private String stringWithPattern;
 
+        /*
+        /**********************************************************
+        /* Nullable and not nullable fields
+        /**********************************************************
+        */
+
+        private String nullable;
+
+        @NotNull
+        private String notNullable;
+
         public List<String> getListWithoutConstraints() {
             return listWithoutConstraints;
         }
@@ -233,6 +244,22 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         public void setStringWithPattern(final String stringWithPattern) {
             this.stringWithPattern = stringWithPattern;
         }
+
+        public String getNullable() {
+            return nullable;
+        }
+
+        public void setNullable(String nullable) {
+            this.nullable = nullable;
+        }
+
+        public String getNotNullable() {
+            return notNullable;
+        }
+
+        public void setNotNullable(String notNullable) {
+            this.notNullable = notNullable;
+        }
     }
 
     /*
@@ -270,6 +297,12 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     private Object[][] stringPatternTestData() {
         return new Object[][] {{"stringWithPattern", "[a-z]+"},
                 {"stringWithoutConstraints", null}};
+    }
+
+    private Object[][] notNullTestData() {
+        return new Object[][] {
+                {"nullable", null},
+                {"notNullable", true}};
     }
 
     /**
@@ -316,6 +349,11 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
             assertTrue(propertySchema.isStringSchema());
             StringSchema stringSchema = propertySchema.asStringSchema();
             assertEquals(testCase[1], stringSchema.getPattern());
+        }
+        for (Object[] testCase : notNullTestData()) {
+            JsonSchema propertySchema = properties.get(testCase[0]);
+            assertNotNull(propertySchema);
+            assertEquals(testCase[1], propertySchema.getRequired());
         }
     }
 

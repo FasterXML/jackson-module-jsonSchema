@@ -47,5 +47,4 @@ public class MapTest extends TestBase
         
 //        assertEquals("{\"type\":\"integer\"}", json);
     }
-
 }
