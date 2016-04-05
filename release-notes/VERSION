@@ -19,6 +19,9 @@ No changes since 2.7.0
 #81: Deserialize `ArrayItems` and `JsonValueFormat` correctly
  (contributed by George F)
 
+2.6.6 (05-Apr-2016)
+2.6.5 (19-Jan-2016)
+2.6.4 (07-Dec-2015)
 2.6.3 (12-Oct-2015)
 
 No changes since 2.6.2
