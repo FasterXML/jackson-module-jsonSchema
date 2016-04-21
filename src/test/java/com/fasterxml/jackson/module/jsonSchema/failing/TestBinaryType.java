@@ -13,7 +13,7 @@ public class TestBinaryType extends SchemaTestBase
     /**
      * Test simple generation for simple/primitive numeric types
      */
-    public void testSimpleNumbers() throws Exception
+    public void testBinaryType() throws Exception
     {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema schema;
