@@ -27,14 +27,23 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
     private static class HyperSchemaFactoryWrapperFactory extends WrapperFactory {
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
-            SchemaFactoryWrapper wrapper = new HyperSchemaFactoryWrapper();
-            wrapper.setProvider(p);
-            return wrapper;
+            return new HyperSchemaFactoryWrapper(p);
         };
+
+        @Override
+        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc)
+        {
+            return new HyperSchemaFactoryWrapper(p)
+                .setVisitorContext(rvc);
+        }
     };
 
     public HyperSchemaFactoryWrapper() {
         super(new HyperSchemaFactoryWrapperFactory());
+    }
+
+    public HyperSchemaFactoryWrapper(SerializerProvider p) {
+        super(p, new HyperSchemaFactoryWrapperFactory());
     }
 
     @Override
@@ -117,5 +126,4 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
         }
         return null;
     }
-
 }

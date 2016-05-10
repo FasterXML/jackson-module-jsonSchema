@@ -52,3 +52,8 @@ Jakub Neubauer (jakubneubauer@github)
 
 #77: Schema with enum array - when deserialized, the enum values are lost
  (2.7.0)
+
+alexpeelman@github
+
+#104: HyperSchema does not generate links for nested objects
+ (2.7.5)
