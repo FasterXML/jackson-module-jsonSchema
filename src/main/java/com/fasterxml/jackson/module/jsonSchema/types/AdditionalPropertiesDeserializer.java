@@ -45,7 +45,7 @@ public class AdditionalPropertiesDeserializer
                 return new ObjectSchema.SchemaAdditionalProperties(innerSchema);
             }
         }
-        throw new JsonMappingException("additionalProperties nodes can only be of "
+        throw JsonMappingException.from(p, "additionalProperties nodes can only be of "
                 + "type boolean or object, got token of type: "+p.getCurrentToken());
     }
 }
