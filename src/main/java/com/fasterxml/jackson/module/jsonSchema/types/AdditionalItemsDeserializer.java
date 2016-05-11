@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonTokenId;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 import com.fasterxml.jackson.module.jsonSchema.types.AdditionalPropertiesDeserializer;
@@ -35,7 +34,7 @@ public class AdditionalItemsDeserializer extends JsonDeserializer<ArraySchema.Ad
 	            return new ArraySchema.SchemaAdditionalItems(innerSchema);
 	        }
 	    }
-	    throw JsonMappingException.from(p,
-	            "additionalItems nodes can only be of type boolean or object, got token of type: %s"+p.getCurrentToken());
+	    ctxt.reportMappingException("additionalItems nodes can only be of type boolean or object, got token of type: %s", p.getCurrentToken());
+	    return null;
 	}
 }
