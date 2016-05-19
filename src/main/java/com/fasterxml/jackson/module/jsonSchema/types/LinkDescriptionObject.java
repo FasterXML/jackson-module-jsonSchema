@@ -1,5 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -203,7 +204,7 @@ public class LinkDescriptionObject {
        would define the properties for the query string and for a POST
        request, this would define the body).
      */
-    @JsonProperty
+    @JsonIgnore
     private JsonSchema jsonSchema;
 
     /**
@@ -266,6 +267,7 @@ public class LinkDescriptionObject {
         return this;
     }
 
+    @JsonProperty
     public JsonSchema getSchema() {
         return jsonSchema;
     }
