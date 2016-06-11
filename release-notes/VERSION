@@ -9,7 +9,7 @@ Project: jackson-module-jsonSchema
 #97: Adding support for JSR-303 @NotNull annotation
  (contributed by mmyslyvtsev@github)
 
-2.7.5 (not yet released)
+2.7.5 (11-Jun-2016)
 
 #104: HyperSchema does not generate links for nested objects
  (reported by alexpeelman@github)
