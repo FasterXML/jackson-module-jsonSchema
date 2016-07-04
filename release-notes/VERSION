@@ -4,7 +4,7 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
-2.8.0 (not yet released)
+2.8.0 (04-Jul-2016)
 
 #97: Adding support for JSR-303 @NotNull annotation
  (contributed by mmyslyvtsev@github)
