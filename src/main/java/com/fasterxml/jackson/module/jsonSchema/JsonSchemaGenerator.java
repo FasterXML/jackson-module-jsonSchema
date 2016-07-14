@@ -24,21 +24,37 @@ public class JsonSchemaGenerator
 
     private final WrapperFactory _wrapperFactory;
 
+    /**
+     * @since 2.8.1
+     */
+    private final SchemaFactoryWrapper _visitor;
+    
     public JsonSchemaGenerator(ObjectMapper mapper) {
-        this(mapper, null);
+        this(mapper, (WrapperFactory) null);
     }
 
     public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
         _mapper = mapper;
         _writer = mapper.writer();
         _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
+        _visitor = null;
+    }
+
+    /**
+     * NOTE: resulting generator is NOT thread-safe, since typically {@link SchemaFactoryWrapper}
+     * being passed is not thread-safe.
+     *
+     * @since 2.8.1
+     */
+    public JsonSchemaGenerator(ObjectMapper mapper, SchemaFactoryWrapper visitor) {
+        this(mapper.writer(), visitor);
     }
 
     /**
      * @since 2.6
      */
     public JsonSchemaGenerator(ObjectWriter w) {
-        this(w, null);
+        this(w, (WrapperFactory) null);
     }
 
     /**
@@ -48,18 +64,38 @@ public class JsonSchemaGenerator
         _mapper = null;
         _writer = w;
         _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
+        _visitor = null;
+    }
+
+    /**
+     * @since 2.8.1
+     */
+    public JsonSchemaGenerator(ObjectWriter w, SchemaFactoryWrapper visitor) {
+        _mapper = null;
+        _writer = w;
+        _wrapperFactory = null;
+        if (visitor == null) {
+            throw new IllegalArgumentException("Missing `visitor`");
+        }
+        _visitor = visitor;
     }
     
     public JsonSchema generateSchema(Class<?> type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(null);
+        SchemaFactoryWrapper visitor = _visitor;
+        if (visitor == null) {
+            visitor = _wrapperFactory.getWrapper(null);
+        }
         _writer.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
 
     public JsonSchema generateSchema(JavaType type) throws JsonMappingException
     {
-        SchemaFactoryWrapper visitor = _wrapperFactory.getWrapper(null);
+        SchemaFactoryWrapper visitor = _visitor;
+        if (visitor == null) {
+            visitor = _wrapperFactory.getWrapper(null);
+        }
         _writer.acceptJsonFormatVisitor(type, visitor);
         return visitor.finalSchema();
     }
