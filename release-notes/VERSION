@@ -4,6 +4,10 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.7.6 (23-Jul-2016)
+
+No changes since 2.7.5
+
 2.7.5 (11-Jun-2016)
 
 #104: HyperSchema does not generate links for nested objects
