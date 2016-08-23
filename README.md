@@ -7,11 +7,7 @@ currently in jackson databind (pre 2.1), in order to allow for the generation of
 Thus, it might feasibly be extended or mirrored to produce xml or even google closure interfaces or classes in addition to the current json schema format. 
 
 Note that since JSON Schema draft version 3 and 4 are incompatible, this module CAN NOT, as-is,
-support v4. There is another module:
-
-    https://github.com/mbknor/mbknor-jackson-jsonSchema
-
-that does support v4, however.
+support v4. There is another module [mbknor-jackson-jsonSchema](https://github.com/mbknor/mbknor-jackson-jsonSchema) that does support v4, however.
 
 It is possible that in future this repo could have 2 different modules; one for v3, another v4.
 And if necessary, more if future revisions also prove incompatible.
