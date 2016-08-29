@@ -69,7 +69,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  * @author jphelan
  */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonTypeInfo(use = Id.CUSTOM, include = As.PROPERTY, property = "type")
+@JsonTypeInfo(use = Id.CUSTOM, include = As.PROPERTY, property = "type", defaultImpl = AnySchema.class)
 @JsonTypeIdResolver(JsonSchemaIdResolver.class)
 public abstract class JsonSchema
 {
