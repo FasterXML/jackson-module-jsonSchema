@@ -26,6 +26,12 @@ public class StringSchema extends ValueTypeSchema {
 	@JsonProperty
 	private String pattern;
 
+        /**
+         * The will be the media type
+         */
+        @JsonProperty
+        private String mediaType;
+        
 	@Override
 	public StringSchema asStringSchema() {
 		return this;
@@ -43,6 +49,10 @@ public class StringSchema extends ValueTypeSchema {
 	    return pattern;
 	}
 
+        public String getMediaType() {
+            return mediaType;
+        }
+        
 	@Override
 	public JsonFormatTypes getType() {
 	    return JsonFormatTypes.STRING;
@@ -65,6 +75,10 @@ public class StringSchema extends ValueTypeSchema {
 	    this.pattern = pattern;
 	}
 
+        public void setMediaType(String mediaType) {
+            this.mediaType = mediaType;
+        }
+        
      @Override
      public boolean equals(Object obj)
      {
