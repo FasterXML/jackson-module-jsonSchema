@@ -27,7 +27,7 @@ public class StringSchema extends ValueTypeSchema {
 	private String pattern;
 
         /**
-         * The will be the media type
+         * This will be the media type
          */
         @JsonProperty
         private String mediaType;
