@@ -8,7 +8,7 @@
   <groupId>com.fasterxml.jackson.module</groupId>
   <artifactId>jackson-module-jsonSchema</artifactId>
   <name>jackson-module-jsonSchema</name>
-  <version>2.8.4-SNAPSHOT</version>
+  <version>2.8.4</version>
   <packaging>bundle</packaging>
   <description>Add-on module for Jackson (http://jackson.codehaus.org) to support
 JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 generation.
@@ -18,7 +18,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
     <connection>scm:git:git@github.com:FasterXML/jackson-module-jsonSchema.git</connection>
     <developerConnection>scm:git:git@github.com:FasterXML/jackson-module-jsonSchema.git</developerConnection>
     <url>http://github.com/FasterXML/jackson-module-jsonSchema</url>    
-    <tag>HEAD</tag>
+    <tag>jackson-module-jsonSchema-2.8.4</tag>
   </scm>
   <developers>
         <developer>
