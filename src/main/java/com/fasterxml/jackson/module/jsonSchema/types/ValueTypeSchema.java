@@ -3,12 +3,13 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
- * This class represents a {@link JsonSchema} 
- * A primitive type. 
+ * This class represents a {@link JsonSchema}
+ * A primitive type.
  */
 public abstract class ValueTypeSchema extends SimpleTypeSchema
 {
@@ -22,8 +23,9 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	   (Section 5.15).
 	 */
 	@JsonProperty(value = "enum")
+	@JsonDeserialize(as = LinkedHashSet.class)
 	protected Set<String> enums = new LinkedHashSet<String>();
-	
+
 	/**
 	 * This property defines the type of data, content type, or microformat to
 	 * be expected in the instance property values. A format attribute MAY be
@@ -32,7 +34,7 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	 * to primitive types (string, integer, number, or boolean). Validators MAY
 	 * (but are not required to) validate that the instance values conform to a
 	 * format.
-	 * 
+	 *
 	 * Additional custom formats MAY be created. These custom formats MAY be
 	 * expressed as an URI, and this URI MAY reference a schema of that
 	 *<p>
