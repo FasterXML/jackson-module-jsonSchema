@@ -1,9 +1,5 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -11,7 +7,9 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * This type represents a {@link JsonSchema} as an object type
@@ -37,10 +35,10 @@ public class ObjectSchema extends ContainerTypeSchema
 	 * valid against the attribute's property value
 	 */
 	@JsonProperty
-	private List<Dependency> dependencies;
+	private Map<String, Object> dependencies;
 
 	/**
-	 * 
+	 *
 	 This attribute is an object that defines the jsonSchema for a set of property
 	 * names of an object instance. The name of each property of this
 	 * attribute's object is a regular expression pattern in the ECMA 262/Perl 5
@@ -67,18 +65,19 @@ public class ObjectSchema extends ContainerTypeSchema
 
 	public ObjectSchema()
 	{
-		dependencies = new ArrayList<Dependency>();
+		dependencies = new LinkedHashMap<String, Object>();
 		patternProperties = new LinkedHashMap<String, JsonSchema>();
 		properties = new LinkedHashMap<String, JsonSchema>();
 	}
 
 	public boolean addSchemaDependency(String depender, JsonSchema parentMustMatch) {
-		return dependencies
-				.add(new SchemaDependency(depender, parentMustMatch));
+		dependencies.put(depender, parentMustMatch);
+		return dependencies.get(depender).equals(parentMustMatch);
 	}
 
 	public boolean addSimpleDependency(String depender, String dependsOn) {
-		return dependencies.add(new SimpleDependency(depender, dependsOn));
+		dependencies.put(depender, dependsOn);
+        return dependencies.get(depender).equals(dependsOn);
 	}
 
      @Override
@@ -100,7 +99,7 @@ public class ObjectSchema extends ContainerTypeSchema
 	    return additionalProperties;
 	}
 
-	public List<Dependency> getDependencies() {
+	public Map<String, Object> getDependencies() {
 	    return dependencies;
 	}
 
@@ -116,7 +115,7 @@ public class ObjectSchema extends ContainerTypeSchema
 		jsonSchema.enrichWithBeanProperty(property);
 		properties.put(property.getName(), jsonSchema);
 	}
-	
+
 	public void putOptionalProperty(String name, JsonSchema jsonSchema) {
 		properties.put(name, jsonSchema);
 	}
@@ -124,11 +123,11 @@ public class ObjectSchema extends ContainerTypeSchema
 	public JsonSchema putPatternProperty(String regex, JsonSchema value) {
 		return patternProperties.put(regex, value);
 	}
-	
+
 	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
 		value.setRequired(true);
 		value.enrichWithBeanProperty(property);
-		return properties.put(property.getName(), value);		
+		return properties.put(property.getName(), value);
 	}
 
 	public JsonSchema putProperty(String name, JsonSchema value) {
@@ -145,7 +144,7 @@ public class ObjectSchema extends ContainerTypeSchema
 	    this.additionalProperties = additionalProperties;
 	}
 
-	public void setDependencies(List<Dependency> dependencies) {
+	public void setDependencies(Map<String, Object> dependencies) {
 	    this.dependencies = dependencies;
 	}
 
@@ -171,10 +170,10 @@ public class ObjectSchema extends ContainerTypeSchema
          return equals(getAdditionalProperties(), that.getAdditionalProperties())
                  && equals(getDependencies(), that.getDependencies())
                  && equals(getPatternProperties(), that.getPatternProperties())
-                 && equals(getProperties(), that.getProperties()) 
+                 && equals(getProperties(), that.getProperties())
                  && super._equals(that);
      }
-	
+
 	@JsonDeserialize(using = AdditionalPropertiesDeserializer.class)
 	public static abstract class AdditionalProperties {
          // simple marker class, deserializer and concrete impl have all functionality
@@ -209,7 +208,7 @@ public class ObjectSchema extends ContainerTypeSchema
 		public static final NoAdditionalProperties instance = new NoAdditionalProperties();
 	}
 
-        
+
 	public static class SchemaAdditionalProperties extends AdditionalProperties
 	{
 		@JsonProperty
@@ -225,7 +224,7 @@ public class ObjectSchema extends ContainerTypeSchema
 		public JsonSchema getJsonSchema() {
 		    return jsonSchema;
 		}
-		
+
 		public SchemaAdditionalProperties(JsonSchema jsonSchema) {
 		    this.jsonSchema = jsonSchema;
 		}
