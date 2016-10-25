@@ -9,7 +9,9 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This type represents a {@link JsonSchema} as an object type
@@ -76,8 +78,16 @@ public class ObjectSchema extends ContainerTypeSchema
 	}
 
 	public boolean addSimpleDependency(String depender, String dependsOn) {
-		dependencies.put(depender, dependsOn);
-        return dependencies.get(depender).equals(dependsOn);
+		if (dependencies.containsKey(depender)) {
+			Set<String> existingDependsOn = (LinkedHashSet<String>) dependencies.get(depender);
+			existingDependsOn.add(dependsOn);
+		} else {
+			Set<String> dependsOnSet = new LinkedHashSet<>();
+			dependsOnSet.add(dependsOn);
+			dependencies.put(depender, dependsOnSet);
+		}
+
+		return ((Set<String>) dependencies.get(depender)).contains(dependsOn);
 	}
 
      @Override
