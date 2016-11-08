@@ -57,3 +57,8 @@ alexpeelman@github
 
 #104: HyperSchema does not generate links for nested objects
  (2.7.5)
+
+Sean Staley (seanstaley@github)
+
+#119: `dependencies` property should not be an Array but Object
+ (2.9.0)
