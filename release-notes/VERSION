@@ -4,6 +4,10 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.8.5 (14-Nov-2016)
+
+No changes since 2.8.4
+
 2.8.4 (14-Oct-2016)
 
 #112: Update LinkDescriptionObject to remove redundant 'jsonSchema' property
