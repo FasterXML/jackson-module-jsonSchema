@@ -34,7 +34,7 @@ public class AdditionalItemsDeserializer extends JsonDeserializer<ArraySchema.Ad
 	            return new ArraySchema.SchemaAdditionalItems(innerSchema);
 	        }
 	    }
-	    ctxt.reportMappingException("additionalItems nodes can only be of type boolean or object, got token of type: %s", p.getCurrentToken());
-	    return null;
+	    return ctxt.reportInputMismatch(this,
+"additionalItems nodes can only be of type boolean or object, got token of type: %s", p.getCurrentToken());
 	}
 }

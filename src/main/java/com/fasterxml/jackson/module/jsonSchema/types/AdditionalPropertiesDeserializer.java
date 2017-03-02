@@ -45,8 +45,7 @@ public class AdditionalPropertiesDeserializer
                 return new ObjectSchema.SchemaAdditionalProperties(innerSchema);
             }
         }
-        ctxt.reportMappingException("additionalProperties nodes can only be of "
-                + "type boolean or object, got token of type: %s", p.getCurrentToken());
-        return null;
+        return ctxt.reportInputMismatch(this,
+"additionalProperties nodes can only be of type boolean or object, got token of type: %s", p.getCurrentToken());
     }
 }

@@ -110,7 +110,7 @@ public class TestGenerateJsonSchema
     static class StringMap extends HashMap<String, String> {
     }
 
-    private static class DependencySchema {
+    static class DependencySchema {
         @JsonProperty(required = true)
         private String property2;
 

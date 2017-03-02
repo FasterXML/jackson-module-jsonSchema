@@ -77,23 +77,20 @@ public class ObjectSchema extends ContainerTypeSchema
 		return dependencies.get(depender).equals(parentMustMatch);
 	}
 
-	public boolean addSimpleDependency(String depender, String dependsOn) {
-		if (dependencies.containsKey(depender)) {
-			Set<String> existingDependsOn = (LinkedHashSet<String>) dependencies.get(depender);
-			existingDependsOn.add(dependsOn);
-		} else {
-			Set<String> dependsOnSet = new LinkedHashSet<>();
-			dependsOnSet.add(dependsOn);
-			dependencies.put(depender, dependsOnSet);
-		}
+    public boolean addSimpleDependency(String depender, String dependsOn) {
+        @SuppressWarnings("unchecked")
+        Set<String> existingDependsOn = (Set<String>) dependencies.get(depender);
+        if (existingDependsOn == null) {
+            existingDependsOn= new LinkedHashSet<>();
+            dependencies.put(depender, existingDependsOn);
+        }
+        return existingDependsOn.add(dependsOn);
+    }
 
-		return ((Set<String>) dependencies.get(depender)).contains(dependsOn);
-	}
-
-     @Override
-     public JsonFormatTypes getType() {
-           return JsonFormatTypes.OBJECT;
-     }
+    @Override
+    public JsonFormatTypes getType() {
+        return JsonFormatTypes.OBJECT;
+    }
 
      @Override
      public boolean isObjectSchema() {
