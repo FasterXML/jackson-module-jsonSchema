@@ -132,13 +132,13 @@ public class ObjectSchema extends ContainerTypeSchema
 	}
 
 	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
-		value.setRequired(true);
+		addRequired(property.getName());
 		value.enrichWithBeanProperty(property);
 		return properties.put(property.getName(), value);
 	}
 
 	public JsonSchema putProperty(String name, JsonSchema value) {
-		value.setRequired(true);
+		addRequired(name);
 		return properties.put(name, value);
 	}
 

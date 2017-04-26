@@ -57,22 +57,22 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
             @Override
             public void optionalProperty(BeanProperty writer) throws JsonMappingException {
                 super.optionalProperty(writer);
-                addValidationConstraints(getPropertySchema(writer), writer);
+                addValidationConstraints(getPropertySchema(writer), getSchema(), writer);
             }
 
             @Override
             public void property(BeanProperty writer) throws JsonMappingException {
                 super.property(writer);
-                addValidationConstraints(getPropertySchema(writer), writer);
+                addValidationConstraints(getPropertySchema(writer), getSchema(), writer);
             }
         };
     }
 
-    protected JsonSchema addValidationConstraints(JsonSchema schema, BeanProperty prop) {
+    protected JsonSchema addValidationConstraints(JsonSchema schema, JsonSchema parentSchema, BeanProperty prop) {
         {
             Boolean required = constraintResolver.getRequired(prop);
-            if (required != null) {
-                schema.setRequired(required);
+            if (Boolean.TRUE.equals(required)) {
+                parentSchema.addRequired(prop.getName());
             }
         }
         if (schema.isArraySchema()) {
