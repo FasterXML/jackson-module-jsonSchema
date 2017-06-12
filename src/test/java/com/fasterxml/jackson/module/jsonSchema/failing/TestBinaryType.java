@@ -21,7 +21,11 @@ public class TestBinaryType extends SchemaTestBase
         schema = generator.generateSchema(byte[].class);
 
         // Should be either an array of bytes, or, String with 'format' of "base64"
-        assertEquals(aposToQuotes("{'type':'array','items':{'type':'byte'}}"),
-                MAPPER.writeValueAsString(schema));
+        String json = MAPPER.writeValueAsString(schema);
+
+        if (!json.equals(aposToQuotes("{'type':'array','items':{'type':'byte'}}"))) {
+            String pretty = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
+            fail("Should get 'array of bytes' or 'String as Base64', instead got: "+pretty);
+        }
     }
 }
