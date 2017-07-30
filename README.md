@@ -25,7 +25,7 @@ Version 2.4 was considered the first stable version of the module.
 (from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
 
 simply add a dependency (this is from my gradle config)
-`"com.fasterxml.jackson.module:jackson-module-jsonSchema:2.5.2"`
+`"com.fasterxml.jackson.module:jackson-module-jsonSchema:2.9.0"`
 and for gradle, at least, you can simply add `mavenLocal()` to your repositories. 
 Maven should resolve the dependency from its local repo transparently.
 
