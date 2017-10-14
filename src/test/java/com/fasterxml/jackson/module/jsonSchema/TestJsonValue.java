@@ -65,7 +65,7 @@ public class TestJsonValue extends SchemaTestBase
         // but let's require bit fuller match:
 
         // construction from bean results in an 'id' being set, whereas from @AsValue it doesn't.
-        schemaExp.setId(null);
+//        schemaExp.setId(null);
 
         String expStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schemaExp);
         String actStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schemaAct);
