@@ -40,7 +40,7 @@ public class TitleSchemaFactoryWrapper extends SchemaFactoryWrapper
             return wrapper;
         }
 
-        public SchemaFactoryWrapper getWrapper(SerializerProvider provider, VisitorContext rvc, ObjectSchema parent) {
+        public SchemaFactoryWrapper getWrapper(SerializerProvider provider, VisitorContext rvc, ObjectSchema parent, Class<?> type) {
             SchemaFactoryWrapper wrapper = new TitleSchemaFactoryWrapper();
             wrapper.setVisitorContext(rvc);
             wrapper.setParent(parent);

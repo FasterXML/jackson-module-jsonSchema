@@ -20,10 +20,11 @@ public class WrapperFactory
         return wrapper;
     }
 
-    public SchemaFactoryWrapper getWrapper(SerializerProvider provider, VisitorContext rvc, ObjectSchema parent) {
+    public SchemaFactoryWrapper getWrapper(SerializerProvider provider, VisitorContext rvc, ObjectSchema parent, Class<?> type) {
         SchemaFactoryWrapper wrapper = new SchemaFactoryWrapper(provider);
         wrapper.setVisitorContext(rvc);
         wrapper.setParent(parent);
+        wrapper.setType(type);
         return wrapper;
     }
 }

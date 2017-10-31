@@ -35,6 +35,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     protected JsonSchema schema;
     protected VisitorContext visitorContext;
     protected ObjectSchema parent;
+    protected Class<?> type;
 
     public SchemaFactoryWrapper() {
         this(null, new WrapperFactory());
@@ -159,6 +160,11 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
 
     public Visitor setParent(ObjectSchema parent) {
         this.parent = parent;
+        return this;
+    }
+
+    public Visitor setType(Class<?> type) {
+        this.type = type;
         return this;
     }
 

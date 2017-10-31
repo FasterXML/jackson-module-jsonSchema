@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Constraint;
+import javax.validation.OverridesAttribute;
 import javax.validation.Payload;
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
@@ -36,11 +37,15 @@ import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
  */
 public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     @Size(min = 2, max = 80)
-    @MyPattern
+    @MyPattern(message = "")
     @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER, ElementType.TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     @Constraint(validatedBy = {})
     public @interface MemberNumber {
+        @OverridesAttribute.List({ //
+            @OverridesAttribute(constraint = Size.class, name = "message"), //
+            @OverridesAttribute(constraint = MyPattern.class, name = "message")})
+        public String message();
         Class<?>[] groups() default {};
         Class<? extends Payload>[] payload() default {};
     }
@@ -50,6 +55,8 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     @Retention(RetentionPolicy.RUNTIME)
     @Constraint(validatedBy = {})
     public @interface MyPattern {
+        @OverridesAttribute(constraint = Pattern.class, name = "message")
+        public String message();
         Class<?>[] groups() default {};
         Class<? extends Payload>[] payload() default {};
     }
@@ -107,6 +114,10 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         @Valid
         @NotNull
         Internal internal2;
+
+        @MemberNumber(message = "Invalid member num.", groups = {Default.class, GroupA.class})
+        private String memberNumber;
+
         /*
         /**********************************************************
         /* Array fields
@@ -205,6 +216,14 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
         public void setInterna2l(Internal internal2) {
             this.internal2 = internal2;
+        }
+
+        public String getMemberNumber() {
+            return memberNumber;
+        }
+
+        public void setMemberNumber(String memberNumber) {
+            this.memberNumber = memberNumber;
         }
 
         public List<String> getListWithoutConstraints() {
@@ -487,6 +506,54 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         assertThat(intObjectSchema.getRequired(), containsInAnyOrder("animal", "nameMandatory"));
     }
 
-    //TODO: add tests limiting validation by groups
-    //TODO: add tests adding restrictions from custom annotations
+    @Test
+    public void testAddingValidationConstraints_CustomAnnotation() throws Exception {
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+
+        assertNotNull("schema should not be null.", jsonSchema);
+        assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
+        ObjectSchema objectSchema = jsonSchema.asObjectSchema();
+        Map<String, JsonSchema> properties = objectSchema.getProperties();
+        assertNotNull(properties);
+        JsonSchema propertySchema = properties.get("memberNumber");
+        assertNotNull(propertySchema);
+        assertTrue(propertySchema.isStringSchema());
+        StringSchema stringSchema = propertySchema.asStringSchema();
+        assertEquals(new Integer("2"), stringSchema.getMinLength());
+        assertEquals(new Integer("80"), stringSchema.getMaxLength());
+        assertEquals("[\\p{Alnum}]*", stringSchema.getPattern());
+    }
+
+    @Test
+    public void testAddingValidationConstraints_LimitedByGroup() throws Exception {
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class, GroupB.class);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+
+        assertNotNull("schema should not be null.", jsonSchema);
+        assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
+        ObjectSchema objectSchema = jsonSchema.asObjectSchema();
+        Map<String, JsonSchema> properties = objectSchema.getProperties();
+        assertNotNull(properties);
+        JsonSchema propertySchema = properties.get("memberNumber");
+        assertNotNull(propertySchema);
+        assertTrue(propertySchema.isStringSchema());
+        StringSchema stringSchema = propertySchema.asStringSchema();
+        assertNull(stringSchema.getMinLength());
+        assertNull(stringSchema.getMaxLength());
+        assertNull(stringSchema.getPattern());
+
+        propertySchema = properties.get("internal");
+        assertNotNull(propertySchema);
+        assertTrue(propertySchema.isObjectSchema());
+        ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
+        assertThat(intObjectSchema.getRequired(), containsInAnyOrder("nameMandatory"));
+
+    }
 }

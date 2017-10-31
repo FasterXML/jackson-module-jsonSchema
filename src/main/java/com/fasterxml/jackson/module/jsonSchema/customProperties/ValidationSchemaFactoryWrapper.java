@@ -27,6 +27,12 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
     private ValidationConstraintResolver constraintResolver;
 
     private static class ValidationSchemaFactoryWrapperFactory extends WrapperFactory {
+        Class<?>[] groups;
+
+        ValidationSchemaFactoryWrapperFactory(Class<?>... groups) {
+            this.groups = groups;
+        }
+
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
             SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper();
@@ -43,8 +49,8 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
         }
 
         @Override
-        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc, ObjectSchema parent) {
-            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper();
+        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc, ObjectSchema parent, Class<?> type) {
+            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper(type, groups);
             wrapper.setProvider(p);
             wrapper.setVisitorContext(rvc);
             wrapper.setParent(parent);
@@ -56,8 +62,12 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
         this(new AnnotationConstraintResolver());
     }
 
-    public ValidationSchemaFactoryWrapper(ValidationConstraintResolver constraintResolver) {
-        super(new ValidationSchemaFactoryWrapperFactory());
+    public ValidationSchemaFactoryWrapper(Class<?> type, Class<?>... groups) {
+        this(new AnnotationConstraintResolver(type, groups), groups);
+    }
+
+    public ValidationSchemaFactoryWrapper(ValidationConstraintResolver constraintResolver, Class<?>... groups) {
+        super(new ValidationSchemaFactoryWrapperFactory(groups));
         this.constraintResolver = constraintResolver;
     }
 

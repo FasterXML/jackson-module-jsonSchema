@@ -112,7 +112,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
             return new ReferenceSchema(seenSchemaUri, schema);
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext, schema);
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext, schema, prop.getType().getRawClass());
         JsonSerializer<Object> ser = getSer(prop);
         if (ser != null) {
             JavaType type = prop.getType();
@@ -135,7 +135,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
             }
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext, schema);
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
         handler.acceptJsonFormatVisitor(visitor, propertyTypeHint);
         return visitor.finalSchema();
     }

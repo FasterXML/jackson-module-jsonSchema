@@ -1,9 +1,28 @@
 package com.fasterxml.jackson.module.jsonSchema.validation;
 
-import com.fasterxml.jackson.databind.BeanProperty;
+import static java.util.stream.Collectors.toMap;
 
-import javax.validation.constraints.*;
+import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.validation.metadata.BeanDescriptor;
+import javax.validation.metadata.ConstraintDescriptor;
+import javax.validation.metadata.PropertyDescriptor;
+
+import com.fasterxml.jackson.databind.BeanProperty;
 
 /**
  * @author cponomaryov
@@ -13,6 +32,18 @@ import java.math.BigDecimal;
 public class AnnotationConstraintResolver
     extends ValidationConstraintResolver
 {
+    Map<String, List<Annotation>> propertyConstraints;
+
+    public AnnotationConstraintResolver() {
+
+    }
+
+    public AnnotationConstraintResolver(Class<?> type, Class<?>... groups) {
+        final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        BeanDescriptor beanDescriptor = validator.getConstraintsForClass(type);
+        propertyConstraints = beanDescriptor.getConstrainedProperties().stream().collect(toMap(pd -> pd.getPropertyName(), propertyDescriptor -> processPropertDescriptor(propertyDescriptor, groups)));
+    }
+
     private Integer getMaxSize(BeanProperty prop) {
         Size ann = getSizeAnnotation(prop);
         if (ann != null) {
@@ -47,21 +78,21 @@ public class AnnotationConstraintResolver
 
     @Override
     public Double getNumberMaximum(BeanProperty prop) {
-        Max maxAnnotation = prop.getAnnotation(Max.class);
+        Max maxAnnotation = getAnnotation(prop, Max.class);
         if (maxAnnotation != null) {
             return (double) maxAnnotation.value();
         }
-        DecimalMax decimalMaxAnnotation = prop.getAnnotation(DecimalMax.class);
+        DecimalMax decimalMaxAnnotation = getAnnotation(prop, DecimalMax.class);
         return decimalMaxAnnotation != null ? new BigDecimal(decimalMaxAnnotation.value()).doubleValue() : null;
     }
 
     @Override
     public Double getNumberMinimum(BeanProperty prop) {
-        Min minAnnotation = prop.getAnnotation(Min.class);
+        Min minAnnotation = getAnnotation(prop, Min.class);
         if (minAnnotation != null) {
             return (double) minAnnotation.value();
         }
-        DecimalMin decimalMinAnnotation = prop.getAnnotation(DecimalMin.class);
+        DecimalMin decimalMinAnnotation = getAnnotation(prop, DecimalMin.class);
         return decimalMinAnnotation != null ? new BigDecimal(decimalMinAnnotation.value()).doubleValue() : null;
     }
 
@@ -77,7 +108,7 @@ public class AnnotationConstraintResolver
 
     @Override
     public String getStringPattern(final BeanProperty prop) {
-        Pattern patternAnnotation = prop.getAnnotation(Pattern.class);
+        Pattern patternAnnotation = getAnnotation(prop, Pattern.class);
         if (patternAnnotation != null) {
             return patternAnnotation.regexp();
         }
@@ -86,11 +117,43 @@ public class AnnotationConstraintResolver
 
     @Override
     public Boolean getRequired(BeanProperty prop) {
-        NotNull notNull = prop.getAnnotation(NotNull.class);
+        NotNull notNull = getAnnotation(prop, NotNull.class);
         return notNull != null ? true : null;
     }
 
     private Size getSizeAnnotation(BeanProperty prop) {
-        return prop.getAnnotation(Size.class);
+        return getAnnotation(prop, Size.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    <T extends Annotation> T getAnnotation(BeanProperty prop, Class<T> type) {
+        if (propertyConstraints != null) {
+            return (T)emptyIfNull(propertyConstraints.get(prop.getName())).stream().filter(a -> type.isInstance(a)).findFirst().orElse(null);
+        } else {
+            return prop.getAnnotation(type);
+        }
+    }
+
+    public static <T> List<T> emptyIfNull(final List<T> list) {
+        return list == null ? new ArrayList<T>() : list;
+    }
+
+    List<Annotation> processPropertDescriptor(PropertyDescriptor propertyDescriptor, Class<?>... groups) {
+        Set<ConstraintDescriptor<?>> descriptorsForGroup = propertyDescriptor.findConstraints().unorderedAndMatchingGroups(groups).getConstraintDescriptors();
+        List<Annotation> propertyConstraintAnnotations = new ArrayList<>();
+        for (ConstraintDescriptor<?> constraintDescriptor : descriptorsForGroup) {
+            processNestedDescriptors(constraintDescriptor, propertyConstraintAnnotations);
+        }
+        return propertyConstraintAnnotations;
+    }
+
+    void processNestedDescriptors(ConstraintDescriptor<?> constraintDescriptor, List<Annotation> propertyConstraintAnnotations) {
+        Set<ConstraintDescriptor<?>> composingConstraints = constraintDescriptor.getComposingConstraints();
+        if (composingConstraints != null && composingConstraints.size() > 0) {
+            for (ConstraintDescriptor<?> constraintDescriptor2 : composingConstraints) {
+                processNestedDescriptors(constraintDescriptor2, propertyConstraintAnnotations);
+            }
+        }
+        propertyConstraintAnnotations.add(constraintDescriptor.getAnnotation());
     }
 }
