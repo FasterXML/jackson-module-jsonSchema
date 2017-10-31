@@ -15,7 +15,12 @@ public class ReferenceSchema extends SimpleTypeSchema
     protected String $ref;
 
     public ReferenceSchema(String ref) {
+        this(ref, null);
+    }
+    
+    public ReferenceSchema(String ref, ObjectSchema parent) {
         this.$ref = ref;
+        this.parent = parent;
     }
 
     @Override

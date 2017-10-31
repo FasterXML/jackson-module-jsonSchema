@@ -1,5 +1,6 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 /**
@@ -31,6 +32,9 @@ public abstract class SimpleTypeSchema extends JsonSchema
 	 */
 	protected LinkDescriptionObject[] links;
 
+    @JsonIgnore
+    protected ObjectSchema parent;
+
 	@Override
 	public SimpleTypeSchema asSimpleTypeSchema() {
 		return this;
@@ -56,7 +60,15 @@ public abstract class SimpleTypeSchema extends JsonSchema
         this.links = links;
     }
 
-	@Override
+    public ObjectSchema getParent() {
+        return parent;
+    }
+
+    public void setParent(ObjectSchema parent) {
+        this.parent = parent;
+    }
+
+    @Override
 	public boolean isSimpleTypeSchema() {
 		return true;
 	}

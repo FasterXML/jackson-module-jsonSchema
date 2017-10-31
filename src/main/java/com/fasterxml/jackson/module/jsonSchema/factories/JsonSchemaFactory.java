@@ -7,39 +7,45 @@ import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 public class JsonSchemaFactory
 {
-    public AnySchema anySchema() {
-        return new AnySchema();
+    public AnySchema anySchema(ObjectSchema parent) {
+        return setParent(new AnySchema(), parent);
     }
 
-    public ArraySchema arraySchema() {
-        return new ArraySchema();
+    public ArraySchema arraySchema(ObjectSchema parent) {
+        return setParent(new ArraySchema(), parent);
     }
 
-    public BooleanSchema booleanSchema() {
-        return new BooleanSchema();
+    public BooleanSchema booleanSchema(ObjectSchema parent) {
+        return setParent(new BooleanSchema(), parent);
     }
 
-    public IntegerSchema integerSchema() {
-        return new IntegerSchema();
+    public IntegerSchema integerSchema(ObjectSchema parent) {
+        return setParent(new IntegerSchema(), parent);
     }
 
-    public NullSchema nullSchema() {
-        return new NullSchema();
+    public NullSchema nullSchema(ObjectSchema parent) {
+        return setParent(new NullSchema(), parent);
     }
 
-    public NumberSchema numberSchema() {
-        return new NumberSchema();
+    public NumberSchema numberSchema(ObjectSchema parent) {
+        return setParent(new NumberSchema(), parent);
     }
 
-    public ObjectSchema objectSchema() {
-        return new ObjectSchema();
+    public ObjectSchema objectSchema(ObjectSchema parent) {
+        return setParent(new ObjectSchema(), parent);
     }
 
-    public StringSchema stringSchema() {
-        return new StringSchema();
+    public StringSchema stringSchema(ObjectSchema parent) {
+        return setParent(new StringSchema(), parent);
+    }
+
+    private <T extends SimpleTypeSchema> T setParent(T schema, ObjectSchema parent) {
+        schema.setParent(parent);
+        return schema;
     }
 }

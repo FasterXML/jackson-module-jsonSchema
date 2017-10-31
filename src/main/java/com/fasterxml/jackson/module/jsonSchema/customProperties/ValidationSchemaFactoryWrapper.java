@@ -6,10 +6,15 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.factories.*;
+import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
+import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitorDecorator;
+import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.VisitorContext;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 import com.fasterxml.jackson.module.jsonSchema.validation.AnnotationConstraintResolver;
 import com.fasterxml.jackson.module.jsonSchema.validation.ValidationConstraintResolver;
@@ -34,6 +39,15 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
             SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper();
             wrapper.setProvider(p);
             wrapper.setVisitorContext(rvc);
+            return wrapper;
+        }
+
+        @Override
+        public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc, ObjectSchema parent) {
+            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper();
+            wrapper.setProvider(p);
+            wrapper.setVisitorContext(rvc);
+            wrapper.setParent(parent);
             return wrapper;
         }
     }
@@ -70,9 +84,13 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
     protected JsonSchema addValidationConstraints(JsonSchema schema, BeanProperty prop) {
         {
-            Boolean required = constraintResolver.getRequired(prop);
-            if (required != null) {
-                schema.setRequired(required);
+            if (schema.isSimpleTypeSchema()) {
+                SimpleTypeSchema sts = schema.asSimpleTypeSchema();
+                ObjectSchema parent = sts.getParent();
+                Boolean required = constraintResolver.getRequired(prop);
+                if (required != null) {
+                    parent.getRequired().add(prop.getName());
+                }
             }
         }
         if (schema.isArraySchema()) {

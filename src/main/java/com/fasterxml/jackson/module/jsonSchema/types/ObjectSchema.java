@@ -1,5 +1,12 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -7,11 +14,6 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This type represents a {@link JsonSchema} as an object type
@@ -64,6 +66,12 @@ public class ObjectSchema extends ContainerTypeSchema
 	 */
 	@JsonProperty
 	private Map<String, JsonSchema> properties;
+
+    /**
+     * This will include the names of the properties that are required.
+     */
+    @JsonProperty
+    private List<String> required = new ArrayList<>();
 
 	public ObjectSchema()
 	{
@@ -118,6 +126,10 @@ public class ObjectSchema extends ContainerTypeSchema
 	    return properties;
 	}
 
+    public List<String> getRequired() {
+        return required;
+    }
+
 	public void putOptionalProperty(BeanProperty property, JsonSchema jsonSchema) {
 		jsonSchema.enrichWithBeanProperty(property);
 		properties.put(property.getName(), jsonSchema);
@@ -132,13 +144,13 @@ public class ObjectSchema extends ContainerTypeSchema
 	}
 
 	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
-		value.setRequired(true);
+        required.add(property.getName());
 		value.enrichWithBeanProperty(property);
 		return properties.put(property.getName(), value);
 	}
 
 	public JsonSchema putProperty(String name, JsonSchema value) {
-		value.setRequired(true);
+        required.add(name);
 		return properties.put(name, value);
 	}
 
@@ -163,7 +175,11 @@ public class ObjectSchema extends ContainerTypeSchema
 	    this.properties = properties;
 	}
 
-     @Override
+    public void setRequired(List<String> required) {
+        this.required = required;
+    }
+
+    @Override
      public boolean equals(Object obj)
      {
          if (obj == this) return true;

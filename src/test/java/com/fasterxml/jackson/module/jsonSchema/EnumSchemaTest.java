@@ -3,8 +3,8 @@ package com.fasterxml.jackson.module.jsonSchema;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
@@ -58,7 +58,6 @@ public class EnumSchemaTest extends TestBase
                 "        \"testOptions\": {\n" +
                 "            \"type\": \"array\",\n" +
                 "            \"id\": \"testOptions\",\n" +
-                "            \"required\":true,\n" +
                 "            \"items\": {\n" +
                 "                \"type\": \"string\",\n" +
                 "                \"enum\": [\n" +
@@ -70,7 +69,8 @@ public class EnumSchemaTest extends TestBase
                 "            },\n" +
                 "            \"minItems\": 1\n" +
                 "        }\n" +
-                "    }\n" +
+            "    },\n" +
+            "    \"required\":[\"testOptions\"]" +
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();

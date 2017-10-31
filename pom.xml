@@ -58,6 +58,11 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.3</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

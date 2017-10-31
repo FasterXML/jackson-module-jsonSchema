@@ -1,12 +1,26 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-import com.fasterxml.jackson.module.jsonSchema.types.*;
+import com.fasterxml.jackson.module.jsonSchema.types.AnySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ContainerTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.UnionTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
 
 /**
  * The type wraps the json schema specification at :
@@ -140,13 +154,6 @@ public abstract class JsonSchema
 	 * "extends":"http://json-schema.org/draft-03/schema" }
 	 */
 	private JsonSchema[] extendsextends;
-
-	/**
-	 * This attribute indicates if the instance must have a value, and not be
-	 * undefined. This is false by default, making the instance optional.
-	 */
-	@JsonProperty
-	private Boolean required = null;
 
     /**
      * This attribute indicates if the instance is not modifiable.
@@ -297,10 +304,6 @@ public abstract class JsonSchema
 
 	public JsonSchema[] getExtends() {
 		return extendsextends;
-	}
-
-	public Boolean getRequired() {
-		return required;
 	}
 
     public Boolean getReadonly() {
@@ -455,10 +458,6 @@ public abstract class JsonSchema
 		this.id = id;
 	}
 
-	public void setRequired(Boolean required) {
-		this.required = required;
-	}
-
     public void setReadonly(Boolean readonly){
         this.readonly = readonly;
     }
@@ -522,7 +521,6 @@ public abstract class JsonSchema
 
                  // 27-Apr-2015, tatu: Should not need to check type explicitly
  //                 && equals(getType(), getType())
-                 && equals(getRequired(), that.getRequired())
                  && equals(getReadonly(), that.getReadonly())
                  && equals(get$ref(), that.get$ref())
                  && equals(get$schema(), that.get$schema())
