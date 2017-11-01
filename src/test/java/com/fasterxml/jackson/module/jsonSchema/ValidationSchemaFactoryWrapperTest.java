@@ -1,6 +1,9 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.lang.annotation.ElementType;
@@ -25,11 +28,16 @@ import javax.validation.groups.Default;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.annotation.JsonSchemaTitle;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.ValidationSchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessorTitle;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorManagerConstraint;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
 /**
@@ -67,6 +75,9 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     public interface GroupB {
     }
 
+    public interface None {
+    }
+
     public static class Internal {
         enum Animals {
             DOG, CAT
@@ -75,6 +86,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         @NotNull(groups = {Default.class, GroupA.class})
         private Animals animal;
 
+        @JsonSchemaTitle("This name is optional.")
         String nameOptional;
 
         @NotNull(groups = {Default.class, GroupB.class})
@@ -435,11 +447,13 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
      */
     @Test
     public void testAddingValidationConstraints() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper();
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
+
+        printJsonSchema(jsonSchema);
 
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
@@ -488,11 +502,13 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     @Test
     public void testAddingValidationConstraints_InternalRequired() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper();
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
+
+        printJsonSchema(jsonSchema);
 
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
@@ -554,6 +570,67 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         assertTrue(propertySchema.isObjectSchema());
         ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
         assertThat(intObjectSchema.getRequired(), containsInAnyOrder("nameMandatory"));
+    }
 
+    @Test
+    public void testAddingValidationConstraints_NoValidation() throws Exception {
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class, None.class);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+
+        assertNotNull("schema should not be null.", jsonSchema);
+        assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
+        ObjectSchema objectSchema = jsonSchema.asObjectSchema();
+        Map<String, JsonSchema> properties = objectSchema.getProperties();
+        assertNotNull(properties);
+        JsonSchema propertySchema = properties.get("memberNumber");
+        assertNotNull(propertySchema);
+        assertTrue(propertySchema.isStringSchema());
+        StringSchema stringSchema = propertySchema.asStringSchema();
+        assertNull(stringSchema.getMinLength());
+        assertNull(stringSchema.getMaxLength());
+        assertNull(stringSchema.getPattern());
+
+        propertySchema = properties.get("internal");
+        assertNotNull(propertySchema);
+        assertTrue(propertySchema.isObjectSchema());
+        ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
+        assertThat(intObjectSchema.getRequired(), is(empty()));
+    }
+
+    @Test
+    public void testAddingValidationConstraints_CustomPropertyManager() throws Exception {
+        SchemaPropertyProcessorManagerConstraint customPropertyProcessorManager = new SchemaPropertyProcessorManagerConstraint(ValidationBean.class, Default.class);
+        customPropertyProcessorManager.registerSchemaPropertyProcessor(new SchemaPropertyProcessorTitle());
+        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(customPropertyProcessorManager);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+
+        printJsonSchema(jsonSchema);
+
+        assertNotNull("schema should not be null.", jsonSchema);
+        assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
+        ObjectSchema objectSchema = jsonSchema.asObjectSchema();
+        Map<String, JsonSchema> properties = objectSchema.getProperties();
+        assertNotNull(properties);
+
+        JsonSchema propertySchema = properties.get("internal");
+        assertNotNull(propertySchema);
+        assertTrue(propertySchema.isObjectSchema());
+        ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
+        properties = intObjectSchema.getProperties();
+        assertNotNull(properties);
+        propertySchema = properties.get("nameOptional");
+        assertTrue(propertySchema.isSimpleTypeSchema());
+        SimpleTypeSchema stSchema = propertySchema.asSimpleTypeSchema();
+        assertThat(stSchema.getTitle(), is(equalTo("This name is optional.")));
+    }
+
+    void printJsonSchema(JsonSchema jsonSchema) throws JsonProcessingException {
+        System.err.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema));
     }
 }

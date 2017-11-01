@@ -11,38 +11,33 @@ import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitorDecorator;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.VisitorContext;
 import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
-import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
-import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorManagerConstraint;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
-import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
-import com.fasterxml.jackson.module.jsonSchema.validation.AnnotationConstraintResolver;
-import com.fasterxml.jackson.module.jsonSchema.validation.ValidationConstraintResolver;
 
 /**
  * @author cponomaryov
  */
 public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
-    private ValidationConstraintResolver constraintResolver;
+    private SchemaPropertyProcessorManagerConstraint schemaPropertyProcessorManagerConstraint;
 
     private static class ValidationSchemaFactoryWrapperFactory extends WrapperFactory {
-        Class<?>[] groups;
+        SchemaPropertyProcessorManagerConstraint schemaPropertyProcessorManagerConstraint;
 
-        ValidationSchemaFactoryWrapperFactory(Class<?>... groups) {
-            this.groups = groups;
+        ValidationSchemaFactoryWrapperFactory(SchemaPropertyProcessorManagerConstraint schemaPropertyProcessorManagerConstraint) {
+            this.schemaPropertyProcessorManagerConstraint = schemaPropertyProcessorManagerConstraint;
         }
 
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
-            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper();
+            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper(schemaPropertyProcessorManagerConstraint);
             wrapper.setProvider(p);
             return wrapper;
         }
 
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc) {
-            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper();
+            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper(schemaPropertyProcessorManagerConstraint);
             wrapper.setProvider(p);
             wrapper.setVisitorContext(rvc);
             return wrapper;
@@ -50,7 +45,7 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc, ObjectSchema parent, Class<?> type) {
-            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper(type, groups);
+            SchemaFactoryWrapper wrapper = new ValidationSchemaFactoryWrapper(schemaPropertyProcessorManagerConstraint.createCopyForType(type));
             wrapper.setProvider(p);
             wrapper.setVisitorContext(rvc);
             wrapper.setParent(parent);
@@ -58,17 +53,13 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
         }
     }
 
-    public ValidationSchemaFactoryWrapper() {
-        this(new AnnotationConstraintResolver());
-    }
-
     public ValidationSchemaFactoryWrapper(Class<?> type, Class<?>... groups) {
-        this(new AnnotationConstraintResolver(type, groups), groups);
+        this(new SchemaPropertyProcessorManagerConstraint(type, groups));
     }
 
-    public ValidationSchemaFactoryWrapper(ValidationConstraintResolver constraintResolver, Class<?>... groups) {
-        super(new ValidationSchemaFactoryWrapperFactory(groups));
-        this.constraintResolver = constraintResolver;
+    public ValidationSchemaFactoryWrapper(SchemaPropertyProcessorManagerConstraint schemaPropertyProcessorManagerConstraint) {
+        super(new ValidationSchemaFactoryWrapperFactory(schemaPropertyProcessorManagerConstraint));
+        this.schemaPropertyProcessorManagerConstraint = schemaPropertyProcessorManagerConstraint;
     }
 
     @Override
@@ -81,43 +72,14 @@ public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
             @Override
             public void optionalProperty(BeanProperty writer) throws JsonMappingException {
                 super.optionalProperty(writer);
-                addValidationConstraints(getPropertySchema(writer), writer);
+                schemaPropertyProcessorManagerConstraint.process(getPropertySchema(writer), writer);
             }
 
             @Override
             public void property(BeanProperty writer) throws JsonMappingException {
                 super.property(writer);
-                addValidationConstraints(getPropertySchema(writer), writer);
+                schemaPropertyProcessorManagerConstraint.process(getPropertySchema(writer), writer);
             }
         };
     }
-
-    protected JsonSchema addValidationConstraints(JsonSchema schema, BeanProperty prop) {
-        {
-            if (schema.isSimpleTypeSchema()) {
-                SimpleTypeSchema sts = schema.asSimpleTypeSchema();
-                ObjectSchema parent = sts.getParent();
-                Boolean required = constraintResolver.getRequired(prop);
-                if (required != null) {
-                    parent.getRequired().add(prop.getName());
-                }
-            }
-        }
-        if (schema.isArraySchema()) {
-            ArraySchema arraySchema = schema.asArraySchema();
-            arraySchema.setMaxItems(constraintResolver.getArrayMaxItems(prop));
-            arraySchema.setMinItems(constraintResolver.getArrayMinItems(prop));
-        } else if (schema.isNumberSchema()) {
-            NumberSchema numberSchema = schema.asNumberSchema();
-            numberSchema.setMaximum(constraintResolver.getNumberMaximum(prop));
-            numberSchema.setMinimum(constraintResolver.getNumberMinimum(prop));
-        } else if (schema.isStringSchema()) {
-            StringSchema stringSchema = schema.asStringSchema();
-            stringSchema.setMaxLength(constraintResolver.getStringMaxLength(prop));
-            stringSchema.setMinLength(constraintResolver.getStringMinLength(prop));
-            stringSchema.setPattern(constraintResolver.getStringPattern(prop));
-        }
-        return schema;
-    }
-
 }
