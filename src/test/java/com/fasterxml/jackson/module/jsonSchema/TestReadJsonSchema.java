@@ -1,16 +1,21 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Trivial test to ensure {@link JsonSchema} can be also deserialized
@@ -112,7 +117,7 @@ public class TestReadJsonSchema
     }
     
     public void testAdditionalItems() throws Exception {
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(SchemableArrays.class), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
         assertNotNull(jsonSchema);
@@ -142,9 +147,10 @@ public class TestReadJsonSchema
     public void _testSimple(Class<?> type) throws Exception
     {
         // Create a schema
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(type), visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
+
         assertNotNull(jsonSchema);
 
         _testSimple(type.getSimpleName(), jsonSchema);
@@ -202,7 +208,7 @@ public class TestReadJsonSchema
                 "    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n" +
                 "    \"description\": \"schema for an fstab entry\",\n" +
                 "    \"type\": \"object\",\n" +
-                //"    \"required\": [ \"storage\" ],\n" +
+                "    \"required\": [ \"storage\" ],\n" +
                 "    \"properties\": {\n" +
                 "        \"storage\": {\n" +
                 "            \"type\": \"object\",\n" +

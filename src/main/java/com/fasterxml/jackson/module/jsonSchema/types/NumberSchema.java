@@ -3,6 +3,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class represents a {@link JsonSchema} as a number type
@@ -10,11 +11,20 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class NumberSchema extends ValueTypeSchema 
 {
-	/**
-	 * This attribute indicates if the value of the instance (if the
-	   instance is a number) can not equal the number defined by the
-	   "maximum" attribute.
-	 */
+    protected NumberSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    public NumberSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    /**
+     * This attribute indicates if the value of the instance (if the
+       instance is a number) can not equal the number defined by the
+       "maximum" attribute.
+     */
 	@JsonProperty
 	private Boolean exclusiveMaximum;
 	

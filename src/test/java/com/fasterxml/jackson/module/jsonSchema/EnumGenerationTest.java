@@ -1,10 +1,14 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 public class EnumGenerationTest extends SchemaTestBase
 {
@@ -38,7 +42,7 @@ public class EnumGenerationTest extends SchemaTestBase
      */
 
     private final ObjectMapper MAPPER = new ObjectMapper();
-    JsonSchemaGenerator SCHEMA_GEN = new JsonSchemaGenerator(MAPPER);
+    JsonSchemaGenerator SCHEMA_GEN = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
 
     public void testEnumDefault() throws Exception
     {
@@ -55,7 +59,7 @@ public class EnumGenerationTest extends SchemaTestBase
         final ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
 
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(LetterBean.class);
         @SuppressWarnings("unchecked")
         Map<String, Object> result = (Map<String, Object>) mapper.convertValue(jsonSchema,  Map.class);
@@ -76,6 +80,7 @@ public class EnumGenerationTest extends SchemaTestBase
             {
                 put("type", "object");
                 put("id", "urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:EnumGenerationTest:LetterBean");
+                put("$schema", JsonSchemaVersion.DRAFT_V4.getSchemaString());
                 put("properties",
                         new LinkedHashMap<String, Object>() {
                     {

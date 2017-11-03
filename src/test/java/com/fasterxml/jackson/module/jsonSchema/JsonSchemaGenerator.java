@@ -1,8 +1,12 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * Convenience class that wraps JSON Schema generation functionality.
@@ -29,14 +33,14 @@ public class JsonSchemaGenerator
      */
     private final SchemaFactoryWrapper _visitor;
     
-    public JsonSchemaGenerator(ObjectMapper mapper) {
-        this(mapper, (WrapperFactory) null);
+    public JsonSchemaGenerator(ObjectMapper mapper, JsonSchemaVersion version) {
+        this(mapper, (WrapperFactory)null, version);
     }
 
-    public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
+    public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory, JsonSchemaVersion version) {
         _mapper = mapper;
         _writer = mapper.writer();
-        _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
+        _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory(version) : wrapperFactory;
         _visitor = null;
     }
 
@@ -53,17 +57,17 @@ public class JsonSchemaGenerator
     /**
      * @since 2.6
      */
-    public JsonSchemaGenerator(ObjectWriter w) {
-        this(w, (WrapperFactory) null);
+    public JsonSchemaGenerator(ObjectWriter w, JsonSchemaVersion version) {
+        this(w, (WrapperFactory)null, version);
     }
 
     /**
      * @since 2.6
      */
-    public JsonSchemaGenerator(ObjectWriter w, WrapperFactory wrapperFactory) {
+    public JsonSchemaGenerator(ObjectWriter w, WrapperFactory wrapperFactory, JsonSchemaVersion version) {
         _mapper = null;
         _writer = w;
-        _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
+        _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory(version) : wrapperFactory;
         _visitor = null;
     }
 

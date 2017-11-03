@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema.Items;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
@@ -139,7 +140,7 @@ public class TestGenerateJsonSchema
      * Test simple generation
      */
     public void testGeneratingJsonSchema() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
 
         assertNotNull(jsonSchema);
@@ -194,7 +195,7 @@ public class TestGenerateJsonSchema
     public void testGeneratingJsonSchemaWithFilters() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setFilterProvider(secretFilterProvider);
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(FilteredBean.class);
         assertNotNull(jsonSchema);
         assertTrue(jsonSchema.isObjectSchema());
@@ -213,7 +214,7 @@ public class TestGenerateJsonSchema
      * properly serialized
      */
     public void testSchemaSerialization() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
         assertNotNull(result);
@@ -228,7 +229,7 @@ public class TestGenerateJsonSchema
      * Test for [JACKSON-454]
      */
     public void testThatObjectsHaveNoItems() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(TrivialBean.class);
         Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
         // can we count on ordering being stable? I think this is true with current ObjectNode impl
@@ -238,7 +239,7 @@ public class TestGenerateJsonSchema
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void testSchemaId() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(BeanWithId.class);
         Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
 
@@ -246,6 +247,7 @@ public class TestGenerateJsonSchema
             {
                 put("type", "object");
                 put("id", "urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:BeanWithId");
+                put("$schema", JsonSchemaVersion.DRAFT_V4.getSchemaString());
                 put("properties",
                         new HashMap() {
                     {
@@ -262,17 +264,17 @@ public class TestGenerateJsonSchema
     }
 
     public void testSimpleMap() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(StringMap.class);
         Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
         assertNotNull(result);
 
         String mapSchemaStr = MAPPER.writeValueAsString(jsonSchema);
-        assertEquals("{\"type\":\"object\",\"additionalProperties\":{\"type\":\"string\"}}", mapSchemaStr);
+        assertEquals("{'type':'object','additionalProperties':{'type':'string'}}", mapSchemaStr.replaceAll("\"", "'"));
     }
 
     public void testSinglePropertyDependency() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
 
@@ -280,18 +282,19 @@ public class TestGenerateJsonSchema
         assertNotNull(result);
 
         String schemaString = MAPPER.writeValueAsString(jsonSchema);
-        assertEquals("{\"type\":\"object\"," +
-                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
-                "\"dependencies\":{\"property1\":[\"property2\"]}," +
-                "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
-                ",\"property2\":{\"type\":\"string\"}," +
-                "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
-                "\"property4\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}," +
-            "\"property5\":{\"type\":\"string\"}},\"required\":[\"property5\"]}", schemaString);
+        assertEquals("{'type':'object'," +
+                "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
+                "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+                "'dependencies':{'property1':['property2']}," +
+                "'properties':{'property1':{'type':'integer'}" +
+                ",'property2':{'type':'string'}," +
+                "'property3':{'type':'array','items':{'type':'string'}}," +
+                "'property4':{'type':'array','items':{'type':'number'}}," +
+            "'property5':{'type':'string'}},'required':['property5']}", schemaString.replaceAll("\"", "'"));
     }
 
     public void testMultiplePropertyDependencies() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property3");
@@ -302,18 +305,19 @@ public class TestGenerateJsonSchema
         assertNotNull(result);
 
         String schemaString = MAPPER.writeValueAsString(jsonSchema);
-        assertEquals("{\"type\":\"object\"," +
-                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
-                "\"dependencies\":{\"property1\":[\"property2\",\"property3\"],\"property2\":[\"property3\"]}," +
-                "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
-                ",\"property2\":{\"type\":\"string\"}," +
-                "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
-                "\"property4\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}," +
-            "\"property5\":{\"type\":\"string\"}},\"required\":[\"property5\"]}", schemaString);
+        assertEquals("{'type':'object'," +
+                "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
+                "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+                "'dependencies':{'property1':['property2','property3'],'property2':['property3']}," +
+                "'properties':{'property1':{'type':'integer'}" +
+                ",'property2':{'type':'string'}," +
+                "'property3':{'type':'array','items':{'type':'string'}}," +
+                "'property4':{'type':'array','items':{'type':'number'}}," +
+            "'property5':{'type':'string'}},'required':['property5']}", schemaString.replaceAll("\"", "'"));
     }
 
     public void testSchemaPropertyDependency() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
 
         // Given this dependency schema
         JsonSchema schemaPropertyDependency = generator.generateSchema(DependencySchema.class);
@@ -327,18 +331,19 @@ public class TestGenerateJsonSchema
 
         // Test the generated value.
         String schemaString = MAPPER.writeValueAsString(simpleBeanSchema);
-        assertEquals("{\"type\":\"object\"," +
-                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
-            "\"dependencies\":{\"property1\":{\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema\",\"properties\":{\"property2\":{\"type\":\"string\"}},\"required\":[\"property2\"]}}," +
-                "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
-                ",\"property2\":{\"type\":\"string\"}," +
-                "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
-                "\"property4\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}," +
-            "\"property5\":{\"type\":\"string\"}},\"required\":[\"property5\"]}", schemaString);
+        assertEquals("{'type':'object'," +
+                "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
+                "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+            "'dependencies':{'property1':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','properties':{'property2':{'type':'string'}},'required':['property2']}}," +
+                "'properties':{'property1':{'type':'integer'}" +
+                ",'property2':{'type':'string'}," +
+                "'property3':{'type':'array','items':{'type':'string'}}," +
+                "'property4':{'type':'array','items':{'type':'number'}}," +
+            "'property5':{'type':'string'}},'required':['property5']}", schemaString.replaceAll("\"", "'"));
     }
 
     public void testSchemaPropertyDependencies() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
 
         // Given this dependency schema
         JsonSchema schemaPropertyDependency = generator.generateSchema(DependencySchema.class);
@@ -355,18 +360,19 @@ public class TestGenerateJsonSchema
         String schemaString = MAPPER.writeValueAsString(simpleBeanSchema);
         assertEquals(
                 "{" +
-                  "\"type\":\"object\"," +
-                  "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
-                  "\"dependencies\":{" +
-                "\"property1\":{\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema\",\"properties\":{\"property2\":{\"type\":\"string\"}},\"required\":[\"property2\"]},"
-                + "\"property3\":{\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema\",\"properties\":{\"property2\":{\"type\":\"string\"}},\"required\":[\"property2\"]}}," +
-                  "\"properties\":{" +
-                      "\"property1\":{\"type\":\"integer\"}" +
-                      ",\"property2\":{\"type\":\"string\"}," +
-                      "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
-                      "\"property4\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}," +
-                "\"property5\":{\"type\":\"string\"}" + "},\"required\":[\"property5\"]" +
-                "}", schemaString);
+                  "'type':'object'," +
+                  "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
+                  "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+                  "'dependencies':{" +
+                "'property1':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','properties':{'property2':{'type':'string'}},'required':['property2']},"
+                + "'property3':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','properties':{'property2':{'type':'string'}},'required':['property2']}}," +
+                  "'properties':{" +
+                      "'property1':{'type':'integer'}" +
+                      ",'property2':{'type':'string'}," +
+                      "'property3':{'type':'array','items':{'type':'string'}}," +
+                      "'property4':{'type':'array','items':{'type':'number'}}," +
+                "'property5':{'type':'string'}" + "},'required':['property5']" +
+                "}", schemaString.replaceAll("\"", "'"));
     }
 
     /*
@@ -378,7 +384,7 @@ public class TestGenerateJsonSchema
     public void testInvalidCall() throws Exception {
         // not ok to pass null
         try {
-            SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+            SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
             MAPPER.acceptJsonFormatVisitor((JavaType) null, visitor);
             fail("Should have failed");
         } catch (IllegalArgumentException iae) {

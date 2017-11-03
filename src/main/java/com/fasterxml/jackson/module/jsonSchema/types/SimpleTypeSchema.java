@@ -2,6 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class encapsulates the functionality of {@link JsonSchema} simple types
@@ -9,10 +10,19 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public abstract class SimpleTypeSchema extends JsonSchema
 {
-	/**
-	 * This attribute defines the default value of the instance when the
-	 * instance is undefined.
-	 */
+    protected SimpleTypeSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    protected SimpleTypeSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    /**
+     * This attribute defines the default value of the instance when the
+     * instance is undefined.
+     */
 	protected String defaultdefault;
 
 	/**

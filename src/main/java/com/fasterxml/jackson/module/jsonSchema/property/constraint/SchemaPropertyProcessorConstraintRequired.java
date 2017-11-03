@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 
@@ -18,10 +19,14 @@ public class SchemaPropertyProcessorConstraintRequired extends SchemaPropertyPro
     public void process(JsonSchema schema, BeanProperty prop) {
         if (schema.isSimpleTypeSchema()) {
             SimpleTypeSchema sts = schema.asSimpleTypeSchema();
-            ObjectSchema parent = sts.getParent();
             Boolean required = getRequired(prop);
             if (required != null) {
-                parent.getRequired().add(prop.getName());
+                if (JsonSchemaVersion.DRAFT_V3.equals(schema.getVersion())) {
+                    schema.setRequiredBoolean(true);
+                } else {
+                    ObjectSchema parent = sts.getParent();
+                    parent.getRequired().add(prop.getName());
+                }
             }
         }
     }

@@ -1,8 +1,10 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import java.math.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 public class TestJDKTypes extends SchemaTestBase
 {
@@ -13,7 +15,7 @@ public class TestJDKTypes extends SchemaTestBase
      */
     public void testSimpleNumbers() throws Exception
     {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema schema;
 
         schema = generator.generateSchema(Long.class);

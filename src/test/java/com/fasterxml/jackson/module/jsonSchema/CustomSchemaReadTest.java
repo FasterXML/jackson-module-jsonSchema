@@ -4,12 +4,20 @@ import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
 public class CustomSchemaReadTest extends SchemaTestBase
 {
     @JsonTypeIdResolver(MyResolver.class)
     public static class MySchema extends ObjectSchema {
+        protected MySchema() {
+            super();
+        }
+
+        public MySchema(JsonSchemaVersion version) {
+            super(version);
+        }
     }
 
     static class MyResolver extends JsonSchemaIdResolver
@@ -45,6 +53,7 @@ public class CustomSchemaReadTest extends SchemaTestBase
          String input = "{\n" + 
              "   \"type\":\"CUSTOM\",\n" + 
              "   \"id\":\"7a2e8538-196b-423e-b714-13515848ec0c\",\n" + 
+            "    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n" +
              "   \"description\":\"My Schema\",\n" + 
              "   \"title\":\"my-json-schema\",\n" + 
              "   \"properties\":{\n" + 
@@ -72,10 +81,11 @@ public class CustomSchemaReadTest extends SchemaTestBase
              "               \"format\":\"regex\",\n" + 
              "               \"pattern\":\"w{3}\"\n" + 
              "            }\n" + 
-            "         },\n" + 
-            "         \"required\":[\"subprop\"]" +
+             "         },\n" + 
+             "         \"required\":[\"subprop\"]" +
              "      }\n" + 
-            "   },\n" + "   \"required\":[\"myarray\", \"mystring\", \"myobject\"]" +
+             "   },\n" + 
+             "   \"required\":[\"myarray\", \"mystring\", \"myobject\"]" +
              "}";
 
          ObjectMapper mapper = new ObjectMapper();
@@ -84,6 +94,7 @@ public class CustomSchemaReadTest extends SchemaTestBase
          MySchema schema = mapper.readValue(input, MySchema.class); // fails
 
          String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(schema);
+        System.err.println(json);
          assertNotNull(json);
     }
 }

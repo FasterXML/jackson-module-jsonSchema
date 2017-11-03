@@ -2,16 +2,16 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.*;
-
-import com.fasterxml.jackson.core.*;
-
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /*
  * This attribute defines the allowed items in an instance array, and
@@ -20,9 +20,18 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class ArraySchema extends ContainerTypeSchema
 {
-	/**
-	 * see {@link AdditionalItems}
-	 */
+    private ArraySchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    public ArraySchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    /**
+     * see {@link AdditionalItems}
+     */
 	@JsonProperty
 	protected ArraySchema.AdditionalItems additionalItems;
 
@@ -155,7 +164,7 @@ public class ArraySchema extends ContainerTypeSchema
 		@JsonProperty
 		private JsonSchema[] jsonSchemas;
 
-		public ArrayItems(JsonSchema[] jsonSchemas) {
+        public ArrayItems(JsonSchema[] jsonSchemas) {
 			this.jsonSchemas = jsonSchemas;
 		}
 

@@ -1,8 +1,8 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 public class TestPropertyOrderInSchema extends SchemaTestBase {
 
@@ -79,14 +79,14 @@ public class TestPropertyOrderInSchema extends SchemaTestBase {
 
     public void testAnnotationOrder() throws Exception {
         ObjectMapper MAPPER = objectMapper();
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(Bean.class);
         assertEquals(jsonSchema.asObjectSchema().getProperties().keySet().toString(), "[c, b, a]");
     }
     
     public void testAlphabeticOrder() throws Exception {
         final ObjectMapper MAPPER = objectMapper();
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(Bean2.class);
         assertEquals(jsonSchema.asObjectSchema().getProperties().keySet().toString(), "[a, b, c]");
     }

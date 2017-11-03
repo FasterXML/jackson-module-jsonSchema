@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessor;
 
 /**
@@ -18,6 +20,11 @@ public abstract class SchemaPropertyProcessorConstraint implements SchemaPropert
 
     public void setPropertyConstraints(Map<String, List<Annotation>> propertyConstraints) {
         this.propertyConstraints = propertyConstraints;
+    }
+
+    @Override
+    public void process(JsonSchema schema, JavaType type) {
+        //Currently not processing constraints on the main class
     }
 
     @SuppressWarnings("unchecked")

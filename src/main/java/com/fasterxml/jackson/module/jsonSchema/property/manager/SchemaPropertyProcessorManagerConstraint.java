@@ -1,4 +1,4 @@
-package com.fasterxml.jackson.module.jsonSchema.property.constraint;
+package com.fasterxml.jackson.module.jsonSchema.property.manager;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -16,7 +16,14 @@ import javax.validation.metadata.PropertyDescriptor;
 
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessorManager;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraint;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintDecimalMax;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintDecimalMin;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintMax;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintMin;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintPattern;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintRequired;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintSize;
 
 /**
  * @author amerritt
@@ -40,18 +47,27 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
         init(type, groups);
     }
 
-    public SchemaPropertyProcessorManagerConstraint createCopyForType(Class<?> type) {
+    @Override
+    public SchemaPropertyProcessorManagerApi createCopyForType(Class<?> type) {
         SchemaPropertyProcessorManagerConstraint copy = new SchemaPropertyProcessorManagerConstraint(type, groups);
         copy.setProcessors(getProcessors());
         return copy;
     }
 
+    /**
+     * Get all the constraints for the type for the given groups.  These will then be passed 
+     * to the constraint processors so they don't each have to look them up every time.
+     * 
+     * @param type - Current class to get constraints from.
+     * @param groups - Active groups for constraints.
+     */
     private void init(Class<?> type, Class<?>... groups) {
         final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         BeanDescriptor beanDescriptor = validator.getConstraintsForClass(type);
         propertyConstraints = beanDescriptor.getConstrainedProperties().stream().collect(toMap(pd -> pd.getPropertyName(), propertyDescriptor -> processPropertDescriptor(propertyDescriptor, groups)));
     }
 
+    @Override
     public void process(JsonSchema schema, BeanProperty prop) {
         getProcessors().forEach(processor -> {
             if (processor instanceof SchemaPropertyProcessorConstraint) {
@@ -61,7 +77,7 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
         });
     }
 
-    public List<Annotation> processPropertDescriptor(PropertyDescriptor propertyDescriptor, Class<?>... groups) {
+    protected List<Annotation> processPropertDescriptor(PropertyDescriptor propertyDescriptor, Class<?>... groups) {
         Set<ConstraintDescriptor<?>> descriptorsForGroup = propertyDescriptor.findConstraints().unorderedAndMatchingGroups(groups).getConstraintDescriptors();
         List<Annotation> propertyConstraintAnnotations = new ArrayList<>();
         for (ConstraintDescriptor<?> constraintDescriptor : descriptorsForGroup) {
@@ -70,7 +86,7 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
         return propertyConstraintAnnotations;
     }
 
-    public void processNestedDescriptors(ConstraintDescriptor<?> constraintDescriptor, List<Annotation> propertyConstraintAnnotations) {
+    protected void processNestedDescriptors(ConstraintDescriptor<?> constraintDescriptor, List<Annotation> propertyConstraintAnnotations) {
         Set<ConstraintDescriptor<?>> composingConstraints = constraintDescriptor.getComposingConstraints();
         if (composingConstraints != null && composingConstraints.size() > 0) {
             for (ConstraintDescriptor<?> constraintDescriptor2 : composingConstraints) {

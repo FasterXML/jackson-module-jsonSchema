@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonNumberFormatVisitor
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonStringFormatVisitor;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.AnySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
@@ -37,12 +38,12 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     protected ObjectSchema parent;
     protected Class<?> type;
 
-    public SchemaFactoryWrapper() {
-        this(null, new WrapperFactory());
+    public SchemaFactoryWrapper(JsonSchemaVersion version) {
+        this(null, new WrapperFactory(version));
     }
 
-    public SchemaFactoryWrapper(SerializerProvider p) {
-        this(p, new WrapperFactory());
+    public SchemaFactoryWrapper(SerializerProvider p, JsonSchemaVersion version) {
+        this(p, new WrapperFactory(version));
     }
 
     protected SchemaFactoryWrapper(WrapperFactory wrapperFactory) {
@@ -51,7 +52,7 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
 
     protected SchemaFactoryWrapper(SerializerProvider p, WrapperFactory wrapperFactory) {
         provider = p;
-        schemaProvider = new JsonSchemaFactory();
+        schemaProvider = new JsonSchemaFactory(wrapperFactory.getVersion());
         visitorFactory = new FormatVisitorFactory(wrapperFactory);
     }
 
@@ -116,6 +117,9 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     @Override
     public JsonObjectFormatVisitor expectObjectFormat(JavaType convertedType) {
         ObjectSchema s = schemaProvider.objectSchema(parent);
+        if (parent == null) {
+            s.set$schema(schemaProvider.getSchemaString());
+        }
         schema = s;
 
         // if we don't already have a recursive visitor context, create one

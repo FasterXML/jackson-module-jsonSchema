@@ -1,6 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.annotation.JsonSchemaTitle;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper;
 
 import junit.framework.TestCase;
@@ -11,9 +12,11 @@ public class TitleSchemaFactoryWrapperTest extends TestCase{
 		public String genus;
 	}
 	
+    @JsonSchemaTitle("Person")
 	public class Person {
 		public String name;
 		public String hat;
+        @JsonSchemaTitle("Pet")
 		public Pet pet;
 	}
 	
@@ -24,6 +27,8 @@ public class TitleSchemaFactoryWrapperTest extends TestCase{
 
 		mapper.acceptJsonFormatVisitor(Person.class, visitor);
 		JsonSchema schema = visitor.finalSchema();
+
+        System.err.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(schema));
 
 		assertTrue("schema should be an objectSchema.", schema.isObjectSchema());
 		String title = schema.asObjectSchema().getTitle();

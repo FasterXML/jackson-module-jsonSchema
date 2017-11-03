@@ -1,6 +1,8 @@
 package com.fasterxml.jackson.module.jsonSchema.factories;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
@@ -18,10 +20,6 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     private WrapperFactory wrapperFactory;
 
     private VisitorContext visitorContext;
-
-    public ArrayVisitor(SerializerProvider provider, ArraySchema schema) {
-        this(provider, schema, new WrapperFactory());
-    }
 
     public ArrayVisitor(SerializerProvider provider, ArraySchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
@@ -75,7 +73,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
             if (visitorContext != null) {
                 String seenSchemaUri = visitorContext.getSeenSchemaUri(contentType);
                 if (seenSchemaUri != null) {
-                    schema.setItemsSchema(new ReferenceSchema(seenSchemaUri));
+                    schema.setItemsSchema(new ReferenceSchema(schema.getVersion(), seenSchemaUri));
                     return;
                 }
             }
@@ -89,7 +87,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     @Override
     public void itemsFormat(JsonFormatTypes format) throws JsonMappingException
     {
-        schema.setItemsSchema(JsonSchema.minimalForFormat(format));
+        schema.setItemsSchema(JsonSchema.minimalForFormat(schema.getVersion(), format));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class represents a {@link JsonSchema} as an integer type
@@ -11,11 +12,20 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class IntegerSchema extends NumberSchema
 {
-	/**
-	 * This attribute defines what value the number instance must be
-	   divisible by with no remainder (the result of the division must be an
-	   integer.)  The value of this attribute SHOULD NOT be 0.
-	 */
+    protected IntegerSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    public IntegerSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    /**
+     * This attribute defines what value the number instance must be
+       divisible by with no remainder (the result of the division must be an
+       integer.)  The value of this attribute SHOULD NOT be 0.
+     */
 	private Integer divisibleBy;
 	
      @Override

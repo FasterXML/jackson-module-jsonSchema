@@ -20,14 +20,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     private WrapperFactory wrapperFactory;
     private VisitorContext visitorContext;
 
-    /**
-     * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
-     */
-    @Deprecated
-    public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
-        this(provider, schema, new WrapperFactory());
-    }
-
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
         this.schema = schema;
@@ -109,7 +101,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
         String seenSchemaUri = visitorContext.getSeenSchemaUri(prop.getType());
         if (seenSchemaUri != null) {
-            return new ReferenceSchema(seenSchemaUri, schema);
+            return new ReferenceSchema(wrapperFactory.getVersion(), seenSchemaUri, schema);
         }
 
         SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext, schema, prop.getType().getRawClass());
@@ -131,7 +123,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         if (visitorContext != null) {
             String seenSchemaUri = visitorContext.getSeenSchemaUri(propertyTypeHint);
             if (seenSchemaUri != null) {
-                return new ReferenceSchema(seenSchemaUri, schema);
+                return new ReferenceSchema(wrapperFactory.getVersion(), seenSchemaUri, schema);
             }
         }
 

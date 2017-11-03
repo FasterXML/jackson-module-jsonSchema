@@ -31,9 +31,10 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonSchemaTitle;
-import com.fasterxml.jackson.module.jsonSchema.customProperties.ValidationSchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.SchemaPropertyProcessorManagerFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.ValidationSchemaPropertyProcessorManagerFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessorTitle;
-import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorManagerConstraint;
+import com.fasterxml.jackson.module.jsonSchema.property.manager.SchemaPropertyProcessorManagerConstraint;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
@@ -447,7 +448,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
      */
     @Test
     public void testAddingValidationConstraints() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class);
+        ValidationSchemaPropertyProcessorManagerFactoryWrapper visitor = new ValidationSchemaPropertyProcessorManagerFactoryWrapper(ValidationBean.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
@@ -502,7 +503,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     @Test
     public void testAddingValidationConstraints_InternalRequired() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class);
+        ValidationSchemaPropertyProcessorManagerFactoryWrapper visitor = new ValidationSchemaPropertyProcessorManagerFactoryWrapper(ValidationBean.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
@@ -524,7 +525,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     @Test
     public void testAddingValidationConstraints_CustomAnnotation() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class);
+        ValidationSchemaPropertyProcessorManagerFactoryWrapper visitor = new ValidationSchemaPropertyProcessorManagerFactoryWrapper(ValidationBean.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
@@ -546,7 +547,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     @Test
     public void testAddingValidationConstraints_LimitedByGroup() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class, GroupB.class);
+        ValidationSchemaPropertyProcessorManagerFactoryWrapper visitor = new ValidationSchemaPropertyProcessorManagerFactoryWrapper(ValidationBean.class, GroupB.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
@@ -574,7 +575,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
 
     @Test
     public void testAddingValidationConstraints_NoValidation() throws Exception {
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(ValidationBean.class, None.class);
+        ValidationSchemaPropertyProcessorManagerFactoryWrapper visitor = new ValidationSchemaPropertyProcessorManagerFactoryWrapper(ValidationBean.class, None.class);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
@@ -604,7 +605,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
     public void testAddingValidationConstraints_CustomPropertyManager() throws Exception {
         SchemaPropertyProcessorManagerConstraint customPropertyProcessorManager = new SchemaPropertyProcessorManagerConstraint(ValidationBean.class, Default.class);
         customPropertyProcessorManager.registerSchemaPropertyProcessor(new SchemaPropertyProcessorTitle());
-        ValidationSchemaFactoryWrapper visitor = new ValidationSchemaFactoryWrapper(customPropertyProcessorManager);
+        SchemaPropertyProcessorManagerFactoryWrapper visitor = new SchemaPropertyProcessorManagerFactoryWrapper(customPropertyProcessorManager);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
@@ -629,6 +630,9 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         SimpleTypeSchema stSchema = propertySchema.asSimpleTypeSchema();
         assertThat(stSchema.getTitle(), is(equalTo("This name is optional.")));
     }
+
+    //TODO: see if I can make the constraint processors more generic
+    //TODO: see about doing v3 and v4 of schema
 
     void printJsonSchema(JsonSchema jsonSchema) throws JsonProcessingException {
         System.err.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema));
