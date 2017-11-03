@@ -11,13 +11,13 @@ import com.fasterxml.jackson.module.jsonSchema.property.manager.SchemaPropertyPr
  * 
  * @author amerritt
  */
-public class TitleSchemaFactoryWrapper extends SchemaPropertyProcessorManagerFactoryWrapper
+public class TitleSchemaPropertyProcessorManagerFactoryWrapper extends SchemaPropertyProcessorManagerFactoryWrapper
 {
-    public TitleSchemaFactoryWrapper() {
+    public TitleSchemaPropertyProcessorManagerFactoryWrapper() {
         this(JsonSchemaVersion.DRAFT_V3);
     }
 
-    public TitleSchemaFactoryWrapper(JsonSchemaVersion version) {
+    public TitleSchemaPropertyProcessorManagerFactoryWrapper(JsonSchemaVersion version) {
         super(new SchemaPropertyProcessorManager(Arrays.asList(new SchemaPropertyProcessorTitle())), version);
     }
 }

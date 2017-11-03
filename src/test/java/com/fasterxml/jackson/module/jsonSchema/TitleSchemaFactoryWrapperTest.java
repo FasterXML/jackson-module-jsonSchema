@@ -2,7 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonSchemaTitle;
-import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaPropertyProcessorManagerFactoryWrapper;
 
 import junit.framework.TestCase;
 
@@ -22,7 +22,7 @@ public class TitleSchemaFactoryWrapperTest extends TestCase{
 	
 	public void testAddingTitle() throws Exception
 	{
-		TitleSchemaFactoryWrapper visitor = new TitleSchemaFactoryWrapper();
+		TitleSchemaPropertyProcessorManagerFactoryWrapper visitor = new TitleSchemaPropertyProcessorManagerFactoryWrapper();
 		ObjectMapper mapper = new ObjectMapper();
 
 		mapper.acceptJsonFormatVisitor(Person.class, visitor);
