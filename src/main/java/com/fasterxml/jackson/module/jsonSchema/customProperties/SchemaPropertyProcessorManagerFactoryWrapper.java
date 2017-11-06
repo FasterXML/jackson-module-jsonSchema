@@ -16,6 +16,10 @@ import com.fasterxml.jackson.module.jsonSchema.property.manager.SchemaPropertyPr
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
 /**
+ * This class provides a wrapper around the SchemaFactoryWrapper that delegates 
+ * to the provided implementation of SchemaPropertyProcessorManagerApi to process
+ * each property of type object elements.
+ * 
  * @author amerritt
  */
 public class SchemaPropertyProcessorManagerFactoryWrapper extends SchemaFactoryWrapper {
@@ -27,7 +31,7 @@ public class SchemaPropertyProcessorManagerFactoryWrapper extends SchemaFactoryW
     }
 
     public SchemaPropertyProcessorManagerFactoryWrapper(SchemaPropertyProcessorManagerApi schemaPropertyProcessorManager, JsonSchemaVersion version) {
-        super(new ValidationSchemaFactoryWrapperFactory(schemaPropertyProcessorManager, version));
+        super(new SchemaPropertyProcessorManagerFactory(schemaPropertyProcessorManager, version));
         this.schemaPropertyProcessorManager = schemaPropertyProcessorManager;
     }
 
@@ -54,10 +58,10 @@ public class SchemaPropertyProcessorManagerFactoryWrapper extends SchemaFactoryW
         };
     }
 
-    private static class ValidationSchemaFactoryWrapperFactory extends WrapperFactory {
+    private static class SchemaPropertyProcessorManagerFactory extends WrapperFactory {
         SchemaPropertyProcessorManagerApi schemaPropertyProcessorManager;
 
-        ValidationSchemaFactoryWrapperFactory(SchemaPropertyProcessorManagerApi schemaPropertyProcessorManager, JsonSchemaVersion version) {
+        SchemaPropertyProcessorManagerFactory(SchemaPropertyProcessorManagerApi schemaPropertyProcessorManager, JsonSchemaVersion version) {
             super(version);
             this.schemaPropertyProcessorManager = schemaPropertyProcessorManager;
         }

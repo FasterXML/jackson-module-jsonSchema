@@ -49,9 +49,7 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
 
     @Override
     public SchemaPropertyProcessorManagerApi createCopyForType(Class<?> type) {
-        SchemaPropertyProcessorManagerConstraint copy = new SchemaPropertyProcessorManagerConstraint(type, groups);
-        copy.setProcessors(getProcessors());
-        return copy;
+        return new SchemaPropertyProcessorManagerConstraint(type, groups);
     }
 
     /**
