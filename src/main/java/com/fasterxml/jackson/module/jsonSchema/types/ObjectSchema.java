@@ -39,7 +39,7 @@ public class ObjectSchema extends ContainerTypeSchema
 	 * name as a property in this attribute's object, then the instance must be
 	 * valid against the attribute's property value
 	 */
-	@JsonProperty
+    @JsonProperty
 	private Map<String, Object> dependencies;
 
 	/**
@@ -71,8 +71,8 @@ public class ObjectSchema extends ContainerTypeSchema
     /**
      * This will include the names of the properties that are required.
      */
-    @JsonProperty
-    private Set<String> required = new HashSet<>();
+    @JsonProperty("required")
+    private Set<String> requiredPropertyNames = new HashSet<>();
 
     private boolean isDeserializing = false;
     protected ObjectSchema() {
@@ -145,12 +145,12 @@ public class ObjectSchema extends ContainerTypeSchema
 	    return properties;
 	}
 
-    public Set<String> getRequired() {
+    public Set<String> getRequiredPropertyNames() {
         if (JsonSchemaVersion.DRAFT_V3.equals(version)) {
-            required.clear(); //make sure this does show in version 3 or it would collide
-            return Collections.unmodifiableSet(required);
+            requiredPropertyNames.clear(); //make sure this does show in version 3 or it would collide
+            return Collections.unmodifiableSet(requiredPropertyNames);
         }
-        return required;
+        return requiredPropertyNames;
     }
 
 	public void putOptionalProperty(BeanProperty property, JsonSchema jsonSchema) {
@@ -170,20 +170,14 @@ public class ObjectSchema extends ContainerTypeSchema
 	}
 
 	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
-        if (JsonSchemaVersion.DRAFT_V3.equals(version)) {
-            value.setRequiredBoolean(true);
-        } else {
-            required.add(property.getName());
-        }
-		value.enrichWithBeanProperty(property);
-		return properties.put(property.getName(), value);
+        return putProperty(property.getName(), value);
 	}
 
 	public JsonSchema putProperty(String name, JsonSchema value) {
         if (JsonSchemaVersion.DRAFT_V3.equals(version)) {
-            value.setRequiredBoolean(true);
+            value.setRequired(true);
         } else {
-            required.add(name);
+            requiredPropertyNames.add(name);
         }
 		return properties.put(name, value);
 	}
@@ -224,11 +218,11 @@ public class ObjectSchema extends ContainerTypeSchema
         }
     }
 
-    public void setRequired(Set<String> required) {
+    public void setRequiredPropertyNames(Set<String> required) {
         if (!isDeserializing && !JsonSchemaVersion.DRAFT_V4.equals(version)) {
             throw new RuntimeException("You can only set required field name set on Draft V4.  You have: " + version);
         }
-        this.required = required;
+        this.requiredPropertyNames = required;
     }
 
     @Override

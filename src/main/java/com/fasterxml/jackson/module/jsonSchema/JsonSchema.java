@@ -1,5 +1,10 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -179,8 +184,8 @@ public abstract class JsonSchema
      * @deprecated Since 2.9 - Use setRequired on ObjectSchema from Draft V4 onwards.
      */
     @Deprecated
-	@JsonProperty("required")
-	private Boolean requiredBoolean = null;
+    @JsonProperty
+	private Boolean required = null;
 
     /**
      * This attribute indicates if the instance is not modifiable.
@@ -194,6 +199,11 @@ public abstract class JsonSchema
      * purpose the instance property.
      */
     private String description;
+
+    /**
+     * Map to hold items that are not part of the official spec but may want to be added.
+     */
+    private Map<String, String> nonStandardProperties = new LinkedHashMap<>();
 
     /**
 	 * Attempt to return this JsonSchema as an {@link AnySchema}
@@ -335,8 +345,8 @@ public abstract class JsonSchema
 		return extendsextends;
 	}
 
-	public Boolean getRequiredBoolean() {
-		return requiredBoolean;
+	public Boolean getRequired() {
+		return required;
 	}
 
     public Boolean getReadonly() {
@@ -345,6 +355,15 @@ public abstract class JsonSchema
 
     public String getDescription() {
         return description;
+    }
+
+    @JsonAnyGetter
+    public Map<String, String> getNonStandardProperties() {
+        return nonStandardProperties;
+    }
+
+    public String getNonStandardProperty(String propertyName) {
+        return nonStandardProperties.get(propertyName);
     }
 
     @JsonIgnore
@@ -494,11 +513,11 @@ public abstract class JsonSchema
 		this.id = id;
 	}
 
-	public void setRequiredBoolean(Boolean requiredBoolean) {
+	public void setRequired(Boolean required) {
         if (!JsonSchemaVersion.DRAFT_V3.equals(version)) {
             throw new RuntimeException("You can only set the required boolean on Draft V3.  You have: " + version);
         }
-		this.requiredBoolean = requiredBoolean;
+		this.required = required;
 	}
 
     public void setReadonly(Boolean readonly){
@@ -507,6 +526,11 @@ public abstract class JsonSchema
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JsonAnySetter
+    public void addNonStandardProperty(String key, String value) {
+        nonStandardProperties.put(key, value);
     }
 
     /**
@@ -565,7 +589,7 @@ public abstract class JsonSchema
 
                  // 27-Apr-2015, tatu: Should not need to check type explicitly
  //                 && equals(getType(), getType())
-            && ((JsonSchemaVersion.DRAFT_V3.equals(version)) ? equals(getRequiredBoolean(), that.getRequiredBoolean()) : true)
+            && ((JsonSchemaVersion.DRAFT_V3.equals(version)) ? equals(getRequired(), that.getRequired()) : true)
                  && equals(getReadonly(), that.getReadonly())
                  && equals(get$ref(), that.get$ref())
                  && equals(get$schema(), that.get$schema())

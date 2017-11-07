@@ -8,15 +8,16 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessor;
+import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyAnnotationProcessor;
 
 /**
  * @author amerritt
  * 
  * @since 4.0
  */
-public abstract class SchemaPropertyProcessorConstraint implements SchemaPropertyProcessor {
+public abstract class SchemaPropertyProcessorConstraint<T extends Annotation> extends SchemaPropertyAnnotationProcessor<T> {
     Map<String, List<Annotation>> propertyConstraints;
+    String propertyName;
 
     public void setPropertyConstraints(Map<String, List<Annotation>> propertyConstraints) {
         this.propertyConstraints = propertyConstraints;
@@ -27,8 +28,14 @@ public abstract class SchemaPropertyProcessorConstraint implements SchemaPropert
         //Currently not processing constraints on the main class
     }
 
+    @Override
+    public void process(JsonSchema schema, BeanProperty prop) {
+        propertyName = prop.getName();
+        processAnnotation(schema, getAnnotation(prop, annotationClass));
+    }
+
     @SuppressWarnings("unchecked")
-    <T extends Annotation> T getAnnotation(BeanProperty prop, Class<T> type) {
+    T getAnnotation(BeanProperty prop, Class<T> type) {
         if (propertyConstraints != null) {
             return (T)emptyIfNull(propertyConstraints.get(prop.getName())).stream().filter(a -> type.isInstance(a)).findFirst().orElse(null);
         } else {

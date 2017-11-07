@@ -2,7 +2,6 @@ package com.fasterxml.jackson.module.jsonSchema.property.constraint;
 
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
@@ -12,23 +11,22 @@ import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
  * 
  * @since 4.0
  */
-public class SchemaPropertyProcessorConstraintSize extends SchemaPropertyProcessorConstraint
+public class SchemaPropertyProcessorConstraintSize extends SchemaPropertyProcessorConstraint<Size>
 {
     @Override
-    public void process(JsonSchema schema, BeanProperty prop) {
+    protected void processNonNullAnnotation(JsonSchema schema, Size sizeAnnotation) {
         if (schema.isArraySchema()) {
             ArraySchema arraySchema = schema.asArraySchema();
-            arraySchema.setMaxItems(getMaxSize(prop));
-            arraySchema.setMinItems(getMinSize(prop));
+            arraySchema.setMaxItems(getMaxSize(sizeAnnotation));
+            arraySchema.setMinItems(getMinSize(sizeAnnotation));
         } else if (schema.isStringSchema()) {
             StringSchema stringSchema = schema.asStringSchema();
-            stringSchema.setMaxLength(getMaxSize(prop));
-            stringSchema.setMinLength(getMinSize(prop));
+            stringSchema.setMaxLength(getMaxSize(sizeAnnotation));
+            stringSchema.setMinLength(getMinSize(sizeAnnotation));
         }
     }
 
-    private Integer getMaxSize(BeanProperty prop) {
-        Size ann = getSizeAnnotation(prop);
+    private Integer getMaxSize(Size ann) {
         if (ann != null) {
             int value = ann.max();
             if (value != Integer.MAX_VALUE) {
@@ -38,8 +36,7 @@ public class SchemaPropertyProcessorConstraintSize extends SchemaPropertyProcess
         return null;
     }
 
-    private Integer getMinSize(BeanProperty prop) {
-        Size ann = getSizeAnnotation(prop);
+    private Integer getMinSize(Size ann) {
         if (ann != null) {
             int value = ann.min();
             if (value != 0) {
@@ -47,9 +44,5 @@ public class SchemaPropertyProcessorConstraintSize extends SchemaPropertyProcess
             }
         }
         return null;
-    }
-
-    private Size getSizeAnnotation(BeanProperty prop) {
-        return getAnnotation(prop, Size.class);
     }
 }

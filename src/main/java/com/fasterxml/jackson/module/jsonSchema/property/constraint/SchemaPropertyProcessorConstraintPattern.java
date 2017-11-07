@@ -2,7 +2,6 @@ package com.fasterxml.jackson.module.jsonSchema.property.constraint;
 
 import javax.validation.constraints.Pattern;
 
-import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
@@ -11,22 +10,14 @@ import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
  * 
  * @since 4.0
  */
-public class SchemaPropertyProcessorConstraintPattern extends SchemaPropertyProcessorConstraint
+public class SchemaPropertyProcessorConstraintPattern extends SchemaPropertyProcessorConstraint<Pattern>
 {
     @Override
-    public void process(JsonSchema schema, BeanProperty prop) {
+    protected void processNonNullAnnotation(JsonSchema schema, Pattern patternAnnotation) {
         if (schema.isStringSchema()) {
             StringSchema stringSchema = schema.asStringSchema();
-            stringSchema.setPattern(getStringPattern(prop));
+            stringSchema.setPattern(patternAnnotation.regexp());
         }
-    }
-
-    public String getStringPattern(final BeanProperty prop) {
-        Pattern patternAnnotation = getAnnotation(prop, Pattern.class);
-        if (patternAnnotation != null) {
-            return patternAnnotation.regexp();
-    }
-        return null;
     }
 
 }

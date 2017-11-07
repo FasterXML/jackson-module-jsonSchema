@@ -31,10 +31,15 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonSchemaTitle;
+import com.fasterxml.jackson.module.jsonSchema.annotation.NonStandardProperty;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.SchemaPropertyProcessorManagerFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.ValidationSchemaPropertyProcessorManagerFactoryWrapper;
 import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessorTitle;
+import com.fasterxml.jackson.module.jsonSchema.property.manager.SchemaPropertyProcessorManager;
+import com.fasterxml.jackson.module.jsonSchema.property.manager.SchemaPropertyProcessorManagerApi;
 import com.fasterxml.jackson.module.jsonSchema.property.manager.SchemaPropertyProcessorManagerConstraint;
+import com.fasterxml.jackson.module.jsonSchema.property.nonstandard.SchemaPropertyProcessorNonStandardProperties;
+import com.fasterxml.jackson.module.jsonSchema.property.nonstandard.SchemaPropertyProcessorNonStandardProperty;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
@@ -44,7 +49,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 /**
  * @author cponomaryov
  */
-public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
+public class SchemaPropertyProcessorManagerFactoryWrapperTest extends SchemaTestBase {
     @Size(min = 2, max = 80)
     @MyPattern(message = "")
     @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER, ElementType.TYPE})
@@ -454,8 +459,6 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
 
-        printJsonSchema(jsonSchema);
-
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
@@ -497,7 +500,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
             assertNotNull(propertySchema);
             assertTrue(propertySchema.isStringSchema());
             StringSchema stringSchema = propertySchema.asStringSchema();
-            assertEquals(testCase[1], stringSchema.getParent().getRequired().contains(testCase[0]));
+            assertEquals(testCase[1], stringSchema.getParent().getRequiredPropertyNames().contains(testCase[0]));
         }
     }
 
@@ -509,8 +512,6 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
 
-        printJsonSchema(jsonSchema);
-
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
@@ -520,7 +521,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         assertNotNull(propertySchema);
         assertTrue(propertySchema.isObjectSchema());
         ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
-        assertThat(intObjectSchema.getRequired(), containsInAnyOrder("animal", "nameMandatory"));
+        assertThat(intObjectSchema.getRequiredPropertyNames(), containsInAnyOrder("animal", "nameMandatory"));
     }
 
     @Test
@@ -570,7 +571,7 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         assertNotNull(propertySchema);
         assertTrue(propertySchema.isObjectSchema());
         ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
-        assertThat(intObjectSchema.getRequired(), containsInAnyOrder("nameMandatory"));
+        assertThat(intObjectSchema.getRequiredPropertyNames(), containsInAnyOrder("nameMandatory"));
     }
 
     @Test
@@ -598,20 +599,18 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         assertNotNull(propertySchema);
         assertTrue(propertySchema.isObjectSchema());
         ObjectSchema intObjectSchema = propertySchema.asObjectSchema();
-        assertThat(intObjectSchema.getRequired(), is(empty()));
+        assertThat(intObjectSchema.getRequiredPropertyNames(), is(empty()));
     }
 
     @Test
     public void testAddingValidationConstraints_CustomPropertyManager() throws Exception {
-        SchemaPropertyProcessorManagerConstraint customPropertyProcessorManager = new SchemaPropertyProcessorManagerConstraint(ValidationBean.class, Default.class);
+        SchemaPropertyProcessorManagerApi customPropertyProcessorManager = new SchemaPropertyProcessorManagerConstraint(ValidationBean.class, Default.class);
         customPropertyProcessorManager.registerSchemaPropertyProcessor(new SchemaPropertyProcessorTitle());
         SchemaPropertyProcessorManagerFactoryWrapper visitor = new SchemaPropertyProcessorManagerFactoryWrapper(customPropertyProcessorManager);
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.acceptJsonFormatVisitor(ValidationBean.class, visitor);
         JsonSchema jsonSchema = visitor.finalSchema();
-
-        printJsonSchema(jsonSchema);
 
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
@@ -631,8 +630,46 @@ public class ValidationSchemaFactoryWrapperTest extends SchemaTestBase {
         assertThat(stSchema.getTitle(), is(equalTo("This name is optional.")));
     }
 
-    //TODO: see if I can make the constraint processors more generic
-    //TODO: see about doing v3 and v4 of schema
+    @NonStandardProperty(name = "test", value = "testValue")
+    public static class InternalNonStandard {
+        @NonStandardProperty(name = "test2", value = "testValue2")
+        @NonStandardProperty(name = "test3", value = "testValue3")
+        @JsonSchemaTitle("This name is optional.")
+        String nameOptional;
+
+        public String getNameOptional() {
+            return nameOptional;
+        }
+
+        public void setNameOptional(String nameOptional) {
+            this.nameOptional = nameOptional;
+        }
+    }
+
+    @Test
+    public void testAddingValidationConstraints_NonStandardProperty() throws Exception {
+        SchemaPropertyProcessorManagerApi customPropertyProcessorManager = new SchemaPropertyProcessorManager();
+        customPropertyProcessorManager.registerSchemaPropertyProcessor(new SchemaPropertyProcessorNonStandardProperty());
+        customPropertyProcessorManager.registerSchemaPropertyProcessor(new SchemaPropertyProcessorNonStandardProperties());
+        SchemaPropertyProcessorManagerFactoryWrapper visitor = new SchemaPropertyProcessorManagerFactoryWrapper(customPropertyProcessorManager);
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.acceptJsonFormatVisitor(InternalNonStandard.class, visitor);
+        JsonSchema jsonSchema = visitor.finalSchema();
+
+        assertNotNull("schema should not be null.", jsonSchema);
+        assertEquals("testValue", jsonSchema.getNonStandardProperty("test"));
+
+        assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
+        ObjectSchema objectSchema = jsonSchema.asObjectSchema();
+        Map<String, JsonSchema> properties = objectSchema.getProperties();
+        assertNotNull(properties);
+
+        JsonSchema propertySchema = properties.get("nameOptional");
+        assertNotNull(propertySchema);
+        assertEquals("testValue2", propertySchema.getNonStandardProperty("test2"));
+        assertEquals("testValue3", propertySchema.getNonStandardProperty("test3"));
+    }
 
     void printJsonSchema(JsonSchema jsonSchema) throws JsonProcessingException {
         System.err.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema));

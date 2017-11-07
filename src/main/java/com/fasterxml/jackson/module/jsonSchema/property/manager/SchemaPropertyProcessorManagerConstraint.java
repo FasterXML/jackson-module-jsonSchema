@@ -16,13 +16,14 @@ import javax.validation.metadata.PropertyDescriptor;
 
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.property.SchemaPropertyProcessor;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraint;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintDecimalMax;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintDecimalMin;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintMax;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintMin;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintPattern;
-import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintRequired;
+import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintNotNull;
 import com.fasterxml.jackson.module.jsonSchema.property.constraint.SchemaPropertyProcessorConstraintSize;
 
 /**
@@ -37,7 +38,7 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
 
     public SchemaPropertyProcessorManagerConstraint(Class<?> type, Class<?>... groups) {
         this.groups = groups;
-        registerSchemaPropertyProcessor(new SchemaPropertyProcessorConstraintRequired());
+        registerSchemaPropertyProcessor(new SchemaPropertyProcessorConstraintNotNull());
         registerSchemaPropertyProcessor(new SchemaPropertyProcessorConstraintSize());
         registerSchemaPropertyProcessor(new SchemaPropertyProcessorConstraintPattern());
         registerSchemaPropertyProcessor(new SchemaPropertyProcessorConstraintMin());
@@ -47,9 +48,15 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
         init(type, groups);
     }
 
+    protected SchemaPropertyProcessorManagerConstraint(Class<?> type, List<SchemaPropertyProcessor> processors, Class<?>... groups) {
+        super(processors);
+        this.groups = groups;
+        init(type, groups);
+    }
+
     @Override
     public SchemaPropertyProcessorManagerApi createCopyForType(Class<?> type) {
-        return new SchemaPropertyProcessorManagerConstraint(type, groups);
+        return new SchemaPropertyProcessorManagerConstraint(type, this.getProcessors(), groups);
     }
 
     /**
@@ -69,7 +76,7 @@ public class SchemaPropertyProcessorManagerConstraint extends SchemaPropertyProc
     public void process(JsonSchema schema, BeanProperty prop) {
         getProcessors().forEach(processor -> {
             if (processor instanceof SchemaPropertyProcessorConstraint) {
-                ((SchemaPropertyProcessorConstraint)processor).setPropertyConstraints(propertyConstraints);
+                ((SchemaPropertyProcessorConstraint<?>)processor).setPropertyConstraints(propertyConstraints);
             }
             processor.process(schema, prop);
         });

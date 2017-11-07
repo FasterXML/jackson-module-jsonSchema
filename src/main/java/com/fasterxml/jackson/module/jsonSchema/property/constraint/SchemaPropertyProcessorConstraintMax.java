@@ -2,7 +2,6 @@ package com.fasterxml.jackson.module.jsonSchema.property.constraint;
 
 import javax.validation.constraints.Max;
 
-import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
 
@@ -11,18 +10,14 @@ import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
  * 
  * @since 4.0
  */
-public class SchemaPropertyProcessorConstraintMax extends SchemaPropertyProcessorConstraint
+public class SchemaPropertyProcessorConstraintMax extends SchemaPropertyProcessorConstraint<Max>
 {
+
     @Override
-    public void process(JsonSchema schema, BeanProperty prop) {
+    protected void processNonNullAnnotation(JsonSchema schema, Max maxAnnotation) {
         if (schema.isNumberSchema()) {
             NumberSchema numberSchema = schema.asNumberSchema();
-            numberSchema.setMaximum(getNumberMaximum(prop));
+            numberSchema.setMaximum((double)maxAnnotation.value());
         }
-    }
-
-    public Double getNumberMaximum(BeanProperty prop) {
-        Max maxAnnotation = getAnnotation(prop, Max.class);
-        return maxAnnotation != null ? (double)maxAnnotation.value() : null;
     }
 }

@@ -45,7 +45,7 @@ public class TestVersions extends SchemaTestBase {
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
-        assertThat(objectSchema.getRequired(), containsInAnyOrder("nameMandatory"));
+        assertThat(objectSchema.getRequiredPropertyNames(), containsInAnyOrder("nameMandatory"));
     }
 
     @Test(expected = RuntimeException.class)
@@ -60,7 +60,7 @@ public class TestVersions extends SchemaTestBase {
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
-        objectSchema.getRequiredBoolean(); //Should blow up...
+        objectSchema.getRequiredPropertyNames(); //Should blow up...
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TestVersions extends SchemaTestBase {
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
-        assertThat(objectSchema.getRequired(), containsInAnyOrder("nameMandatory"));
+        assertThat(objectSchema.getRequiredPropertyNames(), containsInAnyOrder("nameMandatory"));
     }
 
     @Test(expected = RuntimeException.class)
@@ -90,7 +90,7 @@ public class TestVersions extends SchemaTestBase {
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
-        objectSchema.getRequiredBoolean(); //Should blow up...
+        objectSchema.getRequiredPropertyNames(); //Should blow up...
     }
 
     @Test
@@ -111,7 +111,7 @@ public class TestVersions extends SchemaTestBase {
 
         JsonSchema propertySchema = properties.get("nameMandatory");
         assertNotNull(propertySchema);
-        assertThat(propertySchema.getRequiredBoolean(), is(true));
+        assertThat(propertySchema.getRequired(), is(true));
 
     }
 
@@ -127,7 +127,7 @@ public class TestVersions extends SchemaTestBase {
         assertNotNull("schema should not be null.", jsonSchema);
         assertTrue("schema should be an objectSchema.", jsonSchema.isObjectSchema());
         ObjectSchema objectSchema = jsonSchema.asObjectSchema();
-        objectSchema.getRequired(); //should blow up...
+        objectSchema.getRequiredPropertyNames(); //should blow up...
     }
 
 

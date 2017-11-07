@@ -189,7 +189,7 @@ public class TestGenerateJsonSchema
         assertNotNull(prop5);
         assertNull(prop5.getReadonly());
 
-        assertThat(object.getRequired(), containsInAnyOrder("property5"));
+        assertThat(object.getRequiredPropertyNames(), containsInAnyOrder("property5"));
     }
 
     public void testGeneratingJsonSchemaWithFilters() throws Exception {
@@ -213,6 +213,7 @@ public class TestGenerateJsonSchema
      * Additional unit test for verifying that schema object itself can be
      * properly serialized
      */
+    @SuppressWarnings("unchecked")
     public void testSchemaSerialization() throws Exception {
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
@@ -285,12 +286,13 @@ public class TestGenerateJsonSchema
         assertEquals("{'type':'object'," +
                 "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
                 "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+                "'required':['property5']," + 
                 "'dependencies':{'property1':['property2']}," +
                 "'properties':{'property1':{'type':'integer'}" +
                 ",'property2':{'type':'string'}," +
                 "'property3':{'type':'array','items':{'type':'string'}}," +
                 "'property4':{'type':'array','items':{'type':'number'}}," +
-            "'property5':{'type':'string'}},'required':['property5']}", schemaString.replaceAll("\"", "'"));
+            "'property5':{'type':'string'}}}", schemaString.replaceAll("\"", "'"));
     }
 
     public void testMultiplePropertyDependencies() throws Exception {
@@ -308,12 +310,13 @@ public class TestGenerateJsonSchema
         assertEquals("{'type':'object'," +
                 "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
                 "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+                "'required':['property5']," +
                 "'dependencies':{'property1':['property2','property3'],'property2':['property3']}," +
                 "'properties':{'property1':{'type':'integer'}" +
                 ",'property2':{'type':'string'}," +
                 "'property3':{'type':'array','items':{'type':'string'}}," +
                 "'property4':{'type':'array','items':{'type':'number'}}," +
-            "'property5':{'type':'string'}},'required':['property5']}", schemaString.replaceAll("\"", "'"));
+            "'property5':{'type':'string'}}}", schemaString.replaceAll("\"", "'"));
     }
 
     public void testSchemaPropertyDependency() throws Exception {
@@ -334,12 +337,13 @@ public class TestGenerateJsonSchema
         assertEquals("{'type':'object'," +
                 "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
                 "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
-            "'dependencies':{'property1':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','properties':{'property2':{'type':'string'}},'required':['property2']}}," +
+                "'required':['property5']," +
+                "'dependencies':{'property1':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','required':['property2'],'properties':{'property2':{'type':'string'}}}}," +
                 "'properties':{'property1':{'type':'integer'}" +
                 ",'property2':{'type':'string'}," +
                 "'property3':{'type':'array','items':{'type':'string'}}," +
                 "'property4':{'type':'array','items':{'type':'number'}}," +
-            "'property5':{'type':'string'}},'required':['property5']}", schemaString.replaceAll("\"", "'"));
+            "'property5':{'type':'string'}}}", schemaString.replaceAll("\"", "'"));
     }
 
     public void testSchemaPropertyDependencies() throws Exception {
@@ -363,15 +367,16 @@ public class TestGenerateJsonSchema
                   "'type':'object'," +
                   "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean'," +
                   "'$schema':'" + JsonSchemaVersion.DRAFT_V4.getSchemaString() + "'," +
+                  "'required':['property5']," +
                   "'dependencies':{" +
-                "'property1':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','properties':{'property2':{'type':'string'}},'required':['property2']},"
-                + "'property3':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','properties':{'property2':{'type':'string'}},'required':['property2']}}," +
+                  "'property1':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','required':['property2'],'properties':{'property2':{'type':'string'}}}," +
+                  "'property3':{'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema','required':['property2'],'properties':{'property2':{'type':'string'}}}}," +
                   "'properties':{" +
                       "'property1':{'type':'integer'}" +
                       ",'property2':{'type':'string'}," +
                       "'property3':{'type':'array','items':{'type':'string'}}," +
                       "'property4':{'type':'array','items':{'type':'number'}}," +
-                "'property5':{'type':'string'}" + "},'required':['property5']" +
+                 "'property5':{'type':'string'}" + "}" +
                 "}", schemaString.replaceAll("\"", "'"));
     }
 

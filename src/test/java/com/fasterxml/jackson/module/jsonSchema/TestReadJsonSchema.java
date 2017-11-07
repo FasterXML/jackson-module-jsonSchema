@@ -242,4 +242,20 @@ public class TestReadJsonSchema
         assertNotNull(schema.getProperties().get("storage").asObjectSchema().getOneOf());
         assertEquals(4,schema.getProperties().get("storage").asObjectSchema().getOneOf().size());
     }
+
+    /**
+     * Verifies that additional properties that aren't part of the standard are
+     * deserialized properly.
+     */
+    public void testDeserializeNonStandardProperties() throws Exception {
+        String schemaStr = "{\"type\":\"object\",\"properties\":{\"mapSizes\":{\"type\":\"object\",\"additionalProperties\":{\"type\":\"number\"}}},\"additionalProperties\":false,\"validationMessage\":\"Validation Message\"}";
+        JsonSchema schema = MAPPER.readValue(schemaStr, JsonSchema.class);
+        String newSchemaStr = MAPPER.writeValueAsString(schema);
+
+        assertEquals(schemaStr.replaceAll("\\s", "").length(), newSchemaStr.replaceAll("\\s", "").length());
+
+        JsonNode node = MAPPER.readTree(schemaStr);
+        JsonNode finalNode = MAPPER.readTree(newSchemaStr);
+        assertEquals(node, finalNode);
+    }
 }
