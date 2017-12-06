@@ -1,5 +1,12 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -7,11 +14,7 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This type represents a {@link JsonSchema} as an object type
@@ -36,7 +39,7 @@ public class ObjectSchema extends ContainerTypeSchema
 	 * name as a property in this attribute's object, then the instance must be
 	 * valid against the attribute's property value
 	 */
-	@JsonProperty
+    @JsonProperty
 	private Map<String, Object> dependencies;
 
 	/**
@@ -65,14 +68,38 @@ public class ObjectSchema extends ContainerTypeSchema
 	@JsonProperty
 	private Map<String, JsonSchema> properties;
 
-	public ObjectSchema()
+    /**
+     * This will include the names of the properties that are required.
+     */
+    @JsonProperty("required")
+    private Set<String> requiredPropertyNames = new HashSet<>();
+
+    private boolean isDeserializing = false;
+    protected ObjectSchema() {
+        //jackson deserialization only
+        super();
+        isDeserializing = true;
+    }
+
+    public ObjectSchema(JsonSchemaVersion version)
+    {
+        this(version, false);
+    }
+
+    public ObjectSchema(JsonSchemaVersion version, boolean set$Schema)
 	{
+        super(version);
+        if (set$Schema) {
+            set$schema(version.getSchemaString());
+        }
 		dependencies = new LinkedHashMap<String, Object>();
 		patternProperties = new LinkedHashMap<String, JsonSchema>();
 		properties = new LinkedHashMap<String, JsonSchema>();
 	}
 
 	public boolean addSchemaDependency(String depender, JsonSchema parentMustMatch) {
+        //NOTE: dependencies shouldn't have $schema
+        parentMustMatch.set$schema(null);
 		dependencies.put(depender, parentMustMatch);
 		return dependencies.get(depender).equals(parentMustMatch);
 	}
@@ -118,9 +145,20 @@ public class ObjectSchema extends ContainerTypeSchema
 	    return properties;
 	}
 
+    public Set<String> getRequiredPropertyNames() {
+        if (JsonSchemaVersion.DRAFT_V3.equals(version)) {
+            requiredPropertyNames.clear(); //make sure this does show in version 3 or it would collide
+            return Collections.unmodifiableSet(requiredPropertyNames);
+        }
+        return requiredPropertyNames;
+    }
+
 	public void putOptionalProperty(BeanProperty property, JsonSchema jsonSchema) {
 		jsonSchema.enrichWithBeanProperty(property);
 		properties.put(property.getName(), jsonSchema);
+        if (jsonSchema.isObjectSchema() && version != null) {
+            setParentInfo(this, version);
+        }
 	}
 
 	public void putOptionalProperty(String name, JsonSchema jsonSchema) {
@@ -132,13 +170,15 @@ public class ObjectSchema extends ContainerTypeSchema
 	}
 
 	public JsonSchema putProperty(BeanProperty property, JsonSchema value) {
-		value.setRequired(true);
-		value.enrichWithBeanProperty(property);
-		return properties.put(property.getName(), value);
+        return putProperty(property.getName(), value);
 	}
 
 	public JsonSchema putProperty(String name, JsonSchema value) {
-		value.setRequired(true);
+        if (JsonSchemaVersion.DRAFT_V3.equals(version)) {
+            value.setRequired(true);
+        } else {
+            requiredPropertyNames.add(name);
+        }
 		return properties.put(name, value);
 	}
 
@@ -161,9 +201,31 @@ public class ObjectSchema extends ContainerTypeSchema
 
 	public void setProperties(Map<String, JsonSchema> properties) {
 	    this.properties = properties;
+        //NOTE: probably a cleaner way to do this with a custom deserializer but short on time ATM
+        if (isDeserializing && version != null) {
+            setParentInfo(this, version);
+            isDeserializing = false;
+        }
 	}
 
-     @Override
+    private void setParentInfo(ObjectSchema parent, JsonSchemaVersion version) {
+        if (parent.properties != null) {
+            parent.properties.entrySet().stream().filter(e -> e.getValue().isObjectSchema()).map(e -> e.getValue().asObjectSchema()).forEach(os -> {
+                setParentInfo(os, version);
+                os.setParent(parent);
+                os.version = version;
+            });
+        }
+    }
+
+    public void setRequiredPropertyNames(Set<String> required) {
+        if (!isDeserializing && !JsonSchemaVersion.DRAFT_V4.equals(version)) {
+            throw new RuntimeException("You can only set required field name set on Draft V4.  You have: " + version);
+        }
+        this.requiredPropertyNames = required;
+    }
+
+    @Override
      public boolean equals(Object obj)
      {
          if (obj == this) return true;

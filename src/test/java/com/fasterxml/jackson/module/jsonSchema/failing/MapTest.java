@@ -3,10 +3,10 @@ package com.fasterxml.jackson.module.jsonSchema.failing;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.TestBase;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 // for [module-jsonSchema#89]
 public class MapTest extends TestBase
@@ -33,7 +33,7 @@ public class MapTest extends TestBase
 
     public void testSimpleMapKeyType89() throws Exception
     {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema schema;
 
         schema = generator.generateSchema(MapBean.class);

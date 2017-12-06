@@ -3,9 +3,10 @@ package com.fasterxml.jackson.module.jsonSchema;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
 import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
 
@@ -22,7 +23,7 @@ public class EnumSchemaTest extends TestBase
     public void testEnumArrayDeserialization() throws Exception
     {
         ObjectMapper mapper = new ObjectMapper();
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         mapper.acceptJsonFormatVisitor(mapper.constructType(MyEnum[].class), visitor);
         JsonSchema schema = visitor.finalSchema();
 
@@ -53,12 +54,11 @@ public class EnumSchemaTest extends TestBase
         final String jsonSchema = "{\n" +
                 "    \"type\": \"object\",\n" +
                 "    \"id\": \"https://foo.bar/wibble\",\n" +
-                "    \"$schema\": \"http://json-schema.org/draft-03/schema#\",\n" +
+                "    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n" +
                 "    \"properties\": {\n" +
                 "        \"testOptions\": {\n" +
                 "            \"type\": \"array\",\n" +
                 "            \"id\": \"testOptions\",\n" +
-                "            \"required\":true,\n" +
                 "            \"items\": {\n" +
                 "                \"type\": \"string\",\n" +
                 "                \"enum\": [\n" +
@@ -70,7 +70,8 @@ public class EnumSchemaTest extends TestBase
                 "            },\n" +
                 "            \"minItems\": 1\n" +
                 "        }\n" +
-                "    }\n" +
+                "    },\n" +
+                "    \"required\":[\"testOptions\"]" +
                 "}";
 
         ObjectMapper mapper = new ObjectMapper();

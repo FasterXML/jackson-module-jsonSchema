@@ -1,6 +1,10 @@
 package com.fasterxml.jackson.module.jsonSchema.factories;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -15,14 +19,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     protected SerializerProvider provider;
     private WrapperFactory wrapperFactory;
     private VisitorContext visitorContext;
-
-    /**
-     * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
-     */
-    @Deprecated
-    public ObjectVisitor(SerializerProvider provider, ObjectSchema schema) {
-        this(provider, schema, new WrapperFactory());
-    }
 
     public ObjectVisitor(SerializerProvider provider, ObjectSchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
@@ -105,10 +101,10 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         // check if we've seen this argument's sub-schema already and return a reference-schema if we have
         String seenSchemaUri = visitorContext.getSeenSchemaUri(prop.getType());
         if (seenSchemaUri != null) {
-            return new ReferenceSchema(seenSchemaUri);
+            return new ReferenceSchema(wrapperFactory.getVersion(), seenSchemaUri, schema);
         }
 
-        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext);
+        SchemaFactoryWrapper visitor = wrapperFactory.getWrapper(getProvider(), visitorContext, schema, prop.getType().getRawClass());
         JsonSerializer<Object> ser = getSer(prop);
         if (ser != null) {
             JavaType type = prop.getType();
@@ -127,7 +123,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         if (visitorContext != null) {
             String seenSchemaUri = visitorContext.getSeenSchemaUri(propertyTypeHint);
             if (seenSchemaUri != null) {
-                return new ReferenceSchema(seenSchemaUri);
+                return new ReferenceSchema(wrapperFactory.getVersion(), seenSchemaUri, schema);
             }
         }
 

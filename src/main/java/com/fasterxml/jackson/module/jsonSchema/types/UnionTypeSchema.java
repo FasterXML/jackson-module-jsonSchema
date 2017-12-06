@@ -3,6 +3,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class represents a {@link JsonSchema} as a Union Type Schema:
@@ -15,7 +16,16 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class UnionTypeSchema extends JsonSchema
 {
-	@JsonProperty
+    protected UnionTypeSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    protected UnionTypeSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    @JsonProperty
 	protected ValueTypeSchema[] elements;
 
      @Override

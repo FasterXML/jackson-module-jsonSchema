@@ -1,10 +1,10 @@
 package com.fasterxml.jackson.module.jsonSchema.failing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.SchemaTestBase;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 public class TestBinaryType extends SchemaTestBase
 {
@@ -15,7 +15,7 @@ public class TestBinaryType extends SchemaTestBase
      */
     public void testBinaryType() throws Exception
     {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER, JsonSchemaVersion.DRAFT_V4);
         JsonSchema schema;
 
         schema = generator.generateSchema(byte[].class);

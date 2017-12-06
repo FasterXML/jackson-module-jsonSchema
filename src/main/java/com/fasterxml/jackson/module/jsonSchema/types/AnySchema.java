@@ -2,6 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class represents a {@link JsonSchema} of type any
@@ -9,9 +10,16 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class AnySchema extends SimpleTypeSchema
 {
-	public AnySchema() { }
+    protected AnySchema() {
+        //jackson deserialization only
+        super();
+    }
 
-	@Override
+    public AnySchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    @Override
 	public AnySchema asAnySchema() { return this; }
 
 	@Override

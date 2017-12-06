@@ -2,6 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class represents a {@link JsonSchema} as a null type
@@ -9,7 +10,16 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class NullSchema extends SimpleTypeSchema
 {
-	@Override
+    protected NullSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    public NullSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    @Override
 	public NullSchema asNullSchema() { return this; }
 
 	@Override

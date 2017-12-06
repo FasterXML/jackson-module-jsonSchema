@@ -3,6 +3,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This type represents an JSON reference to a {@link com.fasterxml.jackson.module.jsonSchema.JsonSchema}.
@@ -14,8 +15,19 @@ public class ReferenceSchema extends SimpleTypeSchema
     @JsonProperty
     protected String $ref;
 
-    public ReferenceSchema(String ref) {
+    protected ReferenceSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    public ReferenceSchema(JsonSchemaVersion version, String ref) {
+        this(version, ref, null);
+    }
+    
+    public ReferenceSchema(JsonSchemaVersion version, String ref, ObjectSchema parent) {
+        super(version);
         this.$ref = ref;
+        this.parent = parent;
     }
 
     @Override

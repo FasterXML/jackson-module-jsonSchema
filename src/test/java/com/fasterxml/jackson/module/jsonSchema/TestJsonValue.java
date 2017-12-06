@@ -4,10 +4,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
@@ -48,12 +47,12 @@ public class TestJsonValue extends SchemaTestBase
     {
         ObjectMapper mapper = new ObjectMapper();
  
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         mapper.acceptJsonFormatVisitor(mapper.constructType(Leaf.class), visitor);
         JsonSchema schemaExp = visitor.finalSchema();
         assertNotNull(schemaExp);
         
-        visitor = new SchemaFactoryWrapper();
+        visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         mapper.acceptJsonFormatVisitor(mapper.constructType(ContainerWithAsValue.class), visitor);
         JsonSchema schemaAct = visitor.finalSchema();
         assertNotNull(schemaAct);
@@ -78,7 +77,7 @@ public class TestJsonValue extends SchemaTestBase
     {
         ObjectMapper mapper = new ObjectMapper();
  
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         mapper.acceptJsonFormatVisitor(mapper.constructType(Issue34Bean.class), visitor);
         JsonSchema schema = visitor.finalSchema();
         assertNotNull(schema);
@@ -90,7 +89,7 @@ public class TestJsonValue extends SchemaTestBase
     // For [module-jsonSchema#100]
     public void testMapViaJsonValue() throws Exception {
         ObjectMapper m = new ObjectMapper();
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         m.acceptJsonFormatVisitor(m.constructType(MapViaJsonValue.class), visitor);
         JsonSchema schema = visitor.finalSchema();
         assertType(schema, ObjectSchema.class);

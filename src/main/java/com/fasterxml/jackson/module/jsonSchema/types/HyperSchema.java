@@ -1,10 +1,11 @@
  package com.fasterxml.jackson.module.jsonSchema.types;
 
+import java.lang.annotation.Annotation;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
-
-import java.lang.annotation.Annotation;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
  /**
  * This class represents the HyperSchema portion of a {@link JsonSchema}
@@ -13,11 +14,20 @@ import java.lang.annotation.Annotation;
  */
 public class HyperSchema extends JsonSchema
 {
-	/**
-	 * This attribute indicates that the instance property SHOULD NOT be
-	   changed.  Attempts by a user agent to modify the value of this
-	   property are expected to be rejected by a server.
-	 */
+    protected HyperSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    protected HyperSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    /**
+     * This attribute indicates that the instance property SHOULD NOT be
+       changed.  Attempts by a user agent to modify the value of this
+       property are expected to be rejected by a server.
+     */
 	@JsonProperty
 	protected String readOnly;
 	

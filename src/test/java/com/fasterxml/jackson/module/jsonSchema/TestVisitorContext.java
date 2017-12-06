@@ -1,7 +1,9 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 public class TestVisitorContext extends SchemaTestBase
 {
@@ -92,7 +94,7 @@ public class TestVisitorContext extends SchemaTestBase
     private String generateSchema(Class<?> clazz) throws Exception
     {
         MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper(JsonSchemaVersion.DRAFT_V4);
         MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(clazz), visitor);
         return MAPPER.writeValueAsString(visitor.finalSchema());
     }

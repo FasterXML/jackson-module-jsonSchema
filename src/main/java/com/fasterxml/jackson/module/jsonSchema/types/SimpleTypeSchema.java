@@ -1,6 +1,8 @@
 package com.fasterxml.jackson.module.jsonSchema.types;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This class encapsulates the functionality of {@link JsonSchema} simple types
@@ -8,10 +10,19 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public abstract class SimpleTypeSchema extends JsonSchema
 {
-	/**
-	 * This attribute defines the default value of the instance when the
-	 * instance is undefined.
-	 */
+    protected SimpleTypeSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    protected SimpleTypeSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
+    /**
+     * This attribute defines the default value of the instance when the
+     * instance is undefined.
+     */
 	protected String defaultdefault;
 
 	/**
@@ -30,6 +41,9 @@ public abstract class SimpleTypeSchema extends JsonSchema
 	 * instance property.
 	 */
 	protected LinkDescriptionObject[] links;
+
+    @JsonIgnore
+    protected ObjectSchema parent;
 
 	@Override
 	public SimpleTypeSchema asSimpleTypeSchema() {
@@ -56,7 +70,15 @@ public abstract class SimpleTypeSchema extends JsonSchema
         this.links = links;
     }
 
-	@Override
+    public ObjectSchema getParent() {
+        return parent;
+    }
+
+    public void setParent(ObjectSchema parent) {
+        this.parent = parent;
+    }
+
+    @Override
 	public boolean isSimpleTypeSchema() {
 		return true;
 	}

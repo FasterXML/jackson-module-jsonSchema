@@ -3,6 +3,7 @@ package com.fasterxml.jackson.module.jsonSchema.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 
 /**
  * This represents a {@link JsonSchema} as a String
@@ -11,6 +12,15 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
  */
 public class StringSchema extends ValueTypeSchema
 {
+    protected StringSchema() {
+        //jackson deserialization only
+        super();
+    }
+
+    public StringSchema(JsonSchemaVersion version) {
+        super(version);
+    }
+
     /** this defines the maximum length of the string. */
     @JsonProperty
     private Integer maxLength;

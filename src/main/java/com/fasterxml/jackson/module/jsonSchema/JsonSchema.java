@@ -1,12 +1,32 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
-import com.fasterxml.jackson.annotation.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-import com.fasterxml.jackson.module.jsonSchema.types.*;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
+import com.fasterxml.jackson.module.jsonSchema.types.AnySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ArraySchema;
+import com.fasterxml.jackson.module.jsonSchema.types.BooleanSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ContainerTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.IntegerSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.NullSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.NumberSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.UnionTypeSchema;
+import com.fasterxml.jackson.module.jsonSchema.types.ValueTypeSchema;
 
 /**
  * The type wraps the json schema specification at :
@@ -33,7 +53,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
  * 	    "id":{
  * 	      "type":"number",
  * 	      "description":"Product identifier",
- * 	      "required":true
+ * 	      "required":true  
  * 	    },
  * 	    "name":{
  * 	      "description":"Name of the product",
@@ -73,6 +93,21 @@ import com.fasterxml.jackson.module.jsonSchema.types.*;
 @JsonTypeIdResolver(JsonSchemaIdResolver.class)
 public abstract class JsonSchema
 {
+    @JsonIgnore
+    protected JsonSchemaVersion version;
+
+    protected JsonSchema() {
+        //jackson deserialization only
+    }
+
+    protected JsonSchema(JsonSchemaVersion version) {
+        this.version = version;
+    }
+    
+    protected JsonSchema(JsonSchemaVersion version, boolean set$Schema) {
+        this.version = version;
+    }
+
     /**
      * This attribute defines the current URI of this schema (this attribute is
      * effectively a "self" link). This URI MAY be relative or absolute. If the
@@ -141,11 +176,15 @@ public abstract class JsonSchema
 	 */
 	private JsonSchema[] extendsextends;
 
-	/**
-	 * This attribute indicates if the instance must have a value, and not be
-	 * undefined. This is false by default, making the instance optional.
-	 */
-	@JsonProperty
+    /**
+     * This attribute indicates if the instance must have a value, and not be
+     * undefined. This is false by default, making the instance optional.
+     * Available in Draft V3 spec ONLY.
+     * 
+     * @deprecated Since 2.9 - Use setRequired on ObjectSchema from Draft V4 onwards.
+     */
+    @Deprecated
+    @JsonProperty
 	private Boolean required = null;
 
     /**
@@ -161,7 +200,10 @@ public abstract class JsonSchema
      */
     private String description;
 
-    protected JsonSchema() { }
+    /**
+     * Map to hold items that are not part of the official spec but may want to be added.
+     */
+    private Map<String, String> nonStandardProperties = new LinkedHashMap<>();
 
     /**
 	 * Attempt to return this JsonSchema as an {@link AnySchema}
@@ -279,7 +321,11 @@ public abstract class JsonSchema
 		return null;
 	}
 
-     public String getId() {
+    public JsonSchemaVersion getVersion() {
+        return version;
+    }
+
+    public String getId() {
          return id;
      }
 
@@ -309,6 +355,15 @@ public abstract class JsonSchema
 
     public String getDescription() {
         return description;
+    }
+
+    @JsonAnyGetter
+    public Map<String, String> getNonStandardProperties() {
+        return nonStandardProperties;
+    }
+
+    public String getNonStandardProperty(String propertyName) {
+        return nonStandardProperties.get(propertyName);
     }
 
     @JsonIgnore
@@ -441,6 +496,9 @@ public abstract class JsonSchema
 
 	public void set$schema(String $schema) {
 		this.$schema = $schema;
+        if (version == null) {
+            this.version = JsonSchemaVersion.fromSchemaString($schema).orElse(null);
+        }
 	}
 
 	public void setDisallow(JsonSchema[] disallow) {
@@ -456,6 +514,9 @@ public abstract class JsonSchema
 	}
 
 	public void setRequired(Boolean required) {
+        if (!JsonSchemaVersion.DRAFT_V3.equals(version)) {
+            throw new RuntimeException("You can only set the required boolean on Draft V3.  You have: " + version);
+        }
 		this.required = required;
 	}
 
@@ -465,6 +526,11 @@ public abstract class JsonSchema
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JsonAnySetter
+    public void addNonStandardProperty(String key, String value) {
+        nonStandardProperties.put(key, value);
     }
 
     /**
@@ -478,33 +544,34 @@ public abstract class JsonSchema
 	}
 
 	/**
-	 * Create a schema which verifies only that an object is of the given format.
-	 * @param format the format to expect
-	 * @return the schema verifying the given format
-	 */
-	public static JsonSchema minimalForFormat(JsonFormatTypes format)
+     * Create a schema which verifies only that an object is of the given format.
+     * @param jsonVersion 
+     * @param format the format to expect
+     * @return the schema verifying the given format
+     */
+    public static JsonSchema minimalForFormat(JsonSchemaVersion jsonVersion, JsonFormatTypes format)
 	{
 	    if (format != null) {
 	        switch (format) {
         		case ARRAY:
-        			return new ArraySchema();
+                    return new ArraySchema(jsonVersion);
         		case OBJECT:
-        			return new ObjectSchema();
+                    return new ObjectSchema(jsonVersion);
         		case BOOLEAN:
-        			return new BooleanSchema();
+                    return new BooleanSchema(jsonVersion);
         		case INTEGER:
-        			return new IntegerSchema();
+                    return new IntegerSchema(jsonVersion);
         		case NUMBER:
-        			return new NumberSchema();
+                    return new NumberSchema(jsonVersion);
         		case STRING:
-        			return new StringSchema();
+                    return new StringSchema(jsonVersion);
         		case NULL:
-        			return new NullSchema();
+                    return new NullSchema(jsonVersion);
         		case ANY:
         		default:
 		    }
 	    }
-	    return new AnySchema();
+        return new AnySchema(jsonVersion);
 	}
 
 	@Override
@@ -522,7 +589,7 @@ public abstract class JsonSchema
 
                  // 27-Apr-2015, tatu: Should not need to check type explicitly
  //                 && equals(getType(), getType())
-                 && equals(getRequired(), that.getRequired())
+            && ((JsonSchemaVersion.DRAFT_V3.equals(version)) ? equals(getRequired(), that.getRequired()) : true)
                  && equals(getReadonly(), that.getReadonly())
                  && equals(get$ref(), that.get$ref())
                  && equals(get$schema(), that.get$schema())

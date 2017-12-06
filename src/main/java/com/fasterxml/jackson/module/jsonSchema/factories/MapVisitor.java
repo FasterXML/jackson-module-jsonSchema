@@ -25,10 +25,6 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
 
     private VisitorContext visitorContext;
 
-    public MapVisitor(SerializerProvider provider, ObjectSchema schema) {
-        this(provider, schema, new WrapperFactory());
-    }
-    
     public MapVisitor(SerializerProvider provider, ObjectSchema schema, WrapperFactory wrapperFactory) {
         this.provider = provider;
         this.schema = schema;
@@ -86,7 +82,7 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
         if (visitorContext != null) {
             String seenSchemaUri = visitorContext.getSeenSchemaUri(propertyTypeHint);
             if (seenSchemaUri != null) {
-                return new ReferenceSchema(seenSchemaUri);
+                return new ReferenceSchema(wrapperFactory.getVersion(), seenSchemaUri);
             }
         }
 

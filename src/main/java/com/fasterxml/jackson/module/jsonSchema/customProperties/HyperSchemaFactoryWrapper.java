@@ -9,7 +9,12 @@ import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
-import com.fasterxml.jackson.module.jsonSchema.factories.*;
+import com.fasterxml.jackson.module.jsonSchema.factories.ArrayVisitor;
+import com.fasterxml.jackson.module.jsonSchema.factories.ObjectVisitor;
+import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import com.fasterxml.jackson.module.jsonSchema.factories.VisitorContext;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
+import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory.JsonSchemaVersion;
 import com.fasterxml.jackson.module.jsonSchema.types.LinkDescriptionObject;
 import com.fasterxml.jackson.module.jsonSchema.types.ReferenceSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
@@ -23,27 +28,37 @@ import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
     private boolean ignoreDefaults = true;
+    private JsonSchemaVersion version;
 
     private static class HyperSchemaFactoryWrapperFactory extends WrapperFactory {
+        public HyperSchemaFactoryWrapperFactory(JsonSchemaVersion version) {
+            super(version);
+        }
+
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
-            return new HyperSchemaFactoryWrapper(p);
+            HyperSchemaFactoryWrapper hsfw = new HyperSchemaFactoryWrapper();
+            hsfw.setProvider(p);
+            return hsfw;
         };
 
         @Override
         public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc)
         {
-            return new HyperSchemaFactoryWrapper(p)
-                .setVisitorContext(rvc);
+            HyperSchemaFactoryWrapper hsfw = new HyperSchemaFactoryWrapper();
+            hsfw.setVisitorContext(rvc);
+            hsfw.setProvider(p);
+            return hsfw;
         }
     };
 
     public HyperSchemaFactoryWrapper() {
-        super(new HyperSchemaFactoryWrapperFactory());
+        this(JsonSchemaVersion.DRAFT_V3);
     }
 
-    public HyperSchemaFactoryWrapper(SerializerProvider p) {
-        super(p, new HyperSchemaFactoryWrapperFactory());
+    public HyperSchemaFactoryWrapper(JsonSchemaVersion version) {
+        super(new HyperSchemaFactoryWrapperFactory(version));
+        this.version = version;
     }
 
     @Override
@@ -112,7 +127,7 @@ public class HyperSchemaFactoryWrapper extends SchemaFactoryWrapper {
                 if (visitorContext != null) {
                     String seenSchemaUri = visitorContext.getSeenSchemaUri(targetType);
                     if (seenSchemaUri != null) {
-                        return new ReferenceSchema(seenSchemaUri);
+                        return new ReferenceSchema(version, seenSchemaUri);
                     }
                 }
                 HyperSchemaFactoryWrapper targetVisitor = new HyperSchemaFactoryWrapper();
