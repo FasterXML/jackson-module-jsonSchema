@@ -5,9 +5,9 @@ matrix:
     - os: linux-ppc64le # power queue name
       jdk:  openjdk8
     - os: linux         # Intel queue name
-      jdk:
-        - openjdk8
-        - openjdk11
+      jdk:  openjdk8
+    - os: linux         # Intel queue name
+      jdk:  openjdk11
 
 # whitelist
 branches:
