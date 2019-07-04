@@ -1,12 +1,13 @@
 language: java
-os:
-  - linux
-    jdk:
-      - openjdk8
-      - openjdk11
-  - linux-ppc64le
-    jdk:
-      - openjdk8
+
+matrix:
+  include:
+    - os: linux-ppc64le # power queue name
+      jdk:  openjdk8
+    - os: linux         # Intel queue name
+      jdk:
+        - openjdk8
+        - openjdk11
 
 # whitelist
 branches:
