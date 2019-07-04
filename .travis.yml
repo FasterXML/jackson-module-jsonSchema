@@ -1,11 +1,12 @@
 language: java
 os:
   - linux
+    jdk:
+      - openjdk8
+      - openjdk11
   - linux-ppc64le
-
-jdk:
-  - openjdk8
-  - openjdk11
+    jdk:
+      - openjdk8
 
 # whitelist
 branches:
