@@ -4,7 +4,7 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
-2.10.0.pr1 (19-Jul-2019)
+2.10.0 (26-Sep-2019)
 
 * Added JDK9+ `module-info.class` using Moditect plugin
 
