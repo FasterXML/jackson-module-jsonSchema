@@ -1,10 +1,6 @@
 # Jackson [JSON Schema](http://json-schema.org/) Module
 
 This module supports the creation of a JSON Schema (v3)
-This module is intended to be an upgrade path from the hardcoded JSON Schema generation 
-currently in jackson databind (pre 2.1), in order to allow for the generation of arbitrary formats specifying the expected output from a particular jackson enabled application.
-
-Thus, it might feasibly be extended or mirrored to produce xml or even google closure interfaces or classes in addition to the current json schema format. 
 
 Note that since JSON Schema draft version 3 and 4 are incompatible, this module CAN NOT, as-is,
 support v4. There is another module [mbknor-jackson-jsonSchema](https://github.com/mbknor/mbknor-jackson-jsonSchema) that does support v4, however.
@@ -19,6 +15,12 @@ And if necessary, more if future revisions also prove incompatible.
 [![Javadoc](https://javadoc.io/badge/com.fasterxml.jackson.module/jackson-module-jsonSchema.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.module/jackson-module-jsonSchema)
 
 Version 2.4 was considered the first stable version of the module.
+
+## Future plans (lack thereof)
+
+Due to lack of support by community, this module is NOT planned to be supported beyond
+Jackson 2.x -- no work has been done for it to work with future Jackson 3.0.
+Users are encouraged to use more up-to-date JSON Schema support tools.
 
 ## Example Usage
 
