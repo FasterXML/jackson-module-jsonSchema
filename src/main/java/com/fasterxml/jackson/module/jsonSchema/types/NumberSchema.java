@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
+import java.math.BigDecimal;
+
 /**
  * This class represents a {@link JsonSchema} as a number type
  * @author jphelan
@@ -28,15 +30,15 @@ public class NumberSchema extends ValueTypeSchema
 	
 	/**This attribute defines the maximum value of the instance property*/
 	@JsonProperty
-	private Double maximum = null;
+	private BigDecimal maximum = null;
 
 	/**This attribute defines the minimum value of the instance property*/
 	@JsonProperty
-	private Double minimum = null;
+	private BigDecimal minimum = null;
 
 	/** The value of the instance needs to be a multiple of this attribute */
 	@JsonProperty
-	private Double multipleOf = null;
+	private BigDecimal multipleOf = null;
 
 	@Override
 	public NumberSchema asNumberSchema() { return this; }
@@ -49,15 +51,15 @@ public class NumberSchema extends ValueTypeSchema
 		return exclusiveMinimum;
 	}
 
-	public Double getMaximum() {
+	public BigDecimal getMaximum() {
 		return maximum;
 	}
 
-	public Double getMinimum() {
+	public BigDecimal getMinimum() {
 		return minimum;
 	}
 
-	public Double getMultipleOf() {
+	public BigDecimal getMultipleOf() {
 		return multipleOf;
 	}
 	
@@ -81,15 +83,15 @@ public class NumberSchema extends ValueTypeSchema
 	    this.exclusiveMinimum = exclusiveMinimum;
 	}
 
-	public void setMaximum(Double maximum) {
+	public void setMaximum(BigDecimal maximum) {
 	    this.maximum = maximum;
 	}
 
-	public void setMinimum(Double minimum) {
+	public void setMinimum(BigDecimal minimum) {
 	    this.minimum = minimum;
 	}
 
-	public void setMultipleOf(Double multipleOf) {
+	public void setMultipleOf(BigDecimal multipleOf) {
 		this.multipleOf = multipleOf;
 	}
 
