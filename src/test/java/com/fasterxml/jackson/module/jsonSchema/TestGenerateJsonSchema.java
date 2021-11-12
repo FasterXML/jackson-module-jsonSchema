@@ -2,6 +2,7 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class TestGenerateJsonSchema
     extends SchemaTestBase
 {
+    @JsonPropertyOrder({"property1", "property2", "property3", "property4", "property5"})
     public static class SimpleBean
     {
         private int property1;
@@ -280,14 +282,23 @@ public class TestGenerateJsonSchema
         assertNotNull(result);
 
         String schemaString = MAPPER.writeValueAsString(jsonSchema);
-        assertEquals("{\"type\":\"object\"," +
+        String possibleString1 = "{\"type\":\"object\"," +
                 "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"dependencies\":{\"property1\":[\"property2\"]}," +
                 "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
                 ",\"property2\":{\"type\":\"string\"}," +
                 "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
                 "\"property4\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}," +
-                "\"property5\":{\"type\":\"string\",\"required\":true}}}", schemaString);
+                "\"property5\":{\"type\":\"string\",\"required\":true}}}";
+        String possibleString2 = "{\"type\":\"object\"," +
+                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
+                "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
+                ",\"property2\":{\"type\":\"string\"}," +
+                "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
+                "\"property4\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}," +
+                "\"property5\":{\"type\":\"string\",\"required\":true}}," +
+                "\"dependencies\":{\"property1\":[\"property2\"]}}";
+        assertTrue(possibleString1.equals(schemaString) || possibleString2.equals(schemaString));
     }
 
     public void testMultiplePropertyDependencies() throws Exception {
