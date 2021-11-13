@@ -283,7 +283,6 @@ public class TestGenerateJsonSchema
 
         Map<String, Object> result = writeAndMap(mapper, jsonSchema);
         assertNotNull(result);
-        
         String schemaString = mapper.writeValueAsString(jsonSchema);
         assertEquals("{\"type\":\"object\"," +
                 "\"dependencies\":{\"property1\":[\"property2\"]}," +
