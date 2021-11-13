@@ -133,7 +133,6 @@ public class TestGenerateJsonSchema
      */
 
     private final ObjectMapper MAPPER = new ObjectMapper();
-    
 
     /**
      * Test simple generation
