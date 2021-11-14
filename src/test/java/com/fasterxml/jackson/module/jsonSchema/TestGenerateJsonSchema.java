@@ -2,7 +2,9 @@ package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -19,6 +21,7 @@ import java.util.Map;
 public class TestGenerateJsonSchema
     extends SchemaTestBase
 {
+    @JsonPropertyOrder({"property1", "property2", "property3", "property4", "property5"})
     public static class SimpleBean
     {
         private int property1;
@@ -272,17 +275,19 @@ public class TestGenerateJsonSchema
     }
 
     public void testSinglePropertyDependency() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
 
-        Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
+        Map<String, Object> result = writeAndMap(mapper, jsonSchema);
         assertNotNull(result);
-
-        String schemaString = MAPPER.writeValueAsString(jsonSchema);
+        
+        String schemaString = mapper.writeValueAsString(jsonSchema);
         assertEquals("{\"type\":\"object\"," +
-                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"dependencies\":{\"property1\":[\"property2\"]}," +
+                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
                 ",\"property2\":{\"type\":\"string\"}," +
                 "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
@@ -291,20 +296,22 @@ public class TestGenerateJsonSchema
     }
 
     public void testMultiplePropertyDependencies() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property3");
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
         ((ObjectSchema) jsonSchema).addSimpleDependency("property2", "property3");
 
-        Map<String, Object> result = writeAndMap(MAPPER, jsonSchema);
+        Map<String, Object> result = writeAndMap(mapper, jsonSchema);
         assertNotNull(result);
 
-        String schemaString = MAPPER.writeValueAsString(jsonSchema);
+        String schemaString = mapper.writeValueAsString(jsonSchema);
         assertEquals("{\"type\":\"object\"," +
-                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"dependencies\":{\"property1\":[\"property2\",\"property3\"],\"property2\":[\"property3\"]}," +
+                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
                 ",\"property2\":{\"type\":\"string\"}," +
                 "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
@@ -313,7 +320,9 @@ public class TestGenerateJsonSchema
     }
 
     public void testSchemaPropertyDependency() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
 
         // Given this dependency schema
         JsonSchema schemaPropertyDependency = generator.generateSchema(DependencySchema.class);
@@ -322,14 +331,14 @@ public class TestGenerateJsonSchema
         JsonSchema simpleBeanSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) simpleBeanSchema).addSchemaDependency("property1", schemaPropertyDependency);
 
-        Map<String, Object> result = writeAndMap(MAPPER, simpleBeanSchema);
+        Map<String, Object> result = writeAndMap(mapper, simpleBeanSchema);
         assertNotNull(result);
 
         // Test the generated value.
-        String schemaString = MAPPER.writeValueAsString(simpleBeanSchema);
+        String schemaString = mapper.writeValueAsString(simpleBeanSchema);
         assertEquals("{\"type\":\"object\"," +
-                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"dependencies\":{\"property1\":{\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema\",\"properties\":{\"property2\":{\"type\":\"string\",\"required\":true}}}}," +
+                "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                 "\"properties\":{\"property1\":{\"type\":\"integer\"}" +
                 ",\"property2\":{\"type\":\"string\"}," +
                 "\"property3\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}," +
@@ -338,7 +347,9 @@ public class TestGenerateJsonSchema
     }
 
     public void testSchemaPropertyDependencies() throws Exception {
-        JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
 
         // Given this dependency schema
         JsonSchema schemaPropertyDependency = generator.generateSchema(DependencySchema.class);
@@ -348,18 +359,18 @@ public class TestGenerateJsonSchema
         ((ObjectSchema) simpleBeanSchema).addSchemaDependency("property1", schemaPropertyDependency);
         ((ObjectSchema) simpleBeanSchema).addSchemaDependency("property3", schemaPropertyDependency);
 
-        Map<String, Object> result = writeAndMap(MAPPER, simpleBeanSchema);
+        Map<String, Object> result = writeAndMap(mapper, simpleBeanSchema);
         assertNotNull(result);
 
         // Test the generated value.
-        String schemaString = MAPPER.writeValueAsString(simpleBeanSchema);
+        String schemaString = mapper.writeValueAsString(simpleBeanSchema);
         assertEquals(
                 "{" +
                   "\"type\":\"object\"," +
-                  "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                   "\"dependencies\":{" +
                     "\"property1\":{\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema\",\"properties\":{\"property2\":{\"type\":\"string\",\"required\":true}}}," +
                     "\"property3\":{\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema\",\"properties\":{\"property2\":{\"type\":\"string\",\"required\":true}}}}," +
+                  "\"id\":\"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean\"," +
                   "\"properties\":{" +
                       "\"property1\":{\"type\":\"integer\"}" +
                       ",\"property2\":{\"type\":\"string\"}," +
