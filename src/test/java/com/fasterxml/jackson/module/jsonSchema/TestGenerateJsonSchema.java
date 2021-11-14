@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -132,8 +133,13 @@ public class TestGenerateJsonSchema
     /**********************************************************
      */
 
-    private final ObjectMapper MAPPER = new ObjectMapper();
+    private final ObjectMapper MAPPER = objectMapper();
 
+    private final ObjectMapper SORTED_MAPPER = JsonMapper.builder()
+            .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+            .build();
+
+    
     /**
      * Test simple generation
      */
@@ -275,8 +281,7 @@ public class TestGenerateJsonSchema
     }
 
     public void testSinglePropertyDependency() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        final ObjectMapper mapper = SORTED_MAPPER;
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
@@ -296,8 +301,7 @@ public class TestGenerateJsonSchema
     }
 
     public void testMultiplePropertyDependencies() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        final ObjectMapper mapper = SORTED_MAPPER;
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
         JsonSchema jsonSchema = generator.generateSchema(SimpleBean.class);
         ((ObjectSchema) jsonSchema).addSimpleDependency("property1", "property2");
@@ -320,8 +324,7 @@ public class TestGenerateJsonSchema
     }
 
     public void testSchemaPropertyDependency() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        final ObjectMapper mapper = SORTED_MAPPER;
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
 
         // Given this dependency schema
@@ -347,8 +350,7 @@ public class TestGenerateJsonSchema
     }
 
     public void testSchemaPropertyDependencies() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+        final ObjectMapper mapper = SORTED_MAPPER;
         JsonSchemaGenerator generator = new JsonSchemaGenerator(mapper);
 
         // Given this dependency schema
