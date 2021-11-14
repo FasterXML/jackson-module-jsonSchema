@@ -1,6 +1,7 @@
 package com.fasterxml.jackson.module.jsonSchema;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestUnwrapping extends SchemaTestBase
@@ -27,12 +28,12 @@ public class TestUnwrapping extends SchemaTestBase
 
     public void testUnwrapping()  throws Exception
     {
+        MAPPER.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         JsonSchemaGenerator generator = new JsonSchemaGenerator(MAPPER);
         JsonSchema schema = generator.generateSchema(UnwrappingRoot.class);
 
         String json = MAPPER.writeValueAsString(schema).replace('"', '\'');
         
-//System.err.println("JSON -> "+MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(schema));
         String EXP = "{'type':'object'," +
                      "'id':'urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestUnwrapping:UnwrappingRoot'," +
                      "'properties':{'age':{'type':'integer'},'name.first':{'type':'string'},'name.last':{'type':'string'}}}";

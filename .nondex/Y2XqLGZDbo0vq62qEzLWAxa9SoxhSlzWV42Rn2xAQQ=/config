@@ -1,0 +1,11 @@
+nondexFilter=.*
+nondexMode=FULL
+nondexSeed=1140398
+nondexStart=0
+nondexEnd=9223372036854775807
+nondexPrintstack=false
+nondexDir=/home/ms19/jackson-module-jsonSchema/.nondex
+nondexJarDir=/home/ms19/jackson-module-jsonSchema/.nondex
+nondexExecid=Y2XqLGZDbo0vq62qEzLWAxa9SoxhSlzWV42Rn2xAQQ=
+nondexLogging=CONFIG
+test=

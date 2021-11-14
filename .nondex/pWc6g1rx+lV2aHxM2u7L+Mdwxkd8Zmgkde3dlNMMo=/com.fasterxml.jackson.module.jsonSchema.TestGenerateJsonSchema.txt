@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.174 s <<< FAILURE! - in com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema
+testSchemaPropertyDependencies(com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema)  Time elapsed: 0.171 s  <<< FAILURE!
+junit.framework.ComparisonFailure: expected:<{"type":"object","[id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean","dependencies":{"property1":{"id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema","properties":{"property2":{"type":"string","required":true}}},"property3":{"id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema","properties":{"property2":{"type":"string","required":true}}}}],"properties":{"prop...> but was:<{"type":"object","[dependencies":{"property1":{"id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema","properties":{"property2":{"type":"string","required":true}}},"property3":{"id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:DependencySchema","properties":{"property2":{"type":"string","required":true}}}},"id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean"],"properties":{"prop...>
+	at com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema.testSchemaPropertyDependencies(TestGenerateJsonSchema.java:368)
+

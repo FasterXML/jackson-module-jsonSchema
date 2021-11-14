@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.152 s <<< FAILURE! - in com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema
+testSinglePropertyDependency(com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema)  Time elapsed: 0.149 s  <<< FAILURE!
+junit.framework.ComparisonFailure: expected:<{"type":"object","[id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean","dependencies":{"property1":["property2"]}],"properties":{"prop...> but was:<{"type":"object","[dependencies":{"property1":["property2"]},"id":"urn:jsonschema:com:fasterxml:jackson:module:jsonSchema:TestGenerateJsonSchema:SimpleBean"],"properties":{"prop...>
+	at com.fasterxml.jackson.module.jsonSchema.TestGenerateJsonSchema.testSinglePropertyDependency(TestGenerateJsonSchema.java:305)
+
