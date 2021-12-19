@@ -518,7 +518,7 @@ public abstract class JsonSchema
 
     protected boolean _equals(JsonSchema that)
     {
-        return equals(getId(), getId())
+        return equals(getId(), that.getId())
                  // 27-Apr-2015, tatu: Should not need to check type explicitly
  //                 && equals(getType(), getType())
                 && equals(getRequired(), that.getRequired())
