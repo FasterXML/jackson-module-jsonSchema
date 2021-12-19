@@ -8,6 +8,11 @@ Project: jackson-module-jsonSchema
 
 No changes since 2.13
 
+2.13.2 (not yet released)
+
+#146: `JsonSchema.equals()` implementation wrong
+ (contributed by cernautan@github)
+
 2.13.1 (19-Dec-2021)
 2.13.0 (30-Sep-2021)
 
