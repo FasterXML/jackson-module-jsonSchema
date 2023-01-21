@@ -34,7 +34,7 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
         <version>${version.plugin.surefire}</version>
         <configuration>
           <excludes>
-            <exclude>com/fasterxml/jackson/module/jsonSchema_jakarta/failing/*.java</exclude>
+            <exclude>com/fasterxml/jackson/module/jsonSchema/jakarta/failing/*.java</exclude>
           </excludes>
         </configuration>
       </plugin>
