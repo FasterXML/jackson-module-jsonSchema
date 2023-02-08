@@ -26,8 +26,11 @@ Users are encouraged to use more up-to-date JSON Schema support tools.
 
 (from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
 
-simply add a dependency (this is from my gradle config)
-`"com.fasterxml.jackson.module:jackson-module-jsonSchema:2.9.0"`
+simply add a dependency
+`"com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0"`
+or
+`"com.fasterxml.jackson.module:jackson-module-jsonSchema-jakarta:2.15.0"` for the jakarta namespace
+
 and for gradle, at least, you can simply add `mavenLocal()` to your repositories. 
 Maven should resolve the dependency from its local repo transparently.
 
