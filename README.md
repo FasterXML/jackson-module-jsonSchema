@@ -16,6 +16,15 @@ And if necessary, more if future revisions also prove incompatible.
 
 Version 2.4 was considered the first stable version of the module.
 
+## Two modules (with Jackson 2.15)
+
+Starting with upcoming Jackson 2.15, this repository contains TWO versions of the module:
+
+1. Old JSON Schema module `com.fasterxml.jackson.module:jackson-module-jsonSchema` (since 2.0)
+2. New JSON Schema module `com.fasterxml.jackson.module:jackson-module-jsonSchema-jakarta` (2.15+)
+
+depending on whether system needs to work with "old" `javax`/`JAXB` APIs (first module) or newer "Jakarta" APIs.
+
 ## Future plans (lack thereof)
 
 Due to lack of support by community, this module is NOT planned to be supported beyond

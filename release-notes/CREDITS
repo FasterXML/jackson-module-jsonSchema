@@ -62,3 +62,9 @@ Sean Staley (seanstaley@github)
 
 #119: `dependencies` property should not be an Array but Object
  (2.9.0)
+
+Réda Housni Alaoui (reda-alaoui@github)
+
+#151: Support jakarta EE 9: split into 2 modules, old `jackson-module-jsonSchema`
+  and new `jackson-module-jsonSchema-jakarta`
+ (2.15.0)
