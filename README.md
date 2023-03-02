@@ -33,7 +33,7 @@ Users are encouraged to use more up-to-date JSON Schema support tools.
 
 ## Example Usage
 
-(from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/src/test/java/com/fasterxml/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
+(from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/javax/src/test/java/com/fasterxml/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
 
 simply add a dependency
 `"com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0"`
