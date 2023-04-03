@@ -5,6 +5,10 @@ on:
     - master
     - "2.14"
   pull_request:
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
