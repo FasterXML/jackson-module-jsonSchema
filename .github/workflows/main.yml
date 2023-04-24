@@ -3,7 +3,7 @@ on:
   push:
     branches:
     - master
-    - "2.14"
+    - "2.15"
   pull_request:
 
 permissions:
