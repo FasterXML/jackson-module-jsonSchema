@@ -4,6 +4,10 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.15.1 (16-May-2023)
+
+No changes since 2.15.0
+
 2.15.0 (23-Apr-2023)
 
 #151: Support jakarta EE 9: split into 2 modules, old `jackson-module-jsonSchema`
