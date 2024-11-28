@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.fasterxml.jackson.module</groupId>
     <artifactId>jackson-module-jsonSchema-parent</artifactId>
-    <version>2.18.2-SNAPSHOT</version>
+    <version>2.18.2</version>
   </parent>
   <artifactId>jackson-module-jsonSchema</artifactId>
   <name>jackson-module-jsonSchema</name>
