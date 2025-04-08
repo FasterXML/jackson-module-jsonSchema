@@ -3,7 +3,6 @@ on:
   push:
     branches:
     - 2.x
-    - "2.18"
   pull_request:
 
 permissions:
