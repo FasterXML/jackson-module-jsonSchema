@@ -1,9 +1,6 @@
 name: Build and Deploy Snapshot
 on:
   push:
-    branches:
-    - 2.x
-    - "2.18"
   pull_request:
 
 permissions:
@@ -11,7 +8,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: 'ubuntu-22.04'
+    runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
       matrix:
