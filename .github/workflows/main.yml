@@ -1,16 +1,14 @@
 name: Build and Deploy Snapshot
 on:
   push:
-    branches: [2.*]
   pull_request:
-    branches: [2.*]
 
 permissions:
   contents: read
 
 jobs:
   build:
-    runs-on: 'ubuntu-24.04'
+    runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
       matrix:
