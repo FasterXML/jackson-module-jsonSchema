@@ -4,6 +4,10 @@ Project: jackson-module-jsonSchema
 === Releases ===
 ------------------------------------------------------------------------
 
+2.18.4 (06-May-2025)
+
+No changes since 2.18.3
+
 2.18.3 (28-Feb-2025)
 
 #161: Jakarta does not have `jakarta.validation` as `module-info` dependency
