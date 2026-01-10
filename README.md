@@ -11,34 +11,28 @@ And if necessary, more if future revisions also prove incompatible.
 ## Status
 
 [![Build Status](https://travis-ci.org/FasterXML/jackson-module-jsonSchema.svg)](https://travis-ci.org/FasterXML/jackson-module-jsonSchema)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.module/jackson-module-jsonSchema/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.module/jackson-module-jsonSchema/)
-[![Javadoc](https://javadoc.io/badge/com.fasterxml.jackson.module/jackson-module-jsonSchema.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.module/jackson-module-jsonSchema)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/tools.jackson.module/jackson-module-jsonSchema/badge.svg)](https://maven-badges.herokuapp.com/maven-central/tools.jackson.module/jackson-module-jsonSchema/)
+[![Javadoc](https://javadoc.io/badge/tools.jackson.module/jackson-module-jsonSchema.svg)](http://www.javadoc.io/doc/tools.jackson.module/jackson-module-jsonSchema)
 
 Version 2.4 was considered the first stable version of the module.
 
-## Two modules (with Jackson 2.15)
+## Two modules
 
-Starting with upcoming Jackson 2.15, this repository contains TWO versions of the module:
+This repository contains TWO versions of the module:
 
-1. Old JSON Schema module `com.fasterxml.jackson.module:jackson-module-jsonSchema` (since 2.0)
-2. New JSON Schema module `com.fasterxml.jackson.module:jackson-module-jsonSchema-jakarta` (2.15+)
+1. javax: `tools.jackson.module:jackson-module-jsonSchema`
+2. jakarta: `tools.jackson.module:jackson-module-jsonSchema-jakarta`
 
 depending on whether system needs to work with "old" `javax`/`JAXB` APIs (first module) or newer "Jakarta" APIs.
 
-## Future plans (lack thereof)
-
-Due to lack of support by community, this module is NOT planned to be supported beyond
-Jackson 2.x -- no work has been done for it to work with future Jackson 3.0.
-Users are encouraged to use more up-to-date JSON Schema support tools.
-
 ## Example Usage
 
-(from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/javax/src/test/java/com/fasterxml/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
+(from [TestGenerateJsonSchema](https://github.com/FasterXML/jackson-module-jsonSchema/blob/master/javax/src/test/java/tools/jackson/module/jsonSchema/TestGenerateJsonSchema.java#L136))
 
 simply add a dependency
-`"com.fasterxml.jackson.module:jackson-module-jsonSchema:2.15.0"`
+`"tools.jackson.module:jackson-module-jsonSchema:3.1.0"`
 or
-`"com.fasterxml.jackson.module:jackson-module-jsonSchema-jakarta:2.15.0"` for the jakarta namespace
+`"tools.jackson.module:jackson-module-jsonSchema-jakarta:3.1.0"` for the jakarta namespace
 
 and for gradle, at least, you can simply add `mavenLocal()` to your repositories. 
 Maven should resolve the dependency from its local repo transparently.
@@ -54,7 +48,7 @@ This will yield a java pojo representing a JSON Schema, which can itself easily 
 
 ## Adding Property Processing
 
-See `com.fasterxml.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper` for an example of writing custom schema properties.
+See `tools.jackson.module.jsonSchema.customProperties.TitleSchemaFactoryWrapper` for an example of writing custom schema properties.
 
 ## Required Fields
 
@@ -68,7 +62,7 @@ Currently 2 aspects of IETF supported:
 * pathStart - URI that defines what the instance's URI MUST start with in order to validate.
 * links - associated Link Description Objects with instances.
 
-You can enable HypermediaSupport using `com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper`.
+You can enable HypermediaSupport using `tools.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper`.
 Example:
 
 ```java

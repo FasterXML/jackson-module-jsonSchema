@@ -1,15 +1,15 @@
 // Generated 28-Mar-2019 using Moditect maven plugin
-module com.fasterxml.jackson.module.jsonSchema {
+module tools.jackson.module.jsonSchema {
     requires validation.api;
 
     requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
 
-    exports com.fasterxml.jackson.module.jsonSchema;
-    exports com.fasterxml.jackson.module.jsonSchema.annotation;
-    exports com.fasterxml.jackson.module.jsonSchema.customProperties;
-    exports com.fasterxml.jackson.module.jsonSchema.factories;
-    exports com.fasterxml.jackson.module.jsonSchema.types;
-    exports com.fasterxml.jackson.module.jsonSchema.validation;
+    exports tools.jackson.module.jsonSchema;
+    exports tools.jackson.module.jsonSchema.annotation;
+    exports tools.jackson.module.jsonSchema.customProperties;
+    exports tools.jackson.module.jsonSchema.factories;
+    exports tools.jackson.module.jsonSchema.types;
+    exports tools.jackson.module.jsonSchema.validation;
 }
