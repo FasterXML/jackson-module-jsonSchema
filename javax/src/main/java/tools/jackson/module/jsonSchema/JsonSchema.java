@@ -191,14 +191,6 @@ public abstract class JsonSchema
     }
 
     /**
-     * @deprecated Since 2.7
-     */
-    @Deprecated
-    public ContainerTypeSchema asContainerSchema() {
-        return asContainerTypeSchema();
-    }
-
-    /**
      * Attempt to return this JsonSchema as a {@link ContainerTypeSchema}
      * @return this as an ContainerTypeSchema if possible, or null otherwise
      *
@@ -262,14 +254,6 @@ public abstract class JsonSchema
      */
     public UnionTypeSchema asUnionTypeSchema() {
         return null;
-    }
-
-    /**
-     * @deprecated Since 2.7
-     */
-    @Deprecated
-    public ValueTypeSchema asValueSchemaSchema() {
-        return asValueTypeSchema();
     }
 
     /**

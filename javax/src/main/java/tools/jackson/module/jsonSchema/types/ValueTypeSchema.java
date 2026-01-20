@@ -44,18 +44,6 @@ public abstract class ValueTypeSchema extends SimpleTypeSchema
 	@JsonProperty
 	protected JsonValueFormat format;
 
-	/**
-	 * @deprecated Since 2.7
-	 */
-	@Deprecated
-	@Override
-	public ValueTypeSchema asValueSchemaSchema() {
-		return asValueTypeSchema();
-	}
-
-	/**
-	 * @since 2.7
-	 */
 	@Override
 	public ValueTypeSchema asValueTypeSchema() { return this; }
 

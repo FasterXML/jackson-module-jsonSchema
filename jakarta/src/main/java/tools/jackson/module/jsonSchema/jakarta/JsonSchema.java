@@ -205,8 +205,6 @@ public abstract class JsonSchema
     /**
      * Attempt to return this JsonSchema as a {@link ContainerTypeSchema}
      * @return this as an ContainerTypeSchema if possible, or null otherwise
-     *
-     * @since 2.7
      */
     public ContainerTypeSchema asContainerTypeSchema() {
         return null;
