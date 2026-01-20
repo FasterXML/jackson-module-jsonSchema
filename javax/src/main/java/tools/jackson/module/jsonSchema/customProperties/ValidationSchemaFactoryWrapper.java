@@ -20,8 +20,8 @@ import tools.jackson.module.jsonSchema.validation.ValidationConstraintResolver;
 /**
  * @author cponomaryov
  */
-public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper {
-
+public class ValidationSchemaFactoryWrapper extends SchemaFactoryWrapper
+{
     private ValidationConstraintResolver constraintResolver;
 
     private static class ValidationSchemaFactoryWrapperFactory extends WrapperFactory {

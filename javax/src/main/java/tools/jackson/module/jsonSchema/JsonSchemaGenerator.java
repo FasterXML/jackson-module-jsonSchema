@@ -6,17 +6,11 @@ import tools.jackson.module.jsonSchema.factories.WrapperFactory;
 
 /**
  * Convenience class that wraps JSON Schema generation functionality.
- * 
+ *
  * @author tsaloranta
  */
 public class JsonSchemaGenerator
 {
-    /**
-     * @deprecated Since 2.6
-     */
-    @Deprecated
-    protected final ObjectMapper _mapper;
-
     /**
      * @since 2.6
      */
@@ -34,7 +28,6 @@ public class JsonSchemaGenerator
     }
 
     public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
-        _mapper = mapper;
         _writer = mapper.writer();
         _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
         _visitor = null;
@@ -61,7 +54,6 @@ public class JsonSchemaGenerator
      * @since 2.6
      */
     public JsonSchemaGenerator(ObjectWriter w, WrapperFactory wrapperFactory) {
-        _mapper = null;
         _writer = w;
         _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
         _visitor = null;
@@ -71,7 +63,6 @@ public class JsonSchemaGenerator
      * @since 2.8.1
      */
     public JsonSchemaGenerator(ObjectWriter w, SchemaFactoryWrapper visitor) {
-        _mapper = null;
         _writer = w;
         _wrapperFactory = null;
         if (visitor == null) {

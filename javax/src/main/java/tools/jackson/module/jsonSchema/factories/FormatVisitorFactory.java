@@ -4,14 +4,6 @@ import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.jsonFormatVisitors.*;
 
 import tools.jackson.module.jsonSchema.types.*;
-import tools.jackson.module.jsonSchema.types.AnySchema;
-import tools.jackson.module.jsonSchema.types.ArraySchema;
-import tools.jackson.module.jsonSchema.types.BooleanSchema;
-import tools.jackson.module.jsonSchema.types.IntegerSchema;
-import tools.jackson.module.jsonSchema.types.NullSchema;
-import tools.jackson.module.jsonSchema.types.NumberSchema;
-import tools.jackson.module.jsonSchema.types.ObjectSchema;
-import tools.jackson.module.jsonSchema.types.StringSchema;
 
 /**
  * Factory class used for constructing visitors for building various

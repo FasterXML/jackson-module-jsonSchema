@@ -6,11 +6,6 @@ import tools.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import tools.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import tools.jackson.module.jsonSchema.JsonSchema;
 import tools.jackson.module.jsonSchema.factories.*;
-import tools.jackson.module.jsonSchema.factories.ArrayVisitor;
-import tools.jackson.module.jsonSchema.factories.ObjectVisitor;
-import tools.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
-import tools.jackson.module.jsonSchema.factories.VisitorContext;
-import tools.jackson.module.jsonSchema.factories.WrapperFactory;
 
 /**
  * Adds a title to every object schema, either root level or nested. Generally

@@ -12,12 +12,6 @@ import tools.jackson.module.jsonSchema.jakarta.factories.WrapperFactory;
 public class JsonSchemaGenerator
 {
     /**
-     * @deprecated Since 2.6
-     */
-    @Deprecated
-    protected final ObjectMapper _mapper;
-
-    /**
      * @since 2.6
      */
     protected final ObjectWriter _writer;
@@ -34,7 +28,6 @@ public class JsonSchemaGenerator
     }
 
     public JsonSchemaGenerator(ObjectMapper mapper, WrapperFactory wrapperFactory) {
-        _mapper = mapper;
         _writer = mapper.writer();
         _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
         _visitor = null;
@@ -43,35 +36,22 @@ public class JsonSchemaGenerator
     /**
      * NOTE: resulting generator is NOT thread-safe, since typically {@link SchemaFactoryWrapper}
      * being passed is not thread-safe.
-     *
-     * @since 2.8.1
      */
     public JsonSchemaGenerator(ObjectMapper mapper, SchemaFactoryWrapper visitor) {
         this(mapper.writer(), visitor);
     }
 
-    /**
-     * @since 2.6
-     */
     public JsonSchemaGenerator(ObjectWriter w) {
         this(w, (WrapperFactory) null);
     }
 
-    /**
-     * @since 2.6
-     */
     public JsonSchemaGenerator(ObjectWriter w, WrapperFactory wrapperFactory) {
-        _mapper = null;
         _writer = w;
         _wrapperFactory = (wrapperFactory == null) ? new WrapperFactory() : wrapperFactory;
         _visitor = null;
     }
 
-    /**
-     * @since 2.8.1
-     */
     public JsonSchemaGenerator(ObjectWriter w, SchemaFactoryWrapper visitor) {
-        _mapper = null;
         _writer = w;
         _wrapperFactory = null;
         if (visitor == null) {

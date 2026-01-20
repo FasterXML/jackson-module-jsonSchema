@@ -1,0 +1,8 @@
+Here are people who have contributed to development of JSON Schema generator
+module of Jackson JSON processor, versions 3.x (see CREDITS-2.x for 2.x)
+(version numbers in brackets indicate release in which the problem was fixed)
+
+Réda Housni Alaoui (reda-alaoui@github)
+
+* Contributed #166: Support Jackson 3
+ (3.1.0)

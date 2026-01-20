@@ -9,14 +9,6 @@ import tools.jackson.databind.JavaType;
 import tools.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import tools.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import tools.jackson.module.jsonSchema.types.*;
-import tools.jackson.module.jsonSchema.types.AnySchema;
-import tools.jackson.module.jsonSchema.types.ArraySchema;
-import tools.jackson.module.jsonSchema.types.BooleanSchema;
-import tools.jackson.module.jsonSchema.types.IntegerSchema;
-import tools.jackson.module.jsonSchema.types.NullSchema;
-import tools.jackson.module.jsonSchema.types.NumberSchema;
-import tools.jackson.module.jsonSchema.types.ObjectSchema;
-import tools.jackson.module.jsonSchema.types.StringSchema;
 
 /**
  * Type id resolver needed to support polymorphic (de)serialization of all kinds of
@@ -29,6 +21,8 @@ import tools.jackson.module.jsonSchema.types.StringSchema;
  */
 public class JsonSchemaIdResolver extends TypeIdResolverBase
 {
+     private static final long serialVersionUID = 1L;
+
      public JsonSchemaIdResolver() { }
 
      @Override

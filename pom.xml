@@ -32,9 +32,8 @@ JSON Schema (http://tools.ietf.org/html/draft-zyp-json-schema-03) version 3 gene
       <email>tatu.saloranta@iki.fi</email>
     </developer>
     <developer>
-      <id>jackphel</id>
-      <name>Jack Phelan</name>
-      <email>jphelan@andrew.cmu.edu</email>
+      <id>reda-alaoui</id>
+      <name>Réda Housni Alaoui</name>
     </developer>
   </developers>
 

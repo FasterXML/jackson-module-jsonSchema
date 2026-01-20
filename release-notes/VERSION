@@ -1,0 +1,19 @@
+Project: jackson-module-jsonSchema
+Modules:
+  jackson-module-jsonSchema (javax variant)
+  jackson-module-jsonSchema-jakarta (jakarta variant) -- since 2.15
+Versions covered:
+  3.x (see VERSION-2.x for 2.x)
+
+Active Maintainers:
+
+* Réda Housni Alaoui (reda-alaoui@github)
+* Tatu Saloranta, tatu.saloranta@iki.fi (co-author)
+
+------------------------------------------------------------------------
+=== Releases ===
+------------------------------------------------------------------------
+
+3.1.0 (not yet released)
+
+No changes since 2.x

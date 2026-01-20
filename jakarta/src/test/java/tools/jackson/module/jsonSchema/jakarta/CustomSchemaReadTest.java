@@ -12,6 +12,7 @@ public class CustomSchemaReadTest extends SchemaTestBase
     public static class MySchema extends ObjectSchema {
     }
 
+    @SuppressWarnings("serial")
     static class MyResolver extends JsonSchemaIdResolver
     {
         @Override

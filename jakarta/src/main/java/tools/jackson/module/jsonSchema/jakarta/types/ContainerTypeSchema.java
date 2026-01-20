@@ -38,15 +38,6 @@ public abstract class ContainerTypeSchema extends SimpleTypeSchema
 	protected Set<Object> oneOf = Collections.emptySet();
 
 	/**
-	 * @deprecated Since 2.7
-	 */
-	@Deprecated
-	@Override
-	public ContainerTypeSchema asContainerSchema() {
-		return asContainerTypeSchema();
-	}
-
-	/**
 	 * @since 2.7
 	 */
 	@Override

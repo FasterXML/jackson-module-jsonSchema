@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import tools.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 /**
- * This type represents an JSON reference to a {@link com.fasterxml.jackson.module.jsonSchema.JsonSchema}.
- * @author adb
+ * This type represents an JSON reference to a
+ * {@link tools.jackson.module.jsonSchema.jakarta.JsonSchema}.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public class ReferenceSchema extends SimpleTypeSchema

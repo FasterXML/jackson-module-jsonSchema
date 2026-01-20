@@ -8,6 +8,7 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 import tools.jackson.core.JsonParser;
 import tools.jackson.core.JsonToken;
+import tools.jackson.core.ObjectReadContext;
 import tools.jackson.core.json.JsonFactory;
 
 //import static org.junit.Assert.*;
@@ -256,18 +257,18 @@ public abstract class TestBase
         }
     }
     
-    protected void verifyFieldName(JsonParser jp, String expName)
+    protected void verifyFieldName(JsonParser p, String expName)
         throws IOException
     {
-        assertEquals(expName, jp.getText());
-        assertEquals(expName, jp.currentName());
+        assertEquals(expName, p.getString());
+        assertEquals(expName, p.currentName());
     }
 
-    protected void verifyIntValue(JsonParser jp, long expValue)
+    protected void verifyIntValue(JsonParser p, long expValue)
         throws IOException
     {
         // First, via textual
-        assertEquals(String.valueOf(expValue), jp.getText());
+        assertEquals(String.valueOf(expValue), p.getString());
     }
 
     /**
@@ -293,20 +294,17 @@ public abstract class TestBase
     }
 
     protected JsonParser createParserUsingReader(JsonFactory f, String input)
-        throws IOException
     {
-        return f.createParser(new StringReader(input));
+        return f.createParser(ObjectReadContext.empty(), new StringReader(input));
     }
 
     protected JsonParser createParserUsingStream(String input, String encoding)
-        throws IOException
     {
         return createParserUsingStream(new JsonFactory(), input, encoding);
     }
 
     protected JsonParser createParserUsingStream(JsonFactory f,
-                                                 String input, String encoding)
-        throws IOException
+            String input, String encoding)
     {
 
         /* 23-Apr-2008, tatus: UTF-32 is not supported by JDK, have to
@@ -318,10 +316,14 @@ public abstract class TestBase
         if (encoding.equalsIgnoreCase("UTF-32")) {
             data = encodeInUTF32BE(input);
         } else {
-            data = input.getBytes(encoding);
+            try {
+                data = input.getBytes(encoding);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         InputStream is = new ByteArrayInputStream(data);
-        return f.createParser(is);
+        return f.createParser(ObjectReadContext.empty(), is);
     }
 
     /*
@@ -371,17 +373,17 @@ public abstract class TestBase
      * available methods, and ensures results are consistent, before
      * returning them
      */
-    protected String getAndVerifyText(JsonParser jp)
+    protected String getAndVerifyText(JsonParser p)
         throws IOException
     {
         // Ok, let's verify other accessors
-        int actLen = jp.getTextLength();
-        char[] ch = jp.getTextCharacters();
-        String str2 = new String(ch, jp.getTextOffset(), actLen);
-        String str = jp.getText();
+        int actLen = p.getStringLength();
+        char[] ch = p.getStringCharacters();
+        String str2 = new String(ch, p.getStringOffset(), actLen);
+        String str = p.getString();
 
         if (str.length() !=  actLen) {
-            fail("Internal problem (jp.token == "+jp.currentToken()+"): jp.getText().length() ['"+str+"'] == "+str.length()+"; jp.getTextLength() == "+actLen);
+            fail("Internal problem (p.token == "+p.currentToken()+"): p.getText().length() ['"+str+"'] == "+str.length()+"; p.getTextLength() == "+actLen);
         }
         assertEquals("String access via getText(), getTextXxx() must be the same", str, str2);
 

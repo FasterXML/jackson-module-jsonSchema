@@ -164,9 +164,8 @@ public class ArraySchema extends ContainerTypeSchema
 			if (obj instanceof Items) {
 				ArrayItems that = (ArrayItems) obj;
 				return JsonSchema.equals(getJsonSchemas(), that.getJsonSchemas());
-			} else {
-				return false;
 			}
+			return false;
 		}
 
 		public JsonSchema[] getJsonSchemas() {
@@ -179,8 +178,6 @@ public class ArraySchema extends ContainerTypeSchema
 
     public static class ItemsDeserializer extends StdDeserializer<Items>
     {
-        private static final long serialVersionUID = 1L;
-
         public ItemsDeserializer() {
             super(Items.class);
         }

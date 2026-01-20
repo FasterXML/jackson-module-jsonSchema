@@ -69,7 +69,6 @@ public class EnumGenerationTest extends SchemaTestBase
         }
     }
 
-    @SuppressWarnings("serial")
     private Map<String,Object> expectedAsMap(final boolean useToString)
     {
         return new LinkedHashMap<String, Object>() {

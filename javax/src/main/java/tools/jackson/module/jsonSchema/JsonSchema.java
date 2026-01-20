@@ -3,22 +3,12 @@ package tools.jackson.module.jsonSchema;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import tools.jackson.databind.BeanProperty;
 import tools.jackson.databind.annotation.JsonTypeIdResolver;
 import tools.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+
 import tools.jackson.module.jsonSchema.types.*;
-import tools.jackson.module.jsonSchema.types.AnySchema;
-import tools.jackson.module.jsonSchema.types.ArraySchema;
-import tools.jackson.module.jsonSchema.types.BooleanSchema;
-import tools.jackson.module.jsonSchema.types.ContainerTypeSchema;
-import tools.jackson.module.jsonSchema.types.IntegerSchema;
-import tools.jackson.module.jsonSchema.types.NullSchema;
-import tools.jackson.module.jsonSchema.types.NumberSchema;
-import tools.jackson.module.jsonSchema.types.ObjectSchema;
-import tools.jackson.module.jsonSchema.types.SimpleTypeSchema;
-import tools.jackson.module.jsonSchema.types.StringSchema;
-import tools.jackson.module.jsonSchema.types.UnionTypeSchema;
-import tools.jackson.module.jsonSchema.types.ValueTypeSchema;
 
 /**
  * The type wraps the json schema specification at :
@@ -547,14 +537,14 @@ public abstract class JsonSchema
      *  
      * @return (object1 == null ? object2 == null : object1.equals(object2))
      */
-    protected static boolean equals(Object object1, Object object2) {
+    public static boolean equals(Object object1, Object object2) {
         if (object1 == null) {
             return object2 == null;
         }
         return object1.equals(object2);
     }
 
-    protected static <T> boolean arraysEqual(T[] arr1, T[] arr2) {
+    public static <T> boolean arraysEqual(T[] arr1, T[] arr2) {
         if (arr1 == null) {
             return arr2 == null;
         }

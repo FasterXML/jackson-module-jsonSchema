@@ -203,14 +203,6 @@ public abstract class JsonSchema
     }
 
     /**
-     * @deprecated Since 2.7
-     */
-    @Deprecated
-    public ContainerTypeSchema asContainerSchema() {
-        return asContainerTypeSchema();
-    }
-
-    /**
      * Attempt to return this JsonSchema as a {@link ContainerTypeSchema}
      * @return this as an ContainerTypeSchema if possible, or null otherwise
      *
@@ -274,14 +266,6 @@ public abstract class JsonSchema
      */
     public UnionTypeSchema asUnionTypeSchema() {
         return null;
-    }
-
-    /**
-     * @deprecated Since 2.7
-     */
-    @Deprecated
-    public ValueTypeSchema asValueSchemaSchema() {
-        return asValueTypeSchema();
     }
 
     /**
@@ -549,14 +533,14 @@ public abstract class JsonSchema
      *  
      * @return (object1 == null ? object2 == null : object1.equals(object2))
      */
-    protected static boolean equals(Object object1, Object object2) {
+    public static boolean equals(Object object1, Object object2) {
         if (object1 == null) {
             return object2 == null;
         }
         return object1.equals(object2);
     }
 
-    protected static <T> boolean arraysEqual(T[] arr1, T[] arr2) {
+    public static <T> boolean arraysEqual(T[] arr1, T[] arr2) {
         if (arr1 == null) {
             return arr2 == null;
         }
