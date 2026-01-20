@@ -1,5 +1,5 @@
 Here are people who have contributed to development of JSON Schema generator
-module of Jackson JSON processor 
+module of Jackson JSON processor, versions 2.x
 (version numbers in brackets indicate release in which the problem was fixed)
 
 Ignacio del Valle Alles (idelvall@github):

@@ -1,4 +1,5 @@
 Project: jackson-module-jsonSchema
+Versions: 2.x
 
 ------------------------------------------------------------------------
 === Releases ===
