@@ -15,7 +15,7 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
 
     protected SerializationContext context;
 
-    private WrapperFactory wrapperFactory;
+    private final WrapperFactory wrapperFactory;
 
     private VisitorContext visitorContext;
 
@@ -55,15 +55,11 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     public void setContext(SerializationContext c) {
         context = c;
     }
-    
-	public WrapperFactory getWrapperFactory() {
-		return wrapperFactory;
-	}
 
-	public void setWrapperFactory(WrapperFactory wrapperFactory) {
-		this.wrapperFactory = wrapperFactory;
-	}
-    
+    public WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
+
     @Override
     public void itemsFormat(JsonFormatVisitable handler, JavaType contentType)
     {

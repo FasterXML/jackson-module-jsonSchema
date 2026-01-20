@@ -3,14 +3,6 @@ package tools.jackson.module.jsonSchema.jakarta.factories;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.jsonFormatVisitors.*;
 
-import tools.jackson.module.jsonSchema.jakarta.types.AnySchema;
-import tools.jackson.module.jsonSchema.jakarta.types.ArraySchema;
-import tools.jackson.module.jsonSchema.jakarta.types.BooleanSchema;
-import tools.jackson.module.jsonSchema.jakarta.types.IntegerSchema;
-import tools.jackson.module.jsonSchema.jakarta.types.NullSchema;
-import tools.jackson.module.jsonSchema.jakarta.types.NumberSchema;
-import tools.jackson.module.jsonSchema.jakarta.types.ObjectSchema;
-import tools.jackson.module.jsonSchema.jakarta.types.StringSchema;
 import tools.jackson.module.jsonSchema.jakarta.types.*;
 
 /**

@@ -65,14 +65,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
         return wrapperFactory;
     }
 
-    /**
-     * @deprecated Construct instances with provider instead
-     */
-    @Deprecated
-    public void setWrapperFactory(WrapperFactory wrapperFactory) {
-        this.wrapperFactory = wrapperFactory;
-    }
-
     @Override
     public void optionalProperty(BeanProperty prop) {
         schema.putOptionalProperty(prop, propertySchema(prop));
