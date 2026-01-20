@@ -1,0 +1,86 @@
+package tools.jackson.module.jsonSchema.jakarta;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import tools.jackson.databind.DatabindContext;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
+import tools.jackson.databind.jsontype.impl.TypeIdResolverBase;
+import tools.jackson.module.jsonSchema.jakarta.types.AnySchema;
+import tools.jackson.module.jsonSchema.jakarta.types.ArraySchema;
+import tools.jackson.module.jsonSchema.jakarta.types.BooleanSchema;
+import tools.jackson.module.jsonSchema.jakarta.types.IntegerSchema;
+import tools.jackson.module.jsonSchema.jakarta.types.NullSchema;
+import tools.jackson.module.jsonSchema.jakarta.types.NumberSchema;
+import tools.jackson.module.jsonSchema.jakarta.types.ObjectSchema;
+import tools.jackson.module.jsonSchema.jakarta.types.StringSchema;
+import java.util.Arrays;
+
+/**
+ * Type id resolver needed to support polymorphic (de)serialization of all kinds of
+ * {@link JsonSchema} instances.
+ * Note that to support custom types, you will need to sub-class this resolver
+ * and override at least {@link #idFromValue(DatabindContext, Object)}, {@link #idFromValueAndType(DatabindContext, Object, Class)} and
+ * {@link #typeFromId} methods; as well as associate this resolver using
+ * {@link com.fasterxml.jackson.annotation.JsonTypeInfo} annotation on
+ * all custom {@link JsonSchema} implementation classes.
+ */
+public class JsonSchemaIdResolver extends TypeIdResolverBase
+{
+     public JsonSchemaIdResolver() { }
+
+     @Override
+     public String idFromValue(DatabindContext ctxt, Object value) {
+         if (value instanceof JsonSchema) {
+             return ((JsonSchema)value).getType().value();
+         }
+         return null;
+     }
+
+     @Override
+     public String idFromValueAndType(DatabindContext ctxt, Object value, Class<?> suggestedType) {
+         return idFromValue(ctxt, value);
+     }
+
+     @Override
+     public JavaType typeFromId(DatabindContext ctxt, String id)
+     {
+         JsonFormatTypes stdType = JsonFormatTypes.forValue(id);
+         if (stdType != null) {
+             switch (stdType) {
+             case ARRAY:
+                 return ctxt.constructType(ArraySchema.class);
+             case BOOLEAN:
+                 return ctxt.constructType(BooleanSchema.class);
+             case INTEGER:
+                 return ctxt.constructType(IntegerSchema.class);
+             case NULL:
+                 return ctxt.constructType(NullSchema.class);
+             case NUMBER:
+                 return ctxt.constructType(NumberSchema.class);
+             case OBJECT:
+                 return ctxt.constructType(ObjectSchema.class);
+             case STRING:
+                 return ctxt.constructType(StringSchema.class);
+             case ANY:
+             default:
+                 return ctxt.constructType(AnySchema.class);
+             }
+         }
+         // Not a standard type; should use a custom sub-type impl
+         throw new IllegalArgumentException("Can not resolve JsonSchema 'type' id of \""+id
+                 +"\", not recognized as one of standard values: "+Arrays.asList(JsonFormatTypes.values()));
+     }
+
+     @Override
+     public Id getMechanism() {
+         return Id.CUSTOM;
+     }
+
+     @Override
+     public void init(JavaType baseType) { }
+
+     @Override
+     public String idFromBaseType(DatabindContext ctxt) {
+         return null;
+     }
+ }
