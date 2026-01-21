@@ -16,7 +16,8 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     private WrapperFactory wrapperFactory;
     private VisitorContext visitorContext;
 
-    public ObjectVisitor(SerializationContext context, ObjectSchema schema, WrapperFactory wrapperFactory) {
+    public ObjectVisitor(SerializationContext context, ObjectSchema schema,
+            WrapperFactory wrapperFactory) {
         this.context = context;
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
@@ -45,7 +46,7 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     }
 
     /**
-     * @deprecated Construct instances with provider instead
+     * @deprecated Construct instances with context instead
      */
     @Deprecated
     @Override

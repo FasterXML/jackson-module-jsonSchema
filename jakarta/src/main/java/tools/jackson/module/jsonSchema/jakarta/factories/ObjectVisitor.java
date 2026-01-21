@@ -16,14 +16,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     private WrapperFactory wrapperFactory;
     private VisitorContext visitorContext;
 
-    /**
-     * @deprecated Since 2.4; call constructor that takes {@link WrapperFactory}
-     */
-    @Deprecated
-    public ObjectVisitor(SerializationContext context, ObjectSchema schema) {
-        this(context, schema, new WrapperFactory());
-    }
-
     public ObjectVisitor(SerializationContext context, ObjectSchema schema, WrapperFactory wrapperFactory) {
         this.context = context;
         this.schema = schema;
