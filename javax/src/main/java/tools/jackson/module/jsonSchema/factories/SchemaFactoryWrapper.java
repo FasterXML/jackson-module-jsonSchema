@@ -139,10 +139,9 @@ public class SchemaFactoryWrapper implements JsonFormatVisitorWrapper, Visitor
     @Override
     public JsonMapFormatVisitor expectMapFormat(JavaType type)
     {
-        /* 22-Nov-2012, tatu: Looks as if JSON Schema did not have
-         *   concept of Map (distinct from Record or Object); so best
-         *   we can do is to consider it a vague kind-a Object...
-         */
+        // 22-Nov-2012, tatu: Looks as if JSON Schema did not have
+        //   concept of Map (distinct from Record or Object); so best
+        //   we can do is to consider it a vague kind-a Object...
         ObjectSchema s = schemaProvider.objectSchema();
         schema = s;
         return visitorFactory.mapFormatVisitor(context, s, visitorContext);

@@ -10,9 +10,9 @@ import tools.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 /**
  * @author cponomaryov
  */
-public class ObjectVisitorDecorator implements JsonObjectFormatVisitor, JsonSchemaProducer {
-
-    protected ObjectVisitor objectVisitor;
+public class ObjectVisitorDecorator implements JsonObjectFormatVisitor, JsonSchemaProducer
+{
+    protected final ObjectVisitor objectVisitor;
 
     public ObjectVisitorDecorator(ObjectVisitor objectVisitor) {
         this.objectVisitor = objectVisitor;
@@ -26,14 +26,6 @@ public class ObjectVisitorDecorator implements JsonObjectFormatVisitor, JsonSche
     @Override
     public SerializationContext getContext() {
         return objectVisitor.getContext();
-    }
-
-    @Override
-    @Deprecated // since 2.5
-    public void setContext(SerializationContext serializerProvider) {
-        if (objectVisitor.getContext() == null) {
-            objectVisitor.setContext(serializerProvider);
-        }
     }
 
     @Override
@@ -55,5 +47,4 @@ public class ObjectVisitorDecorator implements JsonObjectFormatVisitor, JsonSche
     public void property(String name, JsonFormatVisitable handler, JavaType propertyTypeHint) {
         objectVisitor.property(name, handler, propertyTypeHint);
     }
-
 }

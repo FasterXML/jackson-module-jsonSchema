@@ -17,10 +17,7 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
     implements JsonSchemaProducer, Visitor
 {
     protected final ObjectSchema schema;
-
-    protected SerializationContext context;
-
-    private WrapperFactory wrapperFactory;
+    private final WrapperFactory wrapperFactory;
 
     private VisitorContext visitorContext;
 
@@ -28,8 +25,10 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
         this(context, schema, new WrapperFactory());
     }
     
-    public MapVisitor(SerializationContext context, ObjectSchema schema, WrapperFactory wrapperFactory) {
-        this.context = context;
+    public MapVisitor(SerializationContext context, ObjectSchema schema,
+            WrapperFactory wrapperFactory)
+    {
+        super(context);
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
     }
@@ -51,16 +50,6 @@ public class MapVisitor extends JsonMapFormatVisitor.Base
     /*********************************************************************
      */
 
-    @Override
-    public SerializationContext getContext() {
-        return context;
-    }
-
-    @Override
-    public void setContext(SerializationContext c) {
-        context = c;
-    }
-    
     @Override
     public void keyFormat(JsonFormatVisitable handler, JavaType keyType) {
         // JSON Schema only allows String types so let's not bother too much

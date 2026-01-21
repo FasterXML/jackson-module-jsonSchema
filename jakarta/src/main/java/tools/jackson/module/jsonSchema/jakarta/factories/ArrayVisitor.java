@@ -12,19 +12,17 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     implements JsonSchemaProducer, Visitor
 {
     protected final ArraySchema schema;
-
-    protected SerializationContext content;
-
     private final WrapperFactory wrapperFactory;
-
     private VisitorContext visitorContext;
 
     public ArrayVisitor(SerializationContext content, ArraySchema schema) {
         this(content, schema, new WrapperFactory());
     }
 
-    public ArrayVisitor(SerializationContext content, ArraySchema schema, WrapperFactory wrapperFactory) {
-        this.content = content;
+    public ArrayVisitor(SerializationContext context, ArraySchema schema,
+            WrapperFactory wrapperFactory)
+    {
+        super(context);
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
     }
@@ -46,16 +44,6 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     /*********************************************************************
      */
 
-    @Override
-    public SerializationContext getContext() {
-        return content;
-    }
-
-    @Override
-    public void setContext(SerializationContext c) {
-        content = c;
-    }
-    
     public WrapperFactory getWrapperFactory() {
         return wrapperFactory;
     }

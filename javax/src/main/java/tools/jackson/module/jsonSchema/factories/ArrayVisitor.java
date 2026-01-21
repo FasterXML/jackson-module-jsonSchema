@@ -13,8 +13,6 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
 {
     protected final ArraySchema schema;
 
-    protected SerializationContext context;
-
     private final WrapperFactory wrapperFactory;
 
     private VisitorContext visitorContext;
@@ -23,8 +21,9 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
         this(context, schema, new WrapperFactory());
     }
 
-    public ArrayVisitor(SerializationContext context, ArraySchema schema, WrapperFactory wrapperFactory) {
-        this.context = context;
+    public ArrayVisitor(SerializationContext context, ArraySchema schema,
+            WrapperFactory wrapperFactory) {
+        super(context);
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
     }
@@ -45,16 +44,6 @@ public class ArrayVisitor extends JsonArrayFormatVisitor.Base
     /* JsonArrayFormatVisitor
     /*********************************************************************
      */
-
-    @Override
-    public SerializationContext getContext() {
-        return context;
-    }
-
-    @Override
-    public void setContext(SerializationContext c) {
-        context = c;
-    }
 
     public WrapperFactory getWrapperFactory() {
         return wrapperFactory;

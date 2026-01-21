@@ -12,13 +12,12 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     implements JsonSchemaProducer, Visitor
 {
     protected final ObjectSchema schema;
-    protected SerializationContext context;
-    private WrapperFactory wrapperFactory;
+    private final WrapperFactory wrapperFactory;
     private VisitorContext visitorContext;
 
     public ObjectVisitor(SerializationContext context, ObjectSchema schema,
             WrapperFactory wrapperFactory) {
-        this.context = context;
+        super(context);
         this.schema = schema;
         this.wrapperFactory = wrapperFactory;
     }
@@ -39,20 +38,6 @@ public class ObjectVisitor extends JsonObjectFormatVisitor.Base
     /* JsonObjectFormatVisitor impl
     /*********************************************************************
      */
-
-    @Override
-    public SerializationContext getContext() {
-        return context;
-    }
-
-    /**
-     * @deprecated Construct instances with context instead
-     */
-    @Deprecated
-    @Override
-    public void setContext(SerializationContext c) {
-        context = c;
-    }
 
     public WrapperFactory getWrapperFactory() {
         return wrapperFactory;
