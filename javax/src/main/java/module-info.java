@@ -12,4 +12,7 @@ module tools.jackson.module.jsonSchema {
     exports tools.jackson.module.jsonSchema.factories;
     exports tools.jackson.module.jsonSchema.types;
     exports tools.jackson.module.jsonSchema.validation;
+
+    opens tools.jackson.module.jsonSchema;
+    opens tools.jackson.module.jsonSchema.types;
 }

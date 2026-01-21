@@ -12,4 +12,7 @@ module tools.jackson.module.jsonSchema.jakarta {
     exports tools.jackson.module.jsonSchema.jakarta.factories;
     exports tools.jackson.module.jsonSchema.jakarta.types;
     exports tools.jackson.module.jsonSchema.jakarta.validation;
+
+    opens tools.jackson.module.jsonSchema.jakarta;
+    opens tools.jackson.module.jsonSchema.jakarta.types;
 }
