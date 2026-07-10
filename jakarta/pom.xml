@@ -8,7 +8,7 @@
   <parent>
     <groupId>tools.jackson.module</groupId>
     <artifactId>jackson-module-jsonSchema-parent</artifactId>
-    <version>3.2.1</version>
+    <version>3.2.2-SNAPSHOT</version>
   </parent>
   <artifactId>jackson-module-jsonSchema-jakarta</artifactId>
   <name>jackson-module-jsonSchema-jakarta</name>
