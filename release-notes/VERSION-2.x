@@ -35,6 +35,7 @@ No changes since 2.20.0
 
 No changes since 2.18
 
+2.18.12 (17-Oct-2026)
 2.18.11 (20-Sep-2026)
 2.18.10 (15-Aug-2026)
 2.18.9 (07-Jul-2026)
